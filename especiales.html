@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Pares especiales, pares biomagnéticos y zonas. Portal BioM3.">
+<title>Pares Especiales · BioM3</title>
+<style>
+  :root{--bg:#f8fafc;--card:#fff;--text:#1f2937;--muted:#64748b;--accent:#2563eb;
+        --accent-light:#dbeafe;--border:#e2e8f0;--warm:#fef3e7;--warm-border:#fbdcc2;--warm-text:#92400e}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       background:var(--bg);color:var(--text);line-height:1.3;font-size:14px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+           clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .site-header{background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;
+               padding:.65rem 1rem .5rem;text-align:center}
+  .site-header .back{color:#bfdbfe;text-decoration:none;font-size:.8rem}
+  .site-header .back:hover,.site-header .back:focus{color:#fff}
+  .site-header h1{margin:.1rem 0 0;font-size:1.25rem;font-weight:700}
+  .site-header p{margin:.1rem 0 0;color:#dbeafe;font-size:.82rem}
+  .alpha-nav{position:sticky;top:0;z-index:10;background:var(--card);
+             border-bottom:1px solid var(--border);padding:.25rem .4rem;
+             display:flex;flex-wrap:wrap;justify-content:center;gap:.03rem;
+             box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .alpha-nav a,.alpha-nav span{display:inline-block;min-width:1.4rem;padding:.12rem .3rem;
+             text-align:center;border-radius:4px;text-decoration:none;color:var(--accent);
+             font-weight:600;font-size:.74rem;line-height:1.2}
+  .alpha-nav a:hover,.alpha-nav a:focus{background:var(--accent-light);outline:none}
+  .alpha-nav span{color:#cbd5e1;cursor:default}
+  main{max-width:1050px;margin:0 auto;padding:.5rem .35rem 2rem}
+  .intro{margin:0 0 .4rem;color:var(--muted);font-size:.8rem}
+  .intro a{color:var(--accent)}
+  .toolbar{display:flex;gap:.4rem;margin-bottom:.4rem;flex-wrap:wrap;align-items:center}
+  .toolbar .search-wrap{flex:1;min-width:150px}
+  .toolbar input[type=search]{width:100%;padding:.35rem .6rem;font-size:.88rem;
+       font-family:inherit;border:1px solid var(--border);border-radius:6px;background:var(--card)}
+  .toolbar input[type=search]:focus{outline:none;border-color:var(--accent);
+       box-shadow:0 0 0 2px rgba(37,99,235,.18)}
+  .sort-wrap{display:flex;align-items:center;gap:.3rem;font-size:.8rem;color:var(--muted)}
+  .sort-wrap select{padding:.3rem .4rem;font-size:.8rem;font-family:inherit;
+       border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text)}
+  .sort-wrap select:focus{outline:none;border-color:var(--accent)}
+  .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:6px;
+              overflow-x:auto;overflow-y:hidden;display:inline-block;max-width:100%;vertical-align:top}
+  table{width:auto;border-collapse:collapse;table-layout:auto}
+  thead{background:var(--warm)}
+  thead th{text-align:left;padding:.22rem .32rem;font-size:.66rem;text-transform:uppercase;
+           letter-spacing:.04em;color:var(--warm-text);border-bottom:1px solid var(--warm-border);
+           white-space:nowrap;width:1%}
+  thead th.th-num{text-align:center}
+  thead th.th-zona{text-align:left;padding-left:.22rem}
+  thead th.th-sistema{text-align:left;padding-left:.22rem}
+  tbody tr{border-bottom:1px solid var(--border)}
+  tbody tr:last-child{border-bottom:0}
+  tbody tr:hover{background:#f1f5f9}
+  tbody td{padding:.12rem .28rem;vertical-align:top;line-height:1.2;
+           white-space:nowrap;width:1%}
+  td.num{text-align:center;color:var(--muted);font-variant-numeric:tabular-nums;
+         font-size:.72rem;padding-left:.22rem;padding-right:.32rem}
+  td.par-a{text-align:left;color:#1d4ed8;font-weight:500;font-size:.78rem;padding-right:0}
+  td.par-b{text-align:left;color:#9a3412;font-weight:500;font-size:.78rem;padding-left:.1rem}
+  td.par-b::before{content:"·";display:inline-block;margin-right:.25rem;
+                   color:#94a3b8;font-weight:400;font-size:1em}
+  td.par-b:empty::before{content:"";margin:0}
+  td.name{padding-left:.22rem;padding-right:.35rem}
+  td.name a{color:var(--accent);text-decoration:none;font-weight:500;font-size:.82rem}
+  td.name a:hover,td.name a:focus{text-decoration:underline}
+  td.zona{text-align:left;padding-left:.22rem;padding-right:.35rem}
+  td.zona span{display:inline-block;padding:0 5px;border-radius:999px;background:#e0e7ff;
+               color:#3730a3;font-size:.66rem;font-weight:600;line-height:1.4}
+  td.sistema{text-align:left;padding-left:.22rem;padding-right:.35rem}
+  td.sistema span{display:inline-block;padding:0 6px;border-radius:999px;
+                  font-size:.62rem;font-weight:600;line-height:1.4;white-space:nowrap}
+  td.sistema .s-nervioso      {background:#e0e7ff;color:#3730a3}
+  td.sistema .s-circulatorio  {background:#fee2e2;color:#991b1b}
+  td.sistema .s-respiratorio  {background:#cffafe;color:#155e75}
+  td.sistema .s-digestivo     {background:#fef3c7;color:#92400e}
+  td.sistema .s-esqueletico   {background:#f5f5f4;color:#44403c}
+  td.sistema .s-muscular      {background:#fce7f3;color:#9d174d}
+  td.sistema .s-endocrino     {background:#fef9c3;color:#854d0e}
+  td.sistema .s-urinario      {background:#dbeafe;color:#1e40af}
+  td.sistema .s-linfatico     {background:#dcfce7;color:#166534}
+  td.sistema .s-inmunologico  {background:#d1fae5;color:#065f46}
+  td.sistema .s-tegumentario  {background:#ffedd5;color:#9a3412}
+  td.sistema .s-reproductor   {background:#fae8ff;color:#86198f}
+  td.sistema .s-locomotor     {background:#e2e8f0;color:#334155}
+  td.sistema .s-otro          {background:#f3f4f6;color:#6b7280}
+  tr.section-row{background:var(--warm)}
+  tr.section-row td{padding:.14rem .35rem;font-weight:700;color:var(--warm-text);
+        font-size:.78rem;border-top:1px solid var(--warm-border);scroll-margin-top:3rem;
+        white-space:nowrap;width:auto}
+  tr.section-row:first-child td{border-top:0}
+  .no-results{display:none;padding:1rem;text-align:center;color:var(--muted);font-size:.85rem}
+  .back-to-top{position:fixed;bottom:1rem;right:1rem;width:2.2rem;height:2.2rem;border-radius:50%;
+       background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;
+       text-decoration:none;font-size:1rem;box-shadow:0 4px 12px rgba(37,99,235,.35);
+       opacity:0;pointer-events:none;transition:opacity .2s}
+  .back-to-top.visible{opacity:1;pointer-events:auto}
+  footer{text-align:center;padding:.7rem;color:var(--muted);font-size:.72rem;
+         border-top:1px solid var(--border)}
+  @media (max-width:700px){
+    .site-header h1{font-size:1.05rem}
+    .alpha-nav{gap:0;padding:.2rem .15rem}
+    .alpha-nav a,.alpha-nav span{min-width:1.15rem;padding:.08rem .18rem;font-size:.66rem}
+    main{padding:.35rem .2rem 1.5rem}
+    thead th{padding:.2rem .22rem;font-size:.6rem;letter-spacing:.02em}
+    tbody td{padding:.1rem .2rem;line-height:1.18}
+    td.name a{font-size:.78rem}
+    td.par-a,td.par-b{font-size:.72rem}
+    td.par-b::before{margin-right:.18rem}
+    td.zona{padding:.1rem .15rem;text-align:left}
+    td.zona span{font-size:.58rem;padding:0 4px}
+    td.sistema{padding:.1rem .15rem}
+    td.sistema span{font-size:.54rem;padding:0 4px}
+    td.num{font-size:.66rem;padding-left:.15rem;padding-right:.25rem}
+    tr.section-row td{padding:.12rem .25rem;font-size:.72rem}
+    .toolbar{flex-direction:column;align-items:stretch;gap:.25rem}
+    .sort-wrap{justify-content:flex-end;font-size:.75rem}
+    .sort-wrap select{font-size:.75rem;padding:.25rem .35rem}
+  }
+  @media (max-width:380px){
+    td.name a{font-size:.74rem}
+    td.par-a,td.par-b{font-size:.68rem}
+    td.zona span{font-size:.54rem;padding:0 3px}
+    td.sistema span{font-size:.5rem;padding:0 3px}
+    td.num{font-size:.62rem}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header" id="top">
+  <a class="back" href="../index.html">← Volver al portal</a>
+  <h1>El Par Biomagnético</h1>
+  <p>Pares Especiales</p>
+</header>
+
+<nav class="alpha-nav" aria-label="Índice alfabético" id="alphaNav">
+  <a href="#sec-a">A</a><a href="#sec-b">B</a><a href="#sec-c">C</a>
+  <a href="#sec-d">D</a><a href="#sec-e">E</a><a href="#sec-f">F</a>
+  <a href="#sec-g">G</a><a href="#sec-h">H</a><a href="#sec-i">I</a>
+  <a href="#sec-j">J</a><span>K</span><a href="#sec-l">L</a>
+  <a href="#sec-m">M</a><span>N</span><a href="#sec-o">O</a>
+  <a href="#sec-p">P</a><a href="#sec-qr">Q-R</a><a href="#sec-s">S</a>
+  <a href="#sec-t">T</a><a href="#sec-u">U</a><a href="#sec-vw">V-W</a>
+</nav>
+
+<main>
+  <p class="intro">
+    También puede consultar los Pares en
+    <a href="especiales2.html">orden alfabético</a>.
+  </p>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <label for="q" class="sr-only">Buscar par, trastorno, zona o sistema</label>
+      <input id="q" type="search" placeholder="Buscar par, trastorno, zona o sistema…" autocomplete="off">
+    </div>
+    <div class="sort-wrap">
+      <label for="sortSelect">Ordenar:</label>
+      <select id="sortSelect" aria-label="Ordenar tabla">
+        <option value="alfabetico">Alfabético</option>
+        <option value="par1">Par 1</option>
+        <option value="par2">Par 2</option>
+        <option value="zona">Zona</option>
+        <option value="sistema">Sistema</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="espTable">
+      <thead>
+        <tr>
+          <th scope="col" class="th-num">#</th>
+          <th scope="col">Par 1</th>
+          <th scope="col">Par 2</th>
+          <th scope="col">Trastorno</th>
+          <th scope="col" class="th-zona">Zona</th>
+          <th scope="col" class="th-sistema">Sistema</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row" id="sec-a"><td colspan="6">A</td></tr>
+        <tr><td class="num">1</td><td class="par-a">polo</td><td class="par-b">polo</td><td class="name"><a href="padecimientos/abraham.html">Abraham, equilibrio</a></td><td class="zona"><span>Otros</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">2</td><td class="par-a">dorsal 7</td><td class="par-b">dorsal 7</td><td class="name"><a href="padecimientos/acidez.html">Acidez y oxidación</a></td><td class="zona"><span>Dorso</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">3</td><td class="par-a">cola de páncreas</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/hiperuricemia.html">Acido Urico, Gota</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">4</td><td class="par-a">pancreas</td><td class="par-b">estómago</td><td class="name"><a href="padecimientos/chaco.html">Alergias cutáneas, Chaco</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">5</td><td class="par-a">torso frente</td><td class="par-b">suprarrenales</td><td class="name"><a href="padecimientos/asma_a.html">Alergias respiratorias</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">6</td><td class="par-a">riñón</td><td class="par-b">cápsula renal</td><td class="name"><a href="padecimientos/alex.html">Alex, disfunción renal</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">7</td><td class="par-a">pineal</td><td class="par-b">cerebelo</td><td class="name"><a href="padecimientos/alopecia.html">Alopecia</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">8</td><td class="par-a">timo</td><td class="par-b">suprarrenales</td><td class="name"><a href="padecimientos/alvaro.html">Alvaro, Sist. endócrino</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">9</td><td class="par-a">bulbo</td><td class="par-b">bulbo</td><td class="name"><a href="padecimientos/alzheimer.html">Alzheimer</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">10</td><td class="par-a">seno ventricular</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/Anaalicia.html">Ana Alicia, taquicardia</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">11</td><td class="par-a">apéndice</td><td class="par-b">timo</td><td class="name"><a href="padecimientos/angeles.html">Angeles, inmunocompetencia</a></td><td class="zona"><span>Torso Bajo</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">12</td><td class="par-a">epiglotis</td><td class="par-b">epiglotis</td><td class="name"><a href="padecimientos/apnea.html">Apnea</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-respiratorio">Respiratorio</span></td></tr>
+        <tr><td class="num">13</td><td class="par-a">nervio inguinal (D)</td><td class="par-b">artículación + riñón</td><td class="name"><a href="padecimientos/artritis.html">Artritis monoarticular</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">14</td><td class="par-a">corazón</td><td class="par-b">costillas (bi)</td><td class="name"><a href="padecimientos/asfixia.html">Asfixia</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">15</td><td class="par-a">torso frente</td><td class="par-b">suprarrenales</td><td class="name"><a href="padecimientos/asma_a.html">Asma alérgica, bronquitis</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">16</td><td class="par-a">riñón (I)</td><td class="par-b">cápsula renal</td><td class="name"><a href="padecimientos/alex.html">Asma verdadero, Alex</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">17</td><td class="par-a">colon transverso</td><td class="par-b">suprapúbico</td><td class="name"><a href="padecimientos/autismo.html">Autismo</a></td><td class="zona"><span>Torso Bajo</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+
+        <tr class="section-row" id="sec-b"><td colspan="6">B</td></tr>
+        <tr><td class="num">18</td><td class="par-a">muñeca</td><td class="par-b">tibia inf.</td><td class="name"><a href="padecimientos/equilibrio_ene.html">Balance energético</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-locomotor">Locomotor</span></td></tr>
+        <tr><td class="num">19</td><td class="par-a">palma</td><td class="par-b">palma</td><td class="name"><a href="padecimientos/bansal.html">Bansal, técnicas</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-tegumentario">Tegumentario</span></td></tr>
+        <tr><td class="num">20</td><td class="par-a">nervio vago</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/benavides.html">Benavides, función estomacal</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">21</td><td class="par-a">nudo braquial</td><td class="par-b">nudo braquial</td><td class="name"><a href="padecimientos/desbloqueo_ene.html">Bloqueo energético</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">22</td><td class="par-a">bulbo</td><td class="par-b">corazón</td><td class="name"><a href="padecimientos/bradicardia.html">Bradicardia</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">23</td><td class="par-a">torso frente</td><td class="par-b">suprarrenales</td><td class="name"><a href="padecimientos/asma_a.html">Bronquitis, asma alérgica</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+
+        <tr class="section-row" id="sec-c"><td colspan="6">C</td></tr>
+        <tr><td class="num">24</td><td class="par-a">cóccix</td><td class="par-b">ciático</td><td class="name"><a href="padecimientos/calambres.html">Calambres en piernas</a></td><td class="zona"><span>Dorso</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">25</td><td class="par-a">lumbar 4</td><td class="par-b">lumbar 4</td><td class="name"><a href="padecimientos/cal_lumbar.html">Calcificación lumbar</a></td><td class="zona"><span>Dorso</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">26</td><td class="par-a">vesícula</td><td class="par-b">escápula</td><td class="name"><a href="padecimientos/vesicula.html">Calculos en vesícula</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">27</td><td class="par-a">uretero</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/calculos_ren.html">Calculos Renales</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">28</td><td class="par-a">afin</td><td class="par-b">afin</td><td class="name"><a href="padecimientos/antineoplasico.html">Cancerígeno</a></td><td class="zona"><span>Otros</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">29</td><td class="par-a">hígado</td><td class="par-b">páncreas</td><td class="name"><a href="padecimientos/cansancio.html">Cansancio crónico</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">30</td><td class="par-a">hipotálamo</td><td class="par-b">hipófisis</td><td class="name"><a href="padecimientos/caspa.html">Caspa</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">31</td><td class="par-a">ojo</td><td class="par-b">escápula</td><td class="name"><a href="padecimientos/cataratas.html">Cataratas</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">32</td><td class="par-a">muñeca arriba</td><td class="par-b">muñeca arriba</td><td class="name"><a href="padecimientos/migrana.html">Cefaleas, Migrañas</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-locomotor">Locomotor</span></td></tr>
+        <tr><td class="num">33</td><td class="par-a">pancreas</td><td class="par-b">estómago</td><td class="name"><a href="padecimientos/chaco.html">Chaco, alergias cutáneas</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">34</td><td class="par-a">cerebelo</td><td class="par-b">cerebelo</td><td class="name"><a href="padecimientos/chapingo.html">Chapingo, Sist. Nerv. Central</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">35</td><td class="par-a">codo</td><td class="par-b">codo</td><td class="name"><a href="padecimientos/castaneda.html">Castañeda, Trastornos visuales</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-locomotor">Locomotor</span></td></tr>
+        <tr><td class="num">36</td><td class="par-a">sien</td><td class="par-b">sien</td><td class="name"><a href="padecimientos/isaac.html">Circulación cerebral, Isaac</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">37</td><td class="par-a">aorta</td><td class="par-b">aorta</td><td class="name"><a href="padecimientos/cardio1.html">Circulación sanguínea</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">38</td><td class="par-a">hígado</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/cirrosis.html">Cirrosis hepática</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">39</td><td class="par-a">ombligo</td><td class="par-b">ombligo</td><td class="name"><a href="padecimientos/plaquetas.html">Coagulos, circulación</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">40</td><td class="par-a">colon transverso</td><td class="par-b">párpado</td><td class="name"><a href="padecimientos/sinusitis_n.html">Congestión nasal</a></td><td class="zona"><span>Torso Bajo</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">41</td><td class="par-a">aquiles superior</td><td class="par-b">aquiles sup.</td><td class="name"><a href="padecimientos/contractura.html">Contracturas musculares</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-locomotor">Locomotor</span></td></tr>
+        <tr><td class="num">42</td><td class="par-a">adenohipófisis</td><td class="par-b">riñón (I)</td><td class="name"><a href="padecimientos/correc-hormonal.html">Corrección hormonal</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">43</td><td class="par-a">hígado</td><td class="par-b">píloro</td><td class="name"><a href="padecimientos/creatinina.html">Creatinina alta</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+
+        <tr class="section-row" id="sec-d"><td colspan="6">D</td></tr>
+        <tr><td class="num">44</td><td class="par-a">duodeno</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/diabetes.html">Diabetes Mellitus</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">45</td><td class="par-a">lumbar 2</td><td class="par-b">lumbar 2</td><td class="name"><a href="padecimientos/gastritis.html">Digestivos, problemas</a></td><td class="zona"><span>Dorso</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">46</td><td class="par-a">recto</td><td class="par-b">ano</td><td class="name"><a href="padecimientos/diarrea.html">Diarreas disfuncionales</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">47</td><td class="par-a">riñón (I)</td><td class="par-b">cápsula renal</td><td class="name"><a href="padecimientos/alex.html">Disfunción renal, Alex</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">48</td><td class="par-a">cuádriceps</td><td class="par-b">cuádriceps</td><td class="name"><a href="padecimientos/lenguaje.html">Dislexia</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-muscular">Muscular</span></td></tr>
+        <tr><td class="num">49</td><td class="par-a">pulmón</td><td class="par-b">pulmón + timo</td><td class="name"><a href="padecimientos/tos.html">Disnea, inflamación, tos</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-respiratorio">Respiratorio</span></td></tr>
+        <tr><td class="num">50</td><td class="par-a">uretero</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/calculos_auch.html">Dolor por cálculos</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">51</td><td class="par-a">vesícula</td><td class="par-b">paratiroides</td><td class="name"><a href="padecimientos/vesicula.html">Dolor de cálculos de vesícula</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">52</td><td class="par-a">ovario</td><td class="par-b">útero</td><td class="name"><a href="padecimientos/duran.html">Durán (embarazo)</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+
+        <tr class="section-row" id="sec-e"><td colspan="6">E</td></tr>
+        <tr><td class="num">53</td><td class="par-a">páncreas</td><td class="par-b">hígado</td><td class="name"><a href="padecimientos/ecuador.html">Ecuador, resist. insulina, peso</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">54</td><td class="par-a">subclavia</td><td class="par-b">subclavia</td><td class="name"><a href="padecimientos/edema.html">Edema</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">55</td><td class="par-a">mácula</td><td class="par-b">cerebelo</td><td class="name"><a href="padecimientos/e_macular.html">Edema Macular</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">56</td><td class="par-a">ojo</td><td class="par-b">cerebelo</td><td class="name"><a href="padecimientos/nervio_optico.html">Edema nervio óptico</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">57</td><td class="par-a">iliaco</td><td class="par-b">iliaco</td><td class="name"><a href="padecimientos/elena.html">Elena</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">58</td><td class="par-a">ovario</td><td class="par-b">útero</td><td class="name"><a href="padecimientos/duran.html">Embarazo, Durán</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">59</td><td class="par-a">trompa</td><td class="par-b">ovario</td><td class="name"><a href="padecimientos/paty.html">Embarazo Ectópico, Paty</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">60</td><td class="par-a">útero</td><td class="par-b">hígado</td><td class="name"><a href="padecimientos/e_molar.html">Embarazo Molar</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">61</td><td class="par-a">sacro</td><td class="par-b">útero</td><td class="name"><a href="padecimientos/endometriosis.html">Endometriosis</a></td><td class="zona"><span>Dorso</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">62</td><td class="par-a">muñeca</td><td class="par-b">tibia (cl)</td><td class="name"><a href="padecimientos/equilibrio_ene.html">Energético</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-locomotor">Locomotor</span></td></tr>
+        <tr><td class="num">63</td><td class="par-a">timo</td><td class="par-b">bazo</td><td class="name"><a href="padecimientos/enfisema.html">Enfisema</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">64</td><td class="par-a">muñeca</td><td class="par-b">rodilla</td><td class="name"><a href="padecimientos/enuresis.html">Enuresis</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-locomotor">Locomotor</span></td></tr>
+        <tr><td class="num">65</td><td class="par-a">lóbulo post. hígado</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/venenos.html">Envenenamiento, Puebla</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">66</td><td class="par-a">cerebelo</td><td class="par-b">cerebelo</td><td class="name"><a href="padecimientos/epilepsia.html">Epilepsia</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">67</td><td class="par-a">timo</td><td class="par-b">bazo</td><td class="name"><a href="padecimientos/enfisema.html">EPOC, Enfermedad Pulmonar Obstructiva Crónica</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">68</td><td class="par-a">tendón triceps</td><td class="par-b">aquiles</td><td class="name"><a href="padecimientos/equilibrio_ene.html">Equilibrio energético</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-locomotor">Locomotor</span></td></tr>
+        <tr><td class="num">69</td><td class="par-a">polo</td><td class="par-b">polo</td><td class="name"><a href="padecimientos/abraham.html">Equilibrio vert. Abraham</a></td><td class="zona"><span>Otros</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">70</td><td class="par-a">ojo</td><td class="par-b">ojo</td><td class="name"><a href="padecimientos/citomegalovirus.html">Esclerosis múltiple</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">71</td><td class="par-a">dorsal 4,5</td><td class="par-b">lumbar 1,2 ó 3</td><td class="name"><a href="padecimientos/espina_bifida.html">Espina bífida</a></td><td class="zona"><span>Dorso</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">72</td><td class="par-a">metatarso</td><td class="par-b">metatarso</td><td class="name"><a href="padecimientos/espolon.html">Espolones</a></td><td class="zona"><span>Pie</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">73</td><td class="par-a">uretero</td><td class="par-b">vejiga</td><td class="name"><a href="padecimientos/arenillas.html">Expulsar arenillas</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+
+        <tr class="section-row" id="sec-f"><td colspan="6">F</td></tr>
+        <tr><td class="num">74</td><td class="par-a">timo</td><td class="par-b">bazo</td><td class="name"><a href="padecimientos/sufactante.html">Factor surfactante</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">75</td><td class="par-a">útero</td><td class="par-b">útero</td><td class="name"><a href="padecimientos/roberta.html">Falso embarazo, Roberta</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">76</td><td class="par-a">deltoides</td><td class="par-b">cuadrado lumbar</td><td class="name"><a href="padecimientos/f_lupus.html">Falso Lupus</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-muscular">Muscular</span></td></tr>
+        <tr><td class="num">77</td><td class="par-a">coronarias</td><td class="par-b">cardias</td><td class="name"><a href="padecimientos/cardio1.html">Flujo sanguineo, control</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">78</td><td class="par-a">coronario</td><td class="par-b">periné</td><td class="name"><a href="padecimientos/fuduric.html">Fuduric: energético</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+
+        <tr class="section-row" id="sec-g"><td colspan="6">G</td></tr>
+        <tr><td class="num">79</td><td class="par-a">hipófisis</td><td class="par-b">mama</td><td class="name"><a href="padecimientos/galactorrea.html">Galactorrea</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">80</td><td class="par-a">gen</td><td class="par-b">órgano afectado</td><td class="name"><a href="padecimientos/gen.html">Gen, regeneración tisular</a></td><td class="zona"><span>Otros</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">81</td><td class="par-a">elevador escápula</td><td class="par-b">proximal deltoides</td><td class="name"><a href="padecimientos/genu-valgo.html">Genu valgo</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-muscular">Muscular</span></td></tr>
+        <tr><td class="num">82</td><td class="par-a">riñón</td><td class="par-b">parietal</td><td class="name"><a href="padecimientos/goiz.html">Goiz</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+
+        <tr class="section-row" id="sec-h"><td colspan="6">H</td></tr>
+        <tr><td class="num">83</td><td class="par-a">estómago</td><td class="par-b">bulbo</td><td class="name"><a href="padecimientos/hemiplejia.html">Hemiplejia</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">84</td><td class="par-a">ano</td><td class="par-b">testículo</td><td class="name"><a href="padecimientos/hemorroides.html">Hemorroides</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">85</td><td class="par-a">carótida</td><td class="par-b">carótida</td><td class="name"><a href="padecimientos/marimar.html">Hipertensión arterial sistémica</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">86</td><td class="par-a">cola de páncreas</td><td class="par-b">riñón (I)</td><td class="name"><a href="padecimientos/hiperuricemia.html">Hiperuricemia, ácido úrico</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">87</td><td class="par-a">parótida</td><td class="par-b">riñón (cl)</td><td class="name"><a href="padecimientos/hipocalcemia.html">Hipocalcemia</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">88</td><td class="par-a">pineal</td><td class="par-b">hipotálamo</td><td class="name"><a href="padecimientos/herpes.html">Herpes, cualquier tipo</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+
+        <tr class="section-row" id="sec-i"><td colspan="6">I</td></tr>
+        <tr><td class="num">89</td><td class="par-a">apéndice</td><td class="par-b">timo</td><td class="name"><a href="padecimientos/angeles.html">Inmunocompetencia, Angeles</a></td><td class="zona"><span>Torso Bajo</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">90</td><td class="par-a">útero</td><td class="par-b">recto</td><td class="name"><a href="padecimientos/intolerancia_a.html">Intolerancia alimentaria</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">91</td><td class="par-a">mastoides</td><td class="par-b">duodeno</td><td class="name"><a href="padecimientos/intolerancia_a.html#oleaginosas">Intolerancia oleaginosas</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">92</td><td class="par-a">amígdala palatina</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/intoxicacion_c.html">Intoxicación crónica</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">93</td><td class="par-a">punta de páncreas</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/arsenico.html">Intoxicación por arsénico</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">94</td><td class="par-a">sien</td><td class="par-b">sien</td><td class="name"><a href="padecimientos/isaac.html">Isaac, microcirculación cerebral</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+
+        <tr class="section-row" id="sec-j"><td colspan="6">J</td></tr>
+        <tr><td class="num">95</td><td class="par-a">atlas</td><td class="par-b">atlas</td><td class="name"><a href="padecimientos/juana.html">Juana, líbido</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">96</td><td class="par-a">juanete</td><td class="par-b">riñón (hl)</td><td class="name"><a href="padecimientos/juanete.html">Juanete</a></td><td class="zona"><span>Pie</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+
+        <tr class="section-row" id="sec-l"><td colspan="6">L</td></tr>
+        <tr><td class="num">97</td><td class="par-a">bazo</td><td class="par-b">duodeno</td><td class="name"><a href="padecimientos/leucemia.html">Leucemia</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">98</td><td class="par-a">atlas</td><td class="par-b">atlas</td><td class="name"><a href="padecimientos/juana.html">Líbido, Juana</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">99</td><td class="par-a">nuca</td><td class="par-b">sacro</td><td class="name"><a href="padecimientos/nuca-sacro.html">Líquido cefaloraquídeo (regula)</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">100</td><td class="par-a">esternón</td><td class="par-b">suprarrenal</td><td class="name"><a href="padecimientos/lucio.html">Lucio, trastornos sanguíneos</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">101</td><td class="par-a">trocanter mayor</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/lumbalgia.html">Lumbalgia</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+
+        <tr class="section-row" id="sec-m"><td colspan="6">M</td></tr>
+        <tr><td class="num">102</td><td class="par-a">riñón</td><td class="par-b">ureter</td><td class="name"><a href="padecimientos/machin.html">Machín o Herpes (4)</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">103</td><td class="par-a">carótida</td><td class="par-b">carótida</td><td class="name"><a href="padecimientos/marimar.html">Marimar, hipertensión</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">104</td><td class="par-a">cuádriceps</td><td class="par-b">cuádriceps</td><td class="name"><a href="padecimientos/magda.html">Magda</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-muscular">Muscular</span></td></tr>
+        <tr><td class="num">105</td><td class="par-a">hipófisis</td><td class="par-b">útero</td><td class="name"><a href="padecimientos/menopausia.html">Menopausia, bochornos</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">106</td><td class="par-a">hipófisis</td><td class="par-b">ovario</td><td class="name"><a href="padecimientos/carmen.html">Menstruación</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">107</td><td class="par-a">muñeca arriba</td><td class="par-b">muñeca arriba</td><td class="name"><a href="padecimientos/migrana.html">Migraña</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-locomotor">Locomotor</span></td></tr>
+        <tr><td class="num">108</td><td class="par-a">útero</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/miomas.html">Miomas, absesos, polipos, carcinomas</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+
+        <tr class="section-row" id="sec-o"><td colspan="6">O</td></tr>
+        <tr><td class="num">109</td><td class="par-a">cresta iliaca anterosuperior</td><td class="par-b">cresta iliaca a.s.</td><td class="name"><a href="padecimientos/obsidad.html">Obesidad, control de peso</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">110</td><td class="par-a">aorta</td><td class="par-b">aorta</td><td class="name"><a href="padecimientos/cardio1.html">Obstrucción v. mitral</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">111</td><td class="par-a">riñón</td><td class="par-b">sacro (cl)</td><td class="name"><a href="padecimientos/olazo.html">Olazo, obstrucción intestinal</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">112</td><td class="par-a">hipófisis</td><td class="par-b">ovario</td><td class="name"><a href="padecimientos/carmen.html">Ovulación</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+
+        <tr class="section-row" id="sec-p"><td colspan="6">P</td></tr>
+        <tr><td class="num">113</td><td class="par-a">trompa</td><td class="par-b">ovario</td><td class="name"><a href="padecimientos/paty.html">Paty, embarazo ectópico</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">114</td><td class="par-a">cerebro</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/paralisis.html">Parálisis</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">115</td><td class="par-a">braquial</td><td class="par-b">codo</td><td class="name"><a href="padecimientos/brazo_paralisis.html">Parálisis del Brazo</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">116</td><td class="par-a">nervio facial</td><td class="par-b">nervio facial</td><td class="name"><a href="padecimientos/nervio_fa.html">Parálisis facial</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">117</td><td class="par-a">postpineal</td><td class="par-b">bulbo raquídeo</td><td class="name"><a href="padecimientos/parkinson.html">Parkinson</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">118</td><td class="par-a">cervical 7</td><td class="par-b">dorsal 1</td><td class="name"><a href="padecimientos/pasciano.html">Pasciano, tennis elbow</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">119</td><td class="par-a">metatarso</td><td class="par-b">metatarso</td><td class="name"><a href="padecimientos/espolon.html">Pie Plano</a></td><td class="zona"><span>Pie</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">120</td><td class="par-a">planta del pie</td><td class="par-b">planta del pie</td><td class="name"><a href="padecimientos/plantas.html">Piernas frías</a></td><td class="zona"><span>Pie</span></td><td class="sistema"><span class="s-tegumentario">Tegumentario</span></td></tr>
+        <tr><td class="num">121</td><td class="par-a">cabeza de peroné</td><td class="par-b">cab. de peroné</td><td class="name"><a href="padecimientos/varices.html#perone">Piernas inflamadas</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">122</td><td class="par-a">ombligo</td><td class="par-b">ombligo</td><td class="name"><a href="padecimientos/plaquetas.html">Plaquetas</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">123</td><td class="par-a">timo</td><td class="par-b">bazo</td><td class="name"><a href="padecimientos/poliglobulina.html">Poliglobulia</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">124</td><td class="par-a">cardias</td><td class="par-b">temporal</td><td class="name"><a href="padecimientos/priones.html">Priones</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">125</td><td class="par-a">lóbulo post. del hígado</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/venenos.html">Puebla, envenenamiento</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+
+        <tr class="section-row" id="sec-qr"><td colspan="6">Q–R</td></tr>
+        <tr><td class="num">126</td><td class="par-a">vagina</td><td class="par-b">ovario</td><td class="name"><a href="padecimientos/quiste-agua.html">Quiste de agua</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">127</td><td class="par-a">nervio inguinal (D)</td><td class="par-b">artículación + riñón</td><td class="name"><a href="padecimientos/artritis.html">Reumatismo articular</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">128</td><td class="par-a">nuca</td><td class="par-b">sacro</td><td class="name"><a href="padecimientos/nuca-sacro.html">Resecado</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">129</td><td class="par-a">páncreas</td><td class="par-b">hígado</td><td class="name"><a href="padecimientos/ecuador.html">Resist. insulina, peso, Ecuador</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">130</td><td class="par-a"></td><td class="par-b"></td><td class="name"><a href="padecimientos/roberta.html">Roberta (falso embarazo)</a></td><td class="zona"><span>Otros</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+
+        <tr class="section-row" id="sec-s"><td colspan="6">S</td></tr>
+        <tr><td class="num">131</td><td class="par-a">útero</td><td class="par-b">útero</td><td class="name"><a href="padecimientos/sangrado-vaginal.html">Sangrado transvaginal</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">132</td><td class="par-a">vagina</td><td class="par-b">útero</td><td class="name"><a href="padecimientos/sjogren.html">Síndrome de Sjogren</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">133</td><td class="par-a">timo</td><td class="par-b">suprarrenales</td><td class="name"><a href="padecimientos/alvaro.html">Sist. endócrino, Alvaro</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">134</td><td class="par-a">epiclavio</td><td class="par-b">epiclavio</td><td class="name"><a href="padecimientos/epiclavio.html">Sistema linfático</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+
+        <tr class="section-row" id="sec-t"><td colspan="6">T</td></tr>
+        <tr><td class="num">135</td><td class="par-a">cuerpo calloso</td><td class="par-b">cuerpo calloso</td><td class="name"><a href="padecimientos/enfisema.html">Tabaquismo</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">136</td><td class="par-a">seno A ventricular</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/Anaalicia.html">Taquicardia, Ana Alicia</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">137</td><td class="par-a">cervical 7</td><td class="par-b">dorsal 1</td><td class="name"><a href="padecimientos/pasciano.html">Tennis elbow, Pasiano</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">138</td><td class="par-a">oído</td><td class="par-b">oído</td><td class="name"><a href="padecimientos/tinitus.html">Tinnitus</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">139</td><td class="par-a">timo</td><td class="par-b">bazo</td><td class="name"><a href="padecimientos/enfisema.html">Tos, absesos pulmonares</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">140</td><td class="par-a">cápsula renal</td><td class="par-b">vejiga</td><td class="name"><a href="padecimientos/toxinas_rinon.html">Toxinas en el riñón</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">141</td><td class="par-a">cuádriceps</td><td class="par-b">cuádriceps</td><td class="name"><a href="padecimientos/lenguaje.html">Trastornos de leguaje</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-muscular">Muscular</span></td></tr>
+        <tr><td class="num">142</td><td class="par-a">cóccix</td><td class="par-b">cóccix</td><td class="name"><a href="padecimientos/pelvico.html">Trastornos pélvicos</a></td><td class="zona"><span>Dorso</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">143</td><td class="par-a">codo</td><td class="par-b">codo</td><td class="name"><a href="padecimientos/castaneda.html">Castañeda, Trastornos visuales</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-locomotor">Locomotor</span></td></tr>
+        <tr><td class="num">144</td><td class="par-a">corazón</td><td class="par-b">corazón</td><td class="name"><a href="padecimientos/cardio1.html">Trigliceridos</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">145</td><td class="par-a">ombligo</td><td class="par-b">ombligo</td><td class="name"><a href="padecimientos/plaquetas.html">Trombos</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">146</td><td class="par-a">punto alcalino</td><td class="par-b">escápula</td><td class="name"><a href="padecimientos/p_alcalino.html">Tumores, miomas, fibromas, quistes.</a></td><td class="zona"><span>Otros</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+
+        <tr class="section-row" id="sec-u"><td colspan="6">U</td></tr>
+        <tr><td class="num">147</td><td class="par-a">vejiga</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/utero-desinf.html">Útero, desinflamar</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+
+        <tr class="section-row" id="sec-vw"><td colspan="6">V–W</td></tr>
+        <tr><td class="num">148</td><td class="par-a">cervicales</td><td class="par-b">útero</td><td class="name"><a href="padecimientos/vaginitis.html">Vaginitis</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">149</td><td class="par-a">nervio trigémino</td><td class="par-b">sacro</td><td class="name"><a href="padecimientos/varices.html">Varices</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">150</td><td class="par-a">vesícula</td><td class="par-b">escápula</td><td class="name"><a href="padecimientos/vesicula.html">Vesícula, desinflamar</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">151</td><td class="par-a">área visual</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/area-visual.html">Vista, capacidad visual</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+      </tbody>
+    </table>
+    <div class="no-results" id="noResults">Sin resultados para tu búsqueda.</div>
+  </div>
+</main>
+
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Volver arriba">↑</a>
+
+<footer>BioM3 · El Par Biomagnético · Pares Especiales</footer>
+
+<script>
+(function () {
+  const input = document.getElementById('q');
+  const sortSelect = document.getElementById('sortSelect');
+  const alphaNav = document.getElementById('alphaNav');
+  const tbody = document.getElementById('espTable').tBodies[0];
+  const noResults = document.getElementById('noResults');
+
+  const originalChildren = Array.from(tbody.children);
+  const dataRows = originalChildren.filter(r => !r.classList.contains('section-row'));
+
+  const ZONA_ORDER = ['Cabeza','Cara','Cuello','Brazos','Torso Superior','Torso Medio','Torso Bajo','Pelvis','Dorso','Pierna','Pie','Otros'];
+  const SISTEMA_ORDER = ['Nervioso','Circulatorio','Respiratorio','Digestivo','Esquelético','Muscular','Endocrino','Urinario','Linfático','Inmunológico','Tegumentario','Reproductor','Locomotor','OTRO'];
+
+  function getKey(row, key) {
+    if (key === 'par1') return row.querySelector('.par-a').textContent.trim().toLowerCase();
+    if (key === 'par2') return row.querySelector('.par-b').textContent.trim().toLowerCase();
+    return '';
+  }
+
+  function renumber() {
+    let n = 0;
+    for (const row of tbody.rows) {
+      if (row.classList.contains('section-row')) continue;
+      const cell = row.querySelector('td.num');
+      if (cell) cell.textContent = ++n;
+    }
+  }
+
+  function buildGrouped(visibleData, groupField, groupOrder) {
+    const byGroup = new Map();
+    groupOrder.forEach(g => byGroup.set(g, []));
+    Array.from(visibleData).forEach(r => {
+      const g = r.querySelector('.' + groupField).textContent.trim();
+      if (!byGroup.has(g)) byGroup.set(g, []);
+      byGroup.get(g).push(r);
+    });
+    byGroup.forEach(arr => arr.sort((a, b) => {
+      const pa = a.querySelector('.par-a').textContent.trim().toLowerCase();
+      const pb = b.querySelector('.par-a').textContent.trim().toLowerCase();
+      return pa.localeCompare(pb, 'es');
+    }));
+    const order = groupOrder.slice();
+    byGroup.forEach((_, g) => { if (!order.includes(g)) order.push(g); });
+    const frag = document.createDocumentFragment();
+    order.forEach(g => {
+      const arr = byGroup.get(g);
+      if (!arr || !arr.length) return;
+      const header = document.createElement('tr');
+      header.className = 'section-row';
+      const cell = document.createElement('td');
+      cell.colSpan = 6;
+      cell.textContent = g;
+      header.appendChild(cell);
+      frag.appendChild(header);
+      arr.forEach(r => frag.appendChild(r));
+    });
+    return frag;
+  }
+
+  function render() {
+    const q = input.value.trim().toLowerCase();
+    const sortKey = sortSelect.value;
+    const matches = r => !q || r.textContent.toLowerCase().includes(q);
+    const visibleData = new Set(dataRows.filter(matches));
+    const frag = document.createDocumentFragment();
+
+    alphaNav.style.display = sortKey === 'alfabetico' ? '' : 'none';
+
+    if (sortKey === 'alfabetico') {
+      let currentSection = null;
+      const sectionHasData = new Map();
+      originalChildren.forEach(child => {
+        if (child.classList.contains('section-row')) {
+          currentSection = child;
+          sectionHasData.set(child, false);
+        } else if (visibleData.has(child) && currentSection) {
+          sectionHasData.set(currentSection, true);
+        }
+      });
+      originalChildren.forEach(child => {
+        if (child.classList.contains('section-row')) {
+          if (sectionHasData.get(child)) frag.appendChild(child);
+        } else if (visibleData.has(child)) {
+          frag.appendChild(child);
+        }
+      });
+    } else if (sortKey === 'zona') {
+      frag.appendChild(buildGrouped(visibleData, 'zona', ZONA_ORDER));
+    } else if (sortKey === 'sistema') {
+      frag.appendChild(buildGrouped(visibleData, 'sistema', SISTEMA_ORDER));
+    } else {
+      Array.from(visibleData)
+        .sort((a, b) => getKey(a, sortKey).localeCompare(getKey(b, sortKey), 'es'))
+        .forEach(r => frag.appendChild(r));
+    }
+
+    tbody.replaceChildren(frag);
+    renumber();
+    noResults.style.display = visibleData.size === 0 ? 'block' : 'none';
+  }
+
+  input.addEventListener('input', render);
+  sortSelect.addEventListener('change', render);
+  render();
+
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 300);
+  }, { passive: true });
+})();
+</script>
+
+</body>
+</html>

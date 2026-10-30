@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Listado de virus patógenos, pares biomagnéticos, zonas y sistemas. Portal BioM3.">
+<title>Virus patógenos · BioM3</title>
+<style>
+  :root{--bg:#f8fafc;--card:#fff;--text:#1f2937;--muted:#64748b;--accent:#2563eb;
+        --accent-light:#dbeafe;--border:#e2e8f0;--warm:#fef3e7;--warm-border:#fbdcc2;--warm-text:#92400e}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       background:var(--bg);color:var(--text);line-height:1.3;font-size:14px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+           clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .site-header{background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;
+               padding:.65rem 1rem .5rem;text-align:center}
+  .site-header .back{color:#bfdbfe;text-decoration:none;font-size:.8rem}
+  .site-header .back:hover,.site-header .back:focus{color:#fff}
+  .site-header h1{margin:.1rem 0 0;font-size:1.25rem;font-weight:700}
+  .site-header p{margin:.1rem 0 0;color:#dbeafe;font-size:.82rem}
+  .alpha-nav{position:sticky;top:0;z-index:10;background:var(--card);
+             border-bottom:1px solid var(--border);padding:.25rem .4rem;
+             display:flex;flex-wrap:wrap;justify-content:center;gap:.03rem;
+             box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .alpha-nav a,.alpha-nav span{display:inline-block;min-width:1.4rem;padding:.12rem .3rem;
+             text-align:center;border-radius:4px;text-decoration:none;color:var(--accent);
+             font-weight:600;font-size:.74rem;line-height:1.2}
+  .alpha-nav a:hover,.alpha-nav a:focus{background:var(--accent-light);outline:none}
+  .alpha-nav span{color:#cbd5e1;cursor:default}
+  main{max-width:1050px;margin:0 auto;padding:.5rem .35rem 2rem}
+  .intro{margin:0 0 .4rem;color:var(--muted);font-size:.8rem}
+  .intro a{color:var(--accent)}
+  .toolbar{display:flex;gap:.4rem;margin-bottom:.4rem;flex-wrap:wrap;align-items:center}
+  .toolbar .search-wrap{flex:1;min-width:150px}
+  .toolbar input[type=search]{width:100%;padding:.35rem .6rem;font-size:.88rem;
+       font-family:inherit;border:1px solid var(--border);border-radius:6px;background:var(--card)}
+  .toolbar input[type=search]:focus{outline:none;border-color:var(--accent);
+       box-shadow:0 0 0 2px rgba(37,99,235,.18)}
+  .sort-wrap{display:flex;align-items:center;gap:.3rem;font-size:.8rem;color:var(--muted)}
+  .sort-wrap select{padding:.3rem .4rem;font-size:.8rem;font-family:inherit;
+       border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--text)}
+  .sort-wrap select:focus{outline:none;border-color:var(--accent)}
+  .table-wrap{background:var(--card);border:1px solid var(--border);border-radius:6px;
+              overflow-x:auto;overflow-y:hidden;display:inline-block;max-width:100%;vertical-align:top}
+  table{width:auto;border-collapse:collapse;table-layout:auto}
+  thead{background:var(--warm)}
+  thead th{text-align:left;padding:.22rem .32rem;font-size:.66rem;text-transform:uppercase;
+           letter-spacing:.04em;color:var(--warm-text);border-bottom:1px solid var(--warm-border);
+           white-space:nowrap;width:1%}
+  thead th.th-num{text-align:center}
+  thead th.th-zona{text-align:left;padding-left:.22rem}
+  thead th.th-sistema{text-align:left;padding-left:.22rem}
+  tbody tr{border-bottom:1px solid var(--border)}
+  tbody tr:last-child{border-bottom:0}
+  tbody tr:hover{background:#f1f5f9}
+  tbody td{padding:.12rem .28rem;vertical-align:top;line-height:1.2;
+           white-space:nowrap;width:1%}
+  td.num{text-align:center;color:var(--muted);font-variant-numeric:tabular-nums;
+         font-size:.72rem;padding-left:.22rem;padding-right:.32rem}
+  td.par-a{text-align:left;color:#1d4ed8;font-weight:500;font-size:.78rem;padding-right:0}
+  td.par-b{text-align:left;color:#9a3412;font-weight:500;font-size:.78rem;padding-left:.1rem}
+  td.par-b::before{content:"·";display:inline-block;margin-right:.25rem;
+                   color:#94a3b8;font-weight:400;font-size:1em}
+  td.par-b:empty::before{content:"";margin:0}
+  td.name{padding-left:.22rem;padding-right:.35rem}
+  td.name a{color:var(--accent);text-decoration:none;font-weight:500;font-size:.82rem}
+  td.name a:hover,td.name a:focus{text-decoration:underline}
+  td.zona{text-align:left;padding-left:.22rem;padding-right:.35rem}
+  td.zona span{display:inline-block;padding:0 5px;border-radius:999px;background:#e0e7ff;
+               color:#3730a3;font-size:.66rem;font-weight:600;line-height:1.4}
+  td.sistema{text-align:left;padding-left:.22rem;padding-right:.35rem}
+  td.sistema span{display:inline-block;padding:0 6px;border-radius:999px;
+                  font-size:.62rem;font-weight:600;line-height:1.4;white-space:nowrap}
+  td.sistema .s-nervioso      {background:#e0e7ff;color:#3730a3}
+  td.sistema .s-circulatorio  {background:#fee2e2;color:#991b1b}
+  td.sistema .s-respiratorio  {background:#cffafe;color:#155e75}
+  td.sistema .s-digestivo     {background:#fef3c7;color:#92400e}
+  td.sistema .s-esqueletico   {background:#f5f5f4;color:#44403c}
+  td.sistema .s-muscular      {background:#fce7f3;color:#9d174d}
+  td.sistema .s-endocrino     {background:#fef9c3;color:#854d0e}
+  td.sistema .s-urinario      {background:#dbeafe;color:#1e40af}
+  td.sistema .s-linfatico     {background:#dcfce7;color:#166534}
+  td.sistema .s-inmunologico  {background:#d1fae5;color:#065f46}
+  td.sistema .s-tegumentario  {background:#ffedd5;color:#9a3412}
+  td.sistema .s-reproductor   {background:#fae8ff;color:#86198f}
+  td.sistema .s-locomotor     {background:#e2e8f0;color:#334155}
+  td.sistema .s-otro          {background:#f3f4f6;color:#6b7280}
+  tr.section-row{background:var(--warm)}
+  tr.section-row td{padding:.14rem .35rem;font-weight:700;color:var(--warm-text);
+        font-size:.78rem;border-top:1px solid var(--warm-border);scroll-margin-top:3rem;
+        white-space:nowrap;width:auto}
+  tr.section-row:first-child td{border-top:0}
+  .no-results{display:none;padding:1rem;text-align:center;color:var(--muted);font-size:.85rem}
+  .back-to-top{position:fixed;bottom:1rem;right:1rem;width:2.2rem;height:2.2rem;border-radius:50%;
+       background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;
+       text-decoration:none;font-size:1rem;box-shadow:0 4px 12px rgba(37,99,235,.35);
+       opacity:0;pointer-events:none;transition:opacity .2s}
+  .back-to-top.visible{opacity:1;pointer-events:auto}
+  footer{text-align:center;padding:.7rem;color:var(--muted);font-size:.72rem;
+         border-top:1px solid var(--border)}
+  @media (max-width:700px){
+    .site-header h1{font-size:1.05rem}
+    .alpha-nav{gap:0;padding:.2rem .15rem}
+    .alpha-nav a,.alpha-nav span{min-width:1.15rem;padding:.08rem .18rem;font-size:.66rem}
+    main{padding:.35rem .2rem 1.5rem}
+    thead th{padding:.2rem .22rem;font-size:.6rem;letter-spacing:.02em}
+    tbody td{padding:.1rem .2rem;line-height:1.18}
+    td.name a{font-size:.78rem}
+    td.par-a,td.par-b{font-size:.72rem}
+    td.par-b::before{margin-right:.18rem}
+    td.zona{padding:.1rem .15rem;text-align:left}
+    td.zona span{font-size:.58rem;padding:0 4px}
+    td.sistema{padding:.1rem .15rem}
+    td.sistema span{font-size:.54rem;padding:0 4px}
+    td.num{font-size:.66rem;padding-left:.15rem;padding-right:.25rem}
+    tr.section-row td{padding:.12rem .25rem;font-size:.72rem}
+    .toolbar{flex-direction:column;align-items:stretch;gap:.25rem}
+    .sort-wrap{justify-content:flex-end;font-size:.75rem}
+    .sort-wrap select{font-size:.75rem;padding:.25rem .35rem}
+  }
+  @media (max-width:380px){
+    td.name a{font-size:.74rem}
+    td.par-a,td.par-b{font-size:.68rem}
+    td.zona span{font-size:.54rem;padding:0 3px}
+    td.sistema span{font-size:.5rem;padding:0 3px}
+    td.num{font-size:.62rem}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header" id="top">
+  <a class="back" href="../index.html">← Volver al portal</a>
+  <h1>El Par Biomagnético</h1>
+  <p>Virus patógenos</p>
+</header>
+
+<nav class="alpha-nav" aria-label="Índice alfabético" id="alphaNav">
+  <a href="#sec-a">A</a><span>B</span>
+  <a href="#sec-c">C</a><a href="#sec-d">D</a><a href="#sec-e">E</a>
+  <a href="#sec-f">F-G</a><a href="#sec-h">H</a><a href="#sec-i">I</a>
+  <a href="#sec-m">M</a><a href="#sec-n">N</a><a href="#sec-o">O</a>
+  <a href="#sec-p">P</a><span>Q</span>
+  <a href="#sec-r">R</a><a href="#sec-s">S</a><a href="#sec-t">T</a>
+  <a href="#sec-v">V</a><a href="#sec-x">X-Z</a>
+</nav>
+
+<main>
+  <p class="intro">
+    También puede consultar los virus patógenos por
+    <a href="virus2.html">pares en orden alfabético</a>.
+  </p>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <label for="q" class="sr-only">Buscar virus, órgano, zona o sistema</label>
+      <input id="q" type="search" placeholder="Buscar virus, órgano, zona o sistema…" autocomplete="off">
+    </div>
+    <div class="sort-wrap">
+      <label for="sortSelect">Ordenar:</label>
+      <select id="sortSelect" aria-label="Ordenar tabla">
+        <option value="patogeno">Patógenos</option>
+        <option value="par1">Par 1</option>
+        <option value="par2">Par 2</option>
+        <option value="zona">Zona</option>
+        <option value="sistema">Sistema</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="virusTable">
+      <thead>
+        <tr>
+          <th scope="col" class="th-num">#</th>
+          <th scope="col">Par 1</th>
+          <th scope="col">Par 2</th>
+          <th scope="col">Trastorno / Virus</th>
+          <th scope="col" class="th-zona">Zona</th>
+          <th scope="col" class="th-sistema">Sistema</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="section-row" id="sec-a"><td colspan="6">A</td></tr>
+        <tr><td class="num">1</td><td class="par-a">ligamento hepático</td><td class="par-b">riñón (D)</td><td class="name"><a href="padecimientos/adenovirus.html">Adenovirus</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">2</td><td class="par-a">hígado</td><td class="par-b">suprarrenales</td><td class="name"><a href="padecimientos/adenovirus.html">Adenovirus 31</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">3</td><td class="par-a">páncreas</td><td class="par-b">cola de páncreas</td><td class="name"><a href="padecimientos/adenovirus36.html">Adenovirus 36</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">4</td><td class="par-a">carina</td><td class="par-b">carina</td><td class="name"><a href="padecimientos/aftosa.html">Aftosa virus</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-respiratorio">Respiratorio</span></td></tr>
+        <tr><td class="num">5</td><td class="par-a">diafragma</td><td class="par-b">píloro</td><td class="name"><a href="padecimientos/astrovirus.html">Astrovirus</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-muscular">Muscular</span></td></tr>
+
+        <tr class="section-row" id="sec-c"><td colspan="6">C</td></tr>
+        <tr><td class="num">6</td><td class="par-a">vesícula</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/catarro.html">Catarro común</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">7</td><td class="par-a">ojo</td><td class="par-b">ojo</td><td class="name"><a href="padecimientos/citomegalovirus.html">Citomegalovirus</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">8</td><td class="par-a">uretra</td><td class="par-b">uretra</td><td class="name"><a href="padecimientos/coronavirus.html">Coronavirus</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">9</td><td class="par-a">mango esternón</td><td class="par-b">mango esternón</td><td class="name"><a href="padecimientos/coxsackie.html">Coxsackie</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">10</td><td class="par-a">colon descendente</td><td class="par-b">ano</td><td class="name"><a href="padecimientos/chikungunya.html">Chikungunya</a></td><td class="zona"><span>Torso Bajo</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+
+        <tr class="section-row" id="sec-d"><td colspan="6">D</td></tr>
+        <tr><td class="num">11</td><td class="par-a">hipófisis</td><td class="par-b">vejiga</td><td class="name"><a href="padecimientos/dengue.html">Dengue</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">12</td><td class="par-a">bulbo</td><td class="par-b">vejiga</td><td class="name"><a href="padecimientos/dengueh.html">Dengue hemorrágico</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">13</td><td class="par-a">lengua</td><td class="par-b">mandíbula</td><td class="name"><a href="padecimientos/distemper_c.html">Distemper canino, moquillo</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-muscular">Muscular</span></td></tr>
+
+        <tr class="section-row" id="sec-e"><td colspan="6">E</td></tr>
+        <tr><td class="num">14</td><td class="par-a">arco del pie</td><td class="par-b">arco del pie</td><td class="name"><a href="padecimientos/ebola.html">Ebolavirus</a></td><td class="zona"><span>Pie</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">15</td><td class="par-a">occipital</td><td class="par-b">occipital</td><td class="name"><a href="padecimientos/eipsteinbar.html">Epstein Barr</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">16</td><td class="par-a">talón</td><td class="par-b">talón</td><td class="name"><a href="padecimientos/eipsteinbar.html">Epstein Barr (reservorio)</a></td><td class="zona"><span>Pie</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">17</td><td class="par-a">parietal</td><td class="par-b">parietal</td><td class="name"><a href="padecimientos/encefalitis.html">Encefalitis viral</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">18</td><td class="par-a">malar</td><td class="par-b">malar</td><td class="name"><a href="padecimientos/enterovirus.html">Enterovirus</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+
+        <tr class="section-row" id="sec-f"><td colspan="6">F–G</td></tr>
+        <tr><td class="num">19</td><td class="par-a">ligamento de páncreas</td><td class="par-b">colon desc.</td><td class="name"><a href="padecimientos/fiebre_ama.html">Fiebre amarilla</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">20</td><td class="par-a">pineal</td><td class="par-b">bulbo</td><td class="name"><a href="padecimientos/guillenbarre.html">Guillain-Barré</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">21</td><td class="par-a">preauricular</td><td class="par-b">temporoccipital</td><td class="name"><a href="padecimientos/gripe-aviar.html">Gripe aviar</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+
+        <tr class="section-row" id="sec-h"><td colspan="6">H</td></tr>
+        <tr><td class="num">22</td><td class="par-a">vesícula</td><td class="par-b">bazo</td><td class="name"><a href="padecimientos/h1n7.html">H1N7</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">23</td><td class="par-a">lunar</td><td class="par-b">riñón</td><td class="name"><a href="padecimientos/hantavirus.html">Hanta virus</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-tegumentario">Tegumentario</span></td></tr>
+        <tr><td class="num">24</td><td class="par-a">pleura</td><td class="par-b">hígado</td><td class="name"><a href="padecimientos/orthohepadna.html">Hepatitis B</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-respiratorio">Respiratorio</span></td></tr>
+        <tr><td class="num">25</td><td class="par-a">pineal</td><td class="par-b">hipófisis</td><td class="name"><a href="padecimientos/herpes.html">Herpes (todos)</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">26</td><td class="par-a">colon ascendente</td><td class="par-b">colon descendente</td><td class="name"><a href="padecimientos/herpes1.html">Herpes I</a></td><td class="zona"><span>Torso Bajo</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">27</td><td class="par-a">angina</td><td class="par-b">angina</td><td class="name"><a href="padecimientos/herpes2.html">Herpes 2</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">28</td><td class="par-a">cúbito</td><td class="par-b">cúbito</td><td class="name"><a href="padecimientos/herpes3.html">Herpes 3</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">29</td><td class="par-a">comisura</td><td class="par-b">comisura</td><td class="name"><a href="padecimientos/herpes4.html">Herpes 4</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">30</td><td class="par-a">caliz renal</td><td class="par-b">uretero</td><td class="name"><a href="padecimientos/herpes5.html">Herpes 5</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">31</td><td class="par-a">nervio femoral</td><td class="par-b">nervio femoral</td><td class="name"><a href="padecimientos/herpes6.html">Herpes 6</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">32</td><td class="par-a">vejiga</td><td class="par-b">recto</td><td class="name"><a href="padecimientos/herpes7.html">Herpes 7</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">33</td><td class="par-a">occipital</td><td class="par-b">occipital</td><td class="name"><a href="padecimientos/eipsteinbar.html">Herpes 8</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">34</td><td class="par-a">cola de caballo</td><td class="par-b">cola de caballo</td><td class="name"><a href="padecimientos/herpes9.html">Herpes 9</a></td><td class="zona"><span>Dorso</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">35</td><td class="par-a">suprapúbico</td><td class="par-b">suprapúbico</td><td class="name"><a href="padecimientos/htlv1.html">HTLV-1 virus</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">36</td><td class="par-a">nervio inguinal</td><td class="par-b">nervio inguinal</td><td class="name"><a href="padecimientos/htlv2.html">HTLV-2 virus</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">37</td><td class="par-a">trocanter menor</td><td class="par-b">trocanter menor</td><td class="name"><a href="padecimientos/htlv4.html">HTLV-4 virus</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+
+        <tr class="section-row" id="sec-i"><td colspan="6">I</td></tr>
+        <tr><td class="num">38</td><td class="par-a">tráquea</td><td class="par-b">tráquea</td><td class="name"><a href="padecimientos/influenza.html">Influenza virus</a></td><td class="zona"><span>Cuello</span></td><td class="sistema"><span class="s-respiratorio">Respiratorio</span></td></tr>
+
+        <tr class="section-row" id="sec-m"><td colspan="6">M</td></tr>
+        <tr><td class="num">39</td><td class="par-a">bulbo</td><td class="par-b">tiroides</td><td class="name"><a href="padecimientos/meningitis.html">Meningitis viral</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+
+        <tr class="section-row" id="sec-n"><td colspan="6">N</td></tr>
+        <tr><td class="num">40</td><td class="par-a">bulbo</td><td class="par-b">cerebelo</td><td class="name"><a href="padecimientos/newcastle.html">Newcastle virus</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">41</td><td class="par-a">saco de Douglas</td><td class="par-b">vena femoral</td><td class="name"><a href="padecimientos/norkwalk.html">Norwalk virus</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+
+        <tr class="section-row" id="sec-o"><td colspan="6">O</td></tr>
+        <tr><td class="num">42</td><td class="par-a">piso orbital</td><td class="par-b">piso orbital</td><td class="name"><a href="padecimientos/orf.html">Orf virus</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">43</td><td class="par-a">pleura derecha</td><td class="par-b">hígado</td><td class="name"><a href="padecimientos/orthohepadna.html">Orthohepadnavirus</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-respiratorio">Respiratorio</span></td></tr>
+
+        <tr class="section-row" id="sec-p"><td colspan="6">P</td></tr>
+        <tr><td class="num">44</td><td class="par-a">anexo</td><td class="par-b">anexo</td><td class="name"><a href="padecimientos/paramixovirus.html">Paramixovirus</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">45</td><td class="par-a">pudendo</td><td class="par-b">pudendo</td><td class="name"><a href="padecimientos/parotiditis.html">Parotiditis o paperas</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">46</td><td class="par-a">próstata</td><td class="par-b">recto</td><td class="name"><a href="padecimientos/papiloma.html">Papiloma virus</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+        <tr><td class="num">47</td><td class="par-a">pleura</td><td class="par-b">pleura</td><td class="name"><a href="padecimientos/pleuritis_viral.html">Pleuritis viral</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-respiratorio">Respiratorio</span></td></tr>
+        <tr><td class="num">48</td><td class="par-a">temporal (I)</td><td class="par-b">temporal (I)</td><td class="name"><a href="padecimientos/polioma.html">Polyomavirus</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">49</td><td class="par-a">ciático</td><td class="par-b">ciático</td><td class="name"><a href="padecimientos/poliomielitis.html">Poliomielitis</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">50</td><td class="par-a">cardias</td><td class="par-b">temporal</td><td class="name"><a href="padecimientos/priones.html">Priones</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+
+        <tr class="section-row" id="sec-r"><td colspan="6">R</td></tr>
+        <tr><td class="num">51</td><td class="par-a">axila</td><td class="par-b">axila</td><td class="name"><a href="padecimientos/rabia.html">Rabia</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-otro">OTRO</span></td></tr>
+        <tr><td class="num">52</td><td class="par-a">esfínter uretral</td><td class="par-b">esfínter uretral</td><td class="name"><a href="padecimientos/rabia.html">Rabia virus III</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">53</td><td class="par-a">polígono de Willis</td><td class="par-b">P. de Willis</td><td class="name"><a href="padecimientos/reovirus.html">Reovirus</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-circulatorio">Circulatorio</span></td></tr>
+        <tr><td class="num">54</td><td class="par-a">punta páncreas</td><td class="par-b">suprailiaco</td><td class="name"><a href="padecimientos/rosacea_p.html">Rosácea púrpura</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">55</td><td class="par-a">pineal</td><td class="par-b">hipotálamo</td><td class="name"><a href="padecimientos/herpes.html">Reservorio de Herpes</a></td><td class="zona"><span>Cabeza</span></td><td class="sistema"><span class="s-endocrino">Endócrino</span></td></tr>
+        <tr><td class="num">56</td><td class="par-a">talón</td><td class="par-b">talón</td><td class="name"><a href="padecimientos/eipsteinbar.html">Reservorio Epstein Barr</a></td><td class="zona"><span>Pie</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">57</td><td class="par-a">nervio inguinal</td><td class="par-b">hígado</td><td class="name"><a href="padecimientos/roseola.html">Roseola</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">58</td><td class="par-a">cóccix</td><td class="par-b">cóccix</td><td class="name"><a href="padecimientos/rotavirus.html">Rotavirus</a></td><td class="zona"><span>Dorso</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">59</td><td class="par-a">timo</td><td class="par-b">parietal</td><td class="name"><a href="padecimientos/rubeola.html">Rubeola</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+
+        <tr class="section-row" id="sec-s"><td colspan="6">S</td></tr>
+        <tr><td class="num">60</td><td class="par-a">estómago</td><td class="par-b">suprarrenales</td><td class="name"><a href="padecimientos/sarampion.html">Sarampión</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">61</td><td class="par-a">timo</td><td class="par-b">recto</td><td class="name"><a href="padecimientos/sida.html">Sida-VIH</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">62</td><td class="par-a">seno frontal</td><td class="par-b">seno frontal</td><td class="name"><a href="padecimientos/sinusitis_f.html">Sinusitis frontal</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-respiratorio">Respiratorio</span></td></tr>
+        <tr><td class="num">63</td><td class="par-a">seno nasal</td><td class="par-b">seno nasal</td><td class="name"><a href="padecimientos/sinusitis_n.html">Sinusitis nasal</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-respiratorio">Respiratorio</span></td></tr>
+        <tr><td class="num">64</td><td class="par-a">seno frontal</td><td class="par-b">seno frontal</td><td class="name"><a href="padecimientos/sinusitis_f.html">Sinusitis viral</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-respiratorio">Respiratorio</span></td></tr>
+        <tr><td class="num">65</td><td class="par-a">sigmoides</td><td class="par-b">recto</td><td class="name"><a href="padecimientos/rcv40.html">SV-40 virus</a></td><td class="zona"><span>Torso Bajo</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+
+        <tr class="section-row" id="sec-t"><td colspan="6">T</td></tr>
+        <tr><td class="num">66</td><td class="par-a">temporal (D)</td><td class="par-b">temporal (D)</td><td class="name"><a href="padecimientos/tifo_exa.html">Tifo exantemático</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">67</td><td class="par-a">supraespinoso</td><td class="par-b">supraespinoso</td><td class="name"><a href="padecimientos/tuberculosis.html">Tuberculosis</a></td><td class="zona"><span>Brazos</span></td><td class="sistema"><span class="s-muscular">Muscular</span></td></tr>
+
+        <tr class="section-row" id="sec-v"><td colspan="6">V</td></tr>
+        <tr><td class="num">68</td><td class="par-a">apéndice</td><td class="par-b">vena femoral</td><td class="name"><a href="padecimientos/vaccinia.html">Vaccinia</a></td><td class="zona"><span>Torso Bajo</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">69</td><td class="par-a">uretero</td><td class="par-b">uretero</td><td class="name"><a href="padecimientos/varicela.html">Varicela</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-urinario">Urinario</span></td></tr>
+        <tr><td class="num">70</td><td class="par-a">punta de páncreas</td><td class="par-b">bazo</td><td class="name"><a href="padecimientos/verruga.html">Verruga común</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">71</td><td class="par-a">recto</td><td class="par-b">timo</td><td class="name"><a href="padecimientos/vih1.html">VIH 1</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">72</td><td class="par-a">aductor</td><td class="par-b">aductor</td><td class="name"><a href="padecimientos/vih2.html">VIH 2</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-muscular">Muscular</span></td></tr>
+        <tr><td class="num">73</td><td class="par-a">nervio inguinal</td><td class="par-b">nervio inguinal</td><td class="name"><a href="padecimientos/vih3.html">VIH 3</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-nervioso">Nervioso</span></td></tr>
+        <tr><td class="num">74</td><td class="par-a">trocanter menor</td><td class="par-b">trocanter menor</td><td class="name"><a href="padecimientos/vih4.html">VIH 4</a></td><td class="zona"><span>Pierna</span></td><td class="sistema"><span class="s-esqueletico">Esquelético</span></td></tr>
+        <tr><td class="num">75</td><td class="par-a">timo</td><td class="par-b">recto</td><td class="name"><a href="padecimientos/sida.html">VIH-Sida</a></td><td class="zona"><span>Torso Superior</span></td><td class="sistema"><span class="s-linfatico">Linfático</span></td></tr>
+        <tr><td class="num">76</td><td class="par-a">apéndice</td><td class="par-b">lengua</td><td class="name"><a href="padecimientos/viruela.html">Viruela</a></td><td class="zona"><span>Torso Bajo</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">77</td><td class="par-a">ampolla hematopancreática</td><td class="par-b">riñón (I)</td><td class="name"><a href="padecimientos/virus_vk.html">Virus BK</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">78</td><td class="par-a">ligamento de páncreas</td><td class="par-b">bazo</td><td class="name"><a href="padecimientos/nilo.html">Virus del Nilo</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">79</td><td class="par-a">ceja</td><td class="par-b">ceja</td><td class="name"><a href="padecimientos/v_sincicial.html">Virus sincicial respiratorio</a></td><td class="zona"><span>Cara</span></td><td class="sistema"><span class="s-tegumentario">Tegumentario</span></td></tr>
+        <tr><td class="num">80</td><td class="par-a">cond. central hepático</td><td class="par-b">mucosa central desc.</td><td class="name"><a href="padecimientos/virus-viajero.html">Virus viajero</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">81</td><td class="par-a">próstata</td><td class="par-b">recto</td><td class="name"><a href="padecimientos/papiloma.html">VPH virus</a></td><td class="zona"><span>Pelvis</span></td><td class="sistema"><span class="s-reproductor">Reproductor</span></td></tr>
+
+        <tr class="section-row" id="sec-x"><td colspan="6">X–Z</td></tr>
+        <tr><td class="num">82</td><td class="par-a">hígado</td><td class="par-b">páncreas</td><td class="name"><a href="padecimientos/xmrv-virus.html">XMRV virus</a></td><td class="zona"><span>Torso Medio</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+        <tr><td class="num">83</td><td class="par-a">colon trasverso</td><td class="par-b">riñón (I)</td><td class="name"><a href="padecimientos/zika.html">Zika</a></td><td class="zona"><span>Torso Bajo</span></td><td class="sistema"><span class="s-digestivo">Digestivo</span></td></tr>
+      </tbody>
+    </table>
+    <div class="no-results" id="noResults">Sin resultados para tu búsqueda.</div>
+  </div>
+</main>
+
+<a href="#top" class="back-to-top" id="backToTop" aria-label="Volver arriba">↑</a>
+
+<footer>BioM3 · El Par Biomagnético · Listado de virus patógenos</footer>
+
+<script>
+(function () {
+  const input = document.getElementById('q');
+  const sortSelect = document.getElementById('sortSelect');
+  const alphaNav = document.getElementById('alphaNav');
+  const tbody = document.getElementById('virusTable').tBodies[0];
+  const noResults = document.getElementById('noResults');
+
+  const originalChildren = Array.from(tbody.children);
+  const dataRows = originalChildren.filter(r => !r.classList.contains('section-row'));
+
+  const ZONA_ORDER = ['Cabeza','Cara','Cuello','Brazos','Torso Superior','Torso Medio','Torso Bajo','Pelvis','Dorso','Pierna','Pie','Otros'];
+  const SISTEMA_ORDER = ['Nervioso','Circulatorio','Respiratorio','Digestivo','Esquelético','Muscular','Endocrino','Urinario','Linfático','Inmunológico','Tegumentario','Reproductor','Locomotor','OTRO'];
+
+  function getKey(row, key) {
+    if (key === 'par1') return row.querySelector('.par-a').textContent.trim().toLowerCase();
+    if (key === 'par2') return row.querySelector('.par-b').textContent.trim().toLowerCase();
+    return '';
+  }
+
+  function renumber() {
+    let n = 0;
+    for (const row of tbody.rows) {
+      if (row.classList.contains('section-row')) continue;
+      const cell = row.querySelector('td.num');
+      if (cell) cell.textContent = ++n;
+    }
+  }
+
+  function buildGrouped(visibleData, groupField, groupOrder) {
+    const byGroup = new Map();
+    groupOrder.forEach(g => byGroup.set(g, []));
+    Array.from(visibleData).forEach(r => {
+      const g = r.querySelector('.' + groupField).textContent.trim();
+      if (!byGroup.has(g)) byGroup.set(g, []);
+      byGroup.get(g).push(r);
+    });
+    byGroup.forEach(arr => arr.sort((a, b) => {
+      const pa = a.querySelector('.par-a').textContent.trim().toLowerCase();
+      const pb = b.querySelector('.par-a').textContent.trim().toLowerCase();
+      return pa.localeCompare(pb, 'es');
+    }));
+    const order = groupOrder.slice();
+    byGroup.forEach((_, g) => { if (!order.includes(g)) order.push(g); });
+    const frag = document.createDocumentFragment();
+    order.forEach(g => {
+      const arr = byGroup.get(g);
+      if (!arr || !arr.length) return;
+      const header = document.createElement('tr');
+      header.className = 'section-row';
+      const cell = document.createElement('td');
+      cell.colSpan = 6;
+      cell.textContent = g;
+      header.appendChild(cell);
+      frag.appendChild(header);
+      arr.forEach(r => frag.appendChild(r));
+    });
+    return frag;
+  }
+
+  function render() {
+    const q = input.value.trim().toLowerCase();
+    const sortKey = sortSelect.value;
+    const matches = r => !q || r.textContent.toLowerCase().includes(q);
+    const visibleData = new Set(dataRows.filter(matches));
+    const frag = document.createDocumentFragment();
+
+    alphaNav.style.display = sortKey === 'patogeno' ? '' : 'none';
+
+    if (sortKey === 'patogeno') {
+      let currentSection = null;
+      const sectionHasData = new Map();
+      originalChildren.forEach(child => {
+        if (child.classList.contains('section-row')) {
+          currentSection = child;
+          sectionHasData.set(child, false);
+        } else if (visibleData.has(child) && currentSection) {
+          sectionHasData.set(currentSection, true);
+        }
+      });
+      originalChildren.forEach(child => {
+        if (child.classList.contains('section-row')) {
+          if (sectionHasData.get(child)) frag.appendChild(child);
+        } else if (visibleData.has(child)) {
+          frag.appendChild(child);
+        }
+      });
+    } else if (sortKey === 'zona') {
+      frag.appendChild(buildGrouped(visibleData, 'zona', ZONA_ORDER));
+    } else if (sortKey === 'sistema') {
+      frag.appendChild(buildGrouped(visibleData, 'sistema', SISTEMA_ORDER));
+    } else {
+      Array.from(visibleData)
+        .sort((a, b) => getKey(a, sortKey).localeCompare(getKey(b, sortKey), 'es'))
+        .forEach(r => frag.appendChild(r));
+    }
+
+    tbody.replaceChildren(frag);
+    renumber();
+    noResults.style.display = visibleData.size === 0 ? 'block' : 'none';
+  }
+
+  input.addEventListener('input', render);
+  sortSelect.addEventListener('change', render);
+  render();
+
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 300);
+  }, { passive: true });
+})();
+</script>
+
+</body>
+</html>

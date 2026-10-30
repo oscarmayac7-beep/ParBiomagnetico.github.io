@@ -1,0 +1,140 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*Estilos links*/
+
+body {
+	background-color:#fff;
+}
+
+a:link {
+color: #6701A2;
+	text-decoration: none;
+	font-weight:600;
+}
+
+a:visited {
+color: #5A048C;
+	text-decoration: none;
+	font-weight:600;
+}
+
+a:active {
+color: #8D25CB;
+	text-decoration: none;
+	font-weight:600;
+}
+
+a:hover {
+color: #790FB8;
+	text-decoration: none;
+	font-weight:600;
+}
+
+.menu-cab {
+background-image:url("../graficos/head-purp.jpg");
+}
+
+.cenefa {
+background-image:url("../skins/rombos.jpg");
+}
+
+.tabla-headcel {
+	background-color: #340053;
+	}
+
+.mastemas:hover {
+	background-color: #68A48C;	
+	}
+
+.cabeza3 {
+	color:#44006C;	
+}
+
+.titulo1 {
+	color:#44006C;	
+}
+
+
+.titulo2 {	
+	background:#790FB8;	
+}
+
+.tit-tipo {	
+	background:#790FB8;	
+}
+
+.tit3 {		
+	background:#44006C;	
+}
+
+.cabeza1 {	
+	color:#44006C;	
+}
+
+.cabeza2 {	
+	color:#44006C;
+}
+	.show-hidde:hover {
+	background-color:#AD7EDB;
+	}
+
+/*Menú principal*/
+
+ul.acel li a {							
+background:#6906BD;				
+			}
+
+ul.acel li a:hover {
+	background:#8421D8;
+}
+
+.menu-lat {
+	background:#6906BD;	
+    }
+
+.menu-sup {
+background-image: url("../graficos/head-purp.jpg");
+}
+
+
+/*Etiq visualizacion*/
+
+
+.backAnim:hover{
+background:#AD7EDB;
+}
+
+/* Speech ballons */
+
+
+/*Gestion de medios*/
+/*Desktop
+@media (min-width: 1100px)*/
+	
+	
+
+/*Tablet Grande o PC chica  @media (min-width: 800px)and (max-width: 1099px){*/
+
+	
+	
+
+/*Tablet chica*/
+@media (min-width: 581px) and (max-width: 799px){	
+
+.cerrar:hover {
+	background-color:#AD7EDB;
+	}	
+}
+
+/*Mobile*/
+@media (max-width: 580px){
+
+	.cerrar:hover {
+	background-color:#AD7EDB;
+	}
+}
+
+
+
+

@@ -1,0 +1,399 @@
+/* CSS Document */
+/* etiquetas estilo de página */
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body { background: #bbb;
+font-weight: 600; height: 100%}
+
+.anchura {
+	display:block;	
+    max-width: 1100px;	
+	height:auto;
+	margin: 0 auto;
+	overflow:visible;
+	background-color:#FFFFFF;
+}
+
+.cabezal {
+  margin-top:-68px;
+  height: 50px;
+  position:fixed;
+  width:100%;
+  max-width: 1100px;
+  background-color: hsla(208,18%,40%,1.00); 
+	text-align: left;
+	vertical-align:top;
+	padding-left:15px;
+	padding-top:5px;
+    display: flex;
+}
+	
+ .titulo {
+	 font-family:"Arial narrow", Sans-serif;
+	color:#fff;
+	font-size:24px;
+	font-weight:600;
+ }
+
+.principal {
+	width:75%;
+	float:left;
+	margin-top:40px;
+}
+
+.lateral {
+	width:25%;
+	position:fixed;
+	margin-left:560px;
+	margin-top:40px;
+}
+
+.tit_menulat {
+	margin-left:10px;	
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	font-weight:600;
+	text-align: left;
+	line-height:20px;
+	text-decoration:none;	
+}
+
+.item_menutal {
+	list-style-type:none;
+	margin-left:17px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-weight:bold;
+	font-size:16px;
+	text-align: left;
+	line-height:22px;	
+}
+
+.tema_lat {
+	display:none;
+}
+
+.tabla {
+	position:fixed;
+	width:100%;
+	max-width: 1100px;		
+	background-color:#ffffff;
+	padding:20px;	
+	margin-top:0px;
+	margin-left:0px;
+	height: 100vh;
+
+}
+
+/* Efecto paralaje del fondo */
+.parallax {
+  /* The image used */
+  background-image: url("../imagenes/hombre-fte.jpg");
+
+  /* Set a specific height */
+  height: 100%;
+max-width: 900px;
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Termina Efecto paralaje del fondo */
+
+.tabla td:first-child {
+	width: 190px;
+	vertical-align:top;
+}
+ 
+.tabla td:nth-child(2) {
+	width:80%;
+	text-align:center;
+}
+
+.imagen {
+    max-width: 100%;
+    height: 300px;
+    width: auto/9; /* Bug de ie8 */
+}
+
+.boton {
+	width:28px;
+	height:28px;
+	padding:3px;
+	margin-right:10px;
+}
+
+.mastemas {
+	font-family:Arial, Helvetica, sans-serif;
+	font-stretch: condensed;
+	font-size:15px;
+	position:relative;
+	top:0;
+	right:10px;	
+	max-width: 125px;
+	padding: 5px;
+	border-bottom-right-radius: 7px;
+	border-bottom-left-radius: 7px;
+	background-color: #A5A6A7;
+	opacity: 0.75;
+    filter: alpha(opacity=75); 	
+}
+
+.boton:hover {
+	background-color:#10DCBF;
+}
+
+.tabla2 {
+	position:fixed;
+	max-width: 1100px;
+	width:100%;		
+	padding:0px;	
+	margin-left:0px;	
+}
+
+.tabla2 td:first-child {	
+	vertical-align:top;
+	width:35px;
+}
+ 
+.tabla2 td:nth-child(3) {
+	width:160px;
+	min-width:160px;
+	text-align:center;
+	padding-right:7px;
+}
+
+.oculto {
+	display:none;
+	background:#95A3A1;
+	width:150px;
+	margin-left:23px;
+	margin-top:8px;
+	padding:6px;
+	-webkit-box-shadow: 4px 4px 5px #777;
+  -moz-box-shadow: 4px 4px 5px #777;
+  filter: shadow(color=#999999, direction=135, strength=2);
+}
+
+a:link {
+	color: #fff;
+	text-decoration: none;
+}
+a:visited {
+	color: #fff;
+	text-decoration: none;
+}
+a:hover {
+	color: #55F1DB;
+	text-decoration: underline;
+}
+a:active {
+	color: #F57200;
+	text-decoration: none;
+}
+
+
+
+/* estilo de menu */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  font-weight: 600;
+  font-size:15px;   
+}
+
+
+#btn-menu {
+  display: none;
+}
+
+.cabezal label {
+  font-size: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  display: none;
+}
+
+
+
+.menu ul {  
+  display: block;
+  list-style: none;
+  width: 210px;
+  margin-top: 45px;
+  margin-left: 5px;   
+  position:absolute;
+  opacity: 0.93;
+   filter: alpha(opacity=80);
+	
+	
+}
+
+.menu ul ul {    
+  display: none;
+  margin-left: 210px;
+  margin-top: -32px;
+  width: 335px; 
+
+}
+
+.menu ul li {  
+  margin-top: 0px;
+  background: #7E98A2;
+  padding-top:3;
+	padding-bottom:3;
+	border-bottom: hsla(210,19%,28%,1.00) solid thin;
+	border-top: hsla(211,33%,72%,1.00) solid thin;
+}
+
+.menu ul li li{  
+  margin-top: 0px;      
+}
+
+.menu ul li a:hover {  
+  color: #FFFFFF;      
+}
+
+.menu a {
+  display: block;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  color: #000;
+  text-decoration: none;
+  line-height: 20px;
+  font-family: 'Arial', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  background:hsla(0,0%,0%,0.00);
+  border-bottom: none;
+  border-top: none;    
+}
+
+.sombra {
+	display: block;
+	width: 545px;
+	padding-top: 9px;
+	padding-bottom: 3px;
+	padding-left: 4px;
+	height:45px;
+	background:none;
+	margin-left: -210px;
+	margin-top: -10px;
+}
+
+.sombra a:hover {
+ background: hsla(186,44%,68%,1.00);
+	color: #fff;
+}
+
+.menu a:hover {
+  background: hsla(186,44%,68%,1.00);
+	
+}
+
+.col1 {
+  margin-left:210;
+  margin-top: -22px;
+}
+
+.col2 {
+  margin-left:8px;
+  margin-top: -30px;
+}
+
+.col2b {
+  margin-left:290;
+  margin-top: -22px;
+}
+
+.menu a i {
+  margin-left: 10px;
+}
+
+.menu ul li:hover {
+  color:fff;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	font-size: 18px;
+	background: hsla(186,44%,68%,1.00);
+}
+
+.menu ul li:hover ul {
+  transition: all 0.3s ease;
+  display: block;
+  position: absolute;
+  margin-top: -36px;	
+}
+
+
+
+@media (min-width: 551px)and (max-width: 800px) {
+	body { background: #ffffff;}
+	
+	.tabla td:first-child {
+	width: 130px;
+}
+
+.tabla td:nth-child(2) {
+	width:50%;
+}
+}
+
+@media (max-width: 550px) {
+	
+  .menu ul li:hover ul {
+  transition: all 3s ease;
+  display: block;
+  position: inherit;
+}
+
+.menu ul ul {   
+  margin-left: 25px;
+  width: 300px;
+  margin-top: -32px;
+  color:#58a;
+}
+
+.menu li:hover li{   
+  color:#fff;
+  padding-top:7px;
+  padding-left:5px;
+}
+
+.titulo {	 
+	font-size:17px;
+	font-weight:600;
+ }
+ 
+ .tit_menulat {
+	font-family:"Arial narrow", Sans-serif;
+	font-size:16px;
+ }
+
+.sombra {
+	display:block;	
+	width: 325px;
+	padding: 5px;
+	padding-top:5px;
+	height:70px;	
+	margin-left: -25px;			
+}
+
+.col1 {
+  margin-left:25;
+	margin-top: 7px;
+}
+.oculto {
+	width:150px;
+}
+}
+
