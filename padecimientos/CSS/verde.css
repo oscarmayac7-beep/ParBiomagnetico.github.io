@@ -1,0 +1,120 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*Estilos links*/
+
+body {
+	background-color:#C3D1C7;
+}
+
+a:link {
+color: #175249;
+	text-decoration: none;
+	font-weight:600;
+}
+
+a:visited {
+color: #285C54;
+	text-decoration: none;
+	font-weight:600;
+}
+
+a:active {
+color: #7DE703;
+	text-decoration: none;
+	font-weight:600;
+}
+
+a:hover {
+color: #0A8B14;
+	text-decoration: none;
+	font-weight:600;
+}
+
+.menu-cab {
+background-image:url("../../graficos/head-verde.jpg");
+}
+
+.tabla-headcel {
+	background-color: #062E28;
+	}
+
+.mastemas:hover {
+	background-color: #68A48C;	
+	}
+
+.cabeza3 {
+	color:#043D1A;	
+}
+
+.titulo1 {
+	color:#043D1A;	
+}
+
+
+.titulo2 {	
+	background:#346d64;	
+}
+
+.tit-tipo {	
+	background:#346d64;	
+}
+
+.tit3 {		
+	background:#53A0A4;	
+}
+
+.cabeza1 {	
+	color:#043D1A;	
+}
+
+.cabeza2 {	
+	color:#043D1A;
+}
+	.show-hidde:hover {
+	background-color:#68A48C;
+	}
+
+/*Etiq visualizacion*/
+
+.oculto {
+	display:none;
+}
+
+.backAnim:hover{
+background:#68A48C;
+}
+
+/* Speech ballons */
+
+
+/*Gestion de medios*/
+/*Desktop
+@media (min-width: 1100px)*/
+	
+	
+
+/*Tablet Grande o PC chica  @media (min-width: 800px)and (max-width: 1099px){*/
+
+	
+	
+
+/*Tablet chica*/
+@media (min-width: 581px) and (max-width: 799px){	
+
+.cerrar:hover {
+	background-color:#68A48C;
+	}	
+}
+
+/*Mobile*/
+@media (max-width: 580px){
+
+	.cerrar:hover {
+	background-color:#68A48C;
+	}
+}
+
+
+
+

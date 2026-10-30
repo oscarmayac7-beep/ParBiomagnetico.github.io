@@ -1,0 +1,120 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*Estilos links*/
+
+body {
+	background-color:#C9CACB;
+}
+
+a:link {
+color: #467288;
+	text-decoration: none;
+	font-weight:600;
+}
+
+a:visited {
+color: #28495C;
+	text-decoration: none;
+	font-weight:600;
+}
+
+a:active {
+color: #03CEE7;
+	text-decoration: none;
+	font-weight:600;
+}
+
+a:hover {
+color: #0A788B;
+	text-decoration: none;
+	font-weight:600;
+}
+
+.menu-cab {
+background-image:url("../../graficos/head-metal.jpg");
+}
+
+.tabla-headcel {
+	background-color: #32393D;
+	}
+
+.mastemas:hover {
+	background-color: #7E9196;	
+	}
+
+.cabeza3 {
+	color:#333E42;	
+}
+
+.titulo1 {
+	color:#333E42;	
+}
+
+
+.titulo2 {	
+	background:#52585A;	
+}
+
+.tit-tipo {	
+	background:#52585A;	
+}
+
+.tit3 {		
+	background:#869596;	
+}
+
+.cabeza1 {	
+	color:#333E42;	
+}
+
+.cabeza2 {	
+	color:#333E42;
+}
+	.show-hidde:hover {
+	background-color:#738DAC;
+	}
+
+/*Etiq visualizacion*/
+
+.oculto {
+	display:none;
+}
+
+.backAnim:hover{
+background:#738DAC;
+}
+
+/* Speech ballons */
+
+
+/*Gestion de medios*/
+/*Desktop
+@media (min-width: 1100px)*/
+	
+	
+
+/*Tablet Grande o PC chica  @media (min-width: 800px)and (max-width: 1099px){*/
+
+	
+	
+
+/*Tablet chica*/
+@media (min-width: 581px) and (max-width: 799px){	
+
+.cerrar:hover {
+	background-color:#738DAC;
+	}	
+}
+
+/*Mobile*/
+@media (max-width: 580px){
+
+	.cerrar:hover {
+	background-color:#738DAC;
+	}
+}
+
+
+
+
