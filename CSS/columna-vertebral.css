@@ -1,0 +1,54 @@
+/* ============================================================
+   Columna «Vértebra» (columna vertebral · Par 1)
+   Estilos compartidos por las listas de pares.
+   ============================================================ */
+
+thead th.th-vertebra {
+	text-align: center;
+	padding-left: .2rem;
+	padding-right: .2rem;
+}
+
+td.vertebra {
+	text-align: center;
+	padding: .12rem .26rem;
+	white-space: nowrap;
+	width: 1%;
+}
+
+td.vertebra span {
+	display: inline-block;
+	min-width: 2rem;
+	padding: 0 5px;
+	border-radius: 999px;
+	font-size: .62rem;
+	font-weight: 700;
+	line-height: 1.5;
+	letter-spacing: .02em;
+}
+
+/* Color por región de la columna */
+td.vertebra .v-C  { background: #e0e7ff; color: #3730a3; }  /* cervical */
+td.vertebra .v-T  { background: #fef3c7; color: #92400e; }  /* dorsal   */
+td.vertebra .v-L  { background: #dcfce7; color: #166534; }  /* lumbar   */
+td.vertebra .v-S  { background: #fae8ff; color: #86198f; }  /* sacro    */
+td.vertebra .v-Co { background: #f1f5f9; color: #475569; }  /* coxígeo  */
+td.vertebra .v-none { background: transparent; color: #cbd5e1; }
+
+/* Encabezado de grupo en la vista «Columna vertebral» */
+tr.section-row td .v-code {
+	display: inline-block;
+	min-width: 1.7rem;
+	margin-right: .4rem;
+	padding: 0 6px;
+	border-radius: 999px;
+	background: #fff;
+	color: #92400e;
+	text-align: center;
+	font-size: .7rem;
+}
+
+@media (max-width: 700px) {
+	td.vertebra span { font-size: .56rem; padding: 0 4px; min-width: 1.7rem; }
+	tr.section-row td .v-code { font-size: .64rem; }
+}
