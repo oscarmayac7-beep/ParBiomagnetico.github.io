@@ -520,6 +520,9 @@ const SISTEMA_ORDER = ['Nervioso','Circulatorio','Respiratorio','Digestivo','Esq
 const PAR1_INFO = {
   "1ra. costilla": ["Torso Superior", "Esquelético"],
   "Aductor": ["Pierna", "Muscular"],
+  "Aductor menor": ["Pierna", "Muscular"],
+  "Apófisis Xifoides": ["Torso Superior", "Esquelético"],
+  "Aquiles sup": ["Pierna", "Muscular"],
   "Agujero": ["Otros", "OTRO"],
   "Amígdala cerebral": ["Cabeza", "Nervioso"],
   "Amígdala palatina": ["Cuello", "Linfático"],
@@ -862,6 +865,8 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
   const alphaNav  = document.getElementById('alphaNav');
   const noResults = document.getElementById('noResults');
   const backTop   = document.getElementById('backToTop');
+  const CV        = window.COLUMNA_VERTEBRAL;
+  const COLS      = 7;
 
   const esc = s => String(s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -887,6 +892,11 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
   });
 
   /* --- Filas --- */
+  function vertebraCell(par1) {
+    const codigo = CV ? CV.vertebraDe(par1) : '';
+    return `<td class="vertebra">${CV ? CV.celda(codigo) : ''}</td>`;
+  }
+
   function buildRow(item) {
     const [clasif, p1, p2, name, href] = item;
     const zona = zonaDe(p1, p2);
@@ -900,7 +910,8 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
         ? `<a href="padecimientos/${esc(href)}">${esc(name)}</a>`
         : `<span>${esc(name)}</span>`}</td>` +
       `<td class="zona"><span>${esc(zona)}</span></td>` +
-      `<td class="sistema"><span class="s-${sistemaClass(sistema)}">${esc(sistema)}</span></td>`;
+      `<td class="sistema"><span class="s-${sistemaClass(sistema)}">${esc(sistema)}</span></td>` +
+      vertebraCell(p1);
     return tr;
   }
 
@@ -908,7 +919,7 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     const tr = document.createElement('tr');
     tr.className = 'section-row';
     if (id) tr.id = id;
-    tr.innerHTML = `<td colspan="6">${esc(texto)}</td>`;
+    tr.innerHTML = `<td colspan="${COLS}">${esc(texto)}</td>`;
     return tr;
   }
 
@@ -923,11 +934,21 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
   });
 
 
+  function textoReferencia(href) {
+    if (!href) return '';
+    const slug = String(href).split('/').pop().replace(/\.html?$/i, '');
+    const palabras = (window.REFERENCIAS && window.REFERENCIAS[slug]) || '';
+    return slug.replace(/[-_]/g, ' ') + ' ' + palabras;
+  }
+
   function coincide(item, q) {
     if (!q) return true;
-    const [clasif, p1, p2, name] = item;
-    const texto = `${clasif} ${p1} ${p2 || ''} ${name} ${zonaDe(p1, p2)} ${sistemaDe(p1, p2)}`;
-    return sinAcentos(texto).includes(q);
+    const [clasif, p1, p2, name, href] = item;
+    const codigo = CV ? CV.vertebraDe(p1) : '';
+    const partes = codigo && CV ? CV.partesDe(codigo) : '';
+    const texto = sinAcentos(`${clasif} ${p1} ${p2 || ''} ${name} ${zonaDe(p1, p2)} ${sistemaDe(p1, p2)} ${codigo} ${partes} ${textoReferencia(href)}`);
+    const tokens = q.split(/\s+/).filter(Boolean);
+    return tokens.every(t => texto.includes(t));
   }
 
   function render() {
@@ -961,6 +982,32 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
       visibles
         .sort((a, b) => String(a[idx] || '').localeCompare(String(b[idx] || ''), 'es'))
         .forEach(it => tbody.appendChild(buildRow(it)));
+    } else if (modo === 'columna') {
+      /* Columna vertebral: las 33 vértebras con sus órganos. */
+      const grupos = new Map();
+      (CV ? CV.VERTEBRAS : []).forEach(v => grupos.set(v[0], []));
+      const sinRelacion = [];
+      visibles.forEach(it => {
+        const c = CV ? CV.vertebraDe(it[1]) : '';
+        if (c && grupos.has(c)) grupos.get(c).push(it);
+        else sinRelacion.push(it);
+      });
+      if (CV) {
+        CV.VERTEBRAS.forEach(([codigo, partes]) => {
+          const arr = grupos.get(codigo);
+          if (!arr.length && q) return;
+          const head = sectionRow('');
+          head.firstChild.innerHTML = `<span class="v-code">${codigo}</span> ${esc(partes)}`;
+          tbody.appendChild(head);
+          arr.sort((a, b) => a[1].localeCompare(b[1], 'es'))
+            .forEach(it => tbody.appendChild(buildRow(it)));
+        });
+      }
+      if (sinRelacion.length) {
+        tbody.appendChild(sectionRow('Sin relación con la columna'));
+        sinRelacion.sort((a, b) => a[1].localeCompare(b[1], 'es'))
+          .forEach(it => tbody.appendChild(buildRow(it)));
+      }
     } else {
       /* Zona o Sistema: filas agrupadas con encabezado. */
       const campo = modo;
