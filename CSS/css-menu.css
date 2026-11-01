@@ -422,6 +422,69 @@ ul, ol {
 }
 
 
+/* ============================================================
+   Pantallas táctiles (Android / iOS)
+   Sin hover el submenú no se abre con el dedo: se abre con la
+   clase .open que pone js/menu-touch.js al tocar.
+   ============================================================ */
+
+ul.acel li.open > ul {
+	display: block;
+}
+
+@media (hover: none) {
+
+	/* El :hover "pegajoso" del móvil ya no abre el menú */
+	ul.acel li:hover > ul {
+		display: none;
+	}
+
+	/* El panel abierto tiene prioridad sobre la regla anterior */
+	ul.acel li.open > ul {
+		display: block;
+	}
+
+	#menu4 {
+		min-width: 0;
+		width: calc(100vw - 196px);
+		max-width: 300px;
+		max-height: calc(100vh - 130px);
+	}
+
+	/* En pantallas táctiles el enlace no se desplaza al pulsar */
+	#menu4 > li > a:hover,
+	#menu4 > li > a:focus-visible {
+		padding-left: 34px;
+	}
+
+	/* Menú móvil (celmenu.html): el submenú se despliega en línea,
+	   debajo de "Listas", sin tapar el resto del menú. */
+	.anchura #menu4 {
+		position: static;
+		left: auto;
+		top: auto;
+		width: 280px;
+		max-width: calc(100vw - 16px);
+		max-height: none;
+		margin: 6px 0 10px;
+		border-radius: 12px;
+		box-shadow: 0 8px 20px rgba(2, 6, 23, .15);
+	}
+
+	.anchura ul.acel li.open > a {
+		background: #25A8FC;
+	}
+}
+
+/* Tableta táctil: el menú lateral mide 59px */
+@media (hover: none) and (max-width: 1040px) {
+	#menu4 {
+		width: calc(100vw - 82px);
+	}
+}
+
+
+
 
 
 
