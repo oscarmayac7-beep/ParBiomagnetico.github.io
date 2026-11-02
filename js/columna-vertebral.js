@@ -328,7 +328,11 @@ window.COLUMNA_VERTEBRAL = (function () {
     'suprapopliteo': 'L5',
     'borde calloso (d/i)': 'C1',
     'borde calloso (post)': 'C1',
-    'botón aórtico': 'T1'
+    'botón aórtico': 'T1',
+    'cuerpo cavernoso': 'L3',
+    'ligamento int. rótula': 'L3',
+    'ligamento int. rodilla': 'L3',
+    'tobillo': 'L5'
   };
 
   /* Respaldo por palabra clave para órganos que no estén en la tabla */
