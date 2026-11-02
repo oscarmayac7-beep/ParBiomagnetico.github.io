@@ -1,0 +1,100 @@
+/* ============================================================
+   Vértebras y emociones · BioM3
+   Mismo lenguaje visual que las listas de pares.
+   ============================================================ */
+:root{--bg:#f8fafc;--card:#fff;--text:#1f2937;--muted:#64748b;--accent:#2563eb;
+      --accent-light:#dbeafe;--border:#e2e8f0;--warm:#fef3e7;--warm-border:#fbdcc2;--warm-text:#92400e}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+     background:var(--bg);color:var(--text);line-height:1.35;font-size:14px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+         clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Header */
+.site-header{background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;
+             padding:.65rem 1rem .5rem;text-align:center}
+.site-header .back{color:#bfdbfe;text-decoration:none;font-size:.8rem}
+.site-header .back:hover,.site-header .back:focus{color:#fff}
+.site-header h1{margin:.1rem 0 0;font-size:1.25rem;font-weight:700}
+.site-header p{margin:.1rem 0 0;color:#dbeafe;font-size:.82rem}
+
+/* Navegación por zonas */
+.reg-nav{position:sticky;top:0;z-index:10;background:var(--card);
+         border-bottom:1px solid var(--border);padding:.3rem .4rem;
+         display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;
+         box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.reg-nav a{display:inline-block;padding:.15rem .55rem;border-radius:999px;text-decoration:none;
+           color:var(--accent);font-weight:600;font-size:.76rem}
+.reg-nav a:hover,.reg-nav a:focus{background:var(--accent-light);outline:none}
+
+/* Main */
+main{max-width:1020px;margin:0 auto;padding:.6rem .5rem 2rem}
+.intro{margin:0 0 .6rem;color:var(--muted);font-size:.8rem}
+.intro a{color:var(--accent)}
+
+/* Buscador */
+.toolbar{display:flex;gap:.4rem;margin-bottom:.5rem}
+.toolbar .search-wrap{flex:1}
+.toolbar input[type=search]{width:100%;padding:.38rem .6rem;font-size:.88rem;font-family:inherit;
+     border:1px solid var(--border);border-radius:8px;background:var(--card)}
+.toolbar input[type=search]:focus{outline:none;border-color:var(--accent);
+     box-shadow:0 0 0 2px rgba(37,99,235,.18)}
+
+/* Índice rápido de códigos */
+.chips-index{display:flex;flex-wrap:wrap;gap:.3rem;padding:.5rem .55rem;margin-bottom:.8rem;
+             background:var(--card);border:1px solid var(--border);border-radius:12px}
+.ichip{display:inline-block;min-width:2.1rem;text-align:center;padding:.12rem .4rem;border-radius:999px;
+       font-size:.68rem;font-weight:700;text-decoration:none}
+.ichip:hover,.ichip:focus{outline:2px solid rgba(37,99,235,.35);outline-offset:1px}
+
+/* Zonas */
+.zona{margin:1.5rem 0 0}
+.zona-titulo{margin:0 0 .3rem;font-size:1.02rem;color:var(--warm-text);
+             border-bottom:2px solid var(--warm-border);padding-bottom:.28rem}
+.zona-rango{font-size:.66rem;font-weight:700;color:var(--muted);background:var(--warm);
+            padding:.1rem .45rem;border-radius:999px;margin-left:.35rem;letter-spacing:.02em}
+.zona-intro{margin:.35rem 0 .2rem;color:var(--muted);font-size:.78rem}
+
+/* Tarjetas */
+.lista-vertebras{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+                 gap:.6rem;margin-top:.6rem}
+.vcard{display:flex;gap:.6rem;background:var(--card);border:1px solid var(--border);
+       border-radius:12px;padding:.6rem .7rem;scroll-margin-top:4.3rem;
+       transition:box-shadow .2s ease,border-color .2s ease}
+.vcard:hover{box-shadow:0 8px 20px -10px rgba(2,6,23,.3)}
+.vcard.destacada{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.2)}
+.vcard-code{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.vchip{display:inline-flex;align-items:center;justify-content:center;min-width:2.5rem;
+       padding:.16rem .45rem;border-radius:999px;font-size:.72rem;font-weight:800;
+       text-decoration:none;letter-spacing:.02em}
+.v-alias{font-size:.58rem;font-weight:700;color:var(--muted);text-align:center}
+.vcard-body h3{margin:0 0 .2rem;font-size:.8rem;color:#1d4ed8;line-height:1.25}
+.vcard-body p{margin:0;font-size:.78rem;color:#334155;line-height:1.35}
+
+/* Colores por región (mismos que las tablas) */
+.v-C{background:#e0e7ff;color:#3730a3}
+.v-T{background:#fef3c7;color:#92400e}
+.v-L{background:#dcfce7;color:#166534}
+.v-S{background:#fae8ff;color:#86198f}
+.v-Co{background:#f1f5f9;color:#475569}
+
+.no-results{display:none;padding:1.2rem;text-align:center;color:var(--muted);font-size:.85rem}
+
+.back-to-top{position:fixed;bottom:1rem;right:1rem;width:2.2rem;height:2.2rem;border-radius:50%;
+     background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;
+     text-decoration:none;font-size:1rem;box-shadow:0 4px 12px rgba(37,99,235,.35);
+     opacity:0;pointer-events:none;transition:opacity .2s}
+.back-to-top.visible{opacity:1;pointer-events:auto}
+
+footer{text-align:center;padding:.8rem;color:var(--muted);font-size:.72rem;
+       border-top:1px solid var(--border)}
+
+@media (max-width:700px){
+  .site-header h1{font-size:1.05rem}
+  main{padding:.4rem .3rem 1.5rem}
+  .lista-vertebras{grid-template-columns:1fr}
+  .reg-nav a{font-size:.72rem;padding:.12rem .45rem}
+  .vcard-body h3{font-size:.78rem}
+  .vcard-body p{font-size:.75rem}
+}
