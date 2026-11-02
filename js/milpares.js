@@ -144,7 +144,7 @@
       var arr = grupos.get(v[0]);
       /* Sin búsqueda se muestran las 33 vértebras, aunque no tengan pares */
       if (!arr.length && conBusqueda) return;
-      frag.appendChild(encabezadoHTML('<span class="v-code">' + v[0] + '</span> ' + v[1]));
+      frag.appendChild(encabezadoHTML('<a class="v-code" href="Vertebras.html#' + v[0] + '">' + v[0] + '</a> ' + v[1]));
       arr.sort(function (a, b) {
         return par1De(a).toLowerCase().localeCompare(par1De(b).toLowerCase(), 'es');
       }).forEach(function (r) { frag.appendChild(r); });

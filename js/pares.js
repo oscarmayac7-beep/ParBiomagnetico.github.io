@@ -997,7 +997,7 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
           const arr = grupos.get(codigo);
           if (!arr.length && q) return;
           const head = sectionRow('');
-          head.firstChild.innerHTML = `<span class="v-code">${codigo}</span> ${esc(partes)}`;
+          head.firstChild.innerHTML = `<a class="v-code" href="Vertebras.html#${codigo}">${codigo}</a> ${esc(partes)}`;
           tbody.appendChild(head);
           arr.sort((a, b) => a[1].localeCompare(b[1], 'es'))
             .forEach(it => tbody.appendChild(buildRow(it)));

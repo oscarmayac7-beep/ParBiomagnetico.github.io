@@ -397,8 +397,8 @@ window.COLUMNA_VERTEBRAL = (function () {
   /* HTML del chip: «T5» con las partes en el tooltip */
   function celda(codigo) {
     if (!codigo) return '<span class="v-none" title="Sin relación definida">—</span>';
-    return '<span class="v-' + region(codigo) + '" title="' + codigo + ': ' +
-      partesDe(codigo) + '">' + codigo + '</span>';
+    return '<a class="v-' + region(codigo) + '" href="Vertebras.html#' + codigo +
+      '" title="' + codigo + ': ' + partesDe(codigo) + ' (ver descripción)">' + codigo + '</a>';
   }
 
   return {
