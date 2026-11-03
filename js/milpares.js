@@ -68,6 +68,7 @@
   }
 
   function getKey(row, key) {
+    if (key === 'clasif') return (row.querySelector('td.clasif').textContent || '').trim().toLowerCase();
     if (key === 'par1') return par1De(row).toLowerCase();
     if (key === 'par2') return row.querySelector('.par-b').textContent.trim().toLowerCase();
     return '';

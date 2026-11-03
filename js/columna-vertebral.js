@@ -364,16 +364,18 @@ window.COLUMNA_VERTEBRAL = (function () {
 
   var REGLAS_NORM = REGLAS.map(function (r) { return [sinAcentos(r[0]), r[1]]; });
 
-  /* «dorsal 7», «lumbar 3», «cervical 2»... se refieren a esa vértebra */
+  /* «dorsal 7», «dorso 12», «lumbares (1)», «cervical 2»... → esa vértebra */
   function porNombreDeVertebra(clave) {
     var limpio = clave.replace(/[()]/g, ' ').replace(/\s+/g, ' ').trim();
-    var m = limpio.match(/^(cervical|dorsal|toracica|lumbar|sacro)\s*(\d+)/);
+    var m = limpio.match(/^(cervicales|cervical|dorsales|dorsal|dorso|toracica|lumbares|lumbar|sacro)\s*(\d+)/);
     if (!m) return '';
+    var region = m[1].replace(/es$/, '');
+    if (region === 'dorso') region = 'dorsal';
     var n = parseInt(m[2], 10);
-    if (m[1] === 'cervical' && n >= 1 && n <= 7) return 'C' + n;
-    if ((m[1] === 'dorsal' || m[1] === 'toracica') && n >= 1 && n <= 12) return 'T' + n;
-    if (m[1] === 'lumbar' && n >= 1 && n <= 5) return 'L' + n;
-    if (m[1] === 'sacro' && n >= 1 && n <= 5) return 'S' + n;
+    if (region === 'cervical' && n >= 1 && n <= 7) return 'C' + n;
+    if ((region === 'dorsal' || region === 'toracica') && n >= 1 && n <= 12) return 'T' + n;
+    if (region === 'lumbar' && n >= 1 && n <= 5) return 'L' + n;
+    if (region === 'sacro' && n >= 1 && n <= 5) return 'S' + n;
     return '';
   }
 
