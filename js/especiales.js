@@ -67,6 +67,18 @@
     return row.querySelector('.par-a').textContent.trim();
   }
 
+  function sistemaDe(row) {
+    var c = row.querySelector('.sistema');
+    return c ? c.textContent.trim() : '';
+  }
+
+  function compararFilas(a, b, conFlujo) {
+    if (window.ORDEN_ANATOMICO) {
+      return window.ORDEN_ANATOMICO.comparar(par1De(a), sistemaDe(a), par1De(b), sistemaDe(b), conFlujo);
+    }
+    return par1De(a).toLowerCase().localeCompare(par1De(b).toLowerCase(), 'es');
+  }
+
   function getKey(row, key) {
     if (key === 'par1') return par1De(row).toLowerCase();
     if (key === 'par2') return row.querySelector('.par-b').textContent.trim().toLowerCase();
@@ -112,7 +124,7 @@
     });
     byGroup.forEach(function (arr) {
       arr.sort(function (a, b) {
-        return par1De(a).toLowerCase().localeCompare(par1De(b).toLowerCase(), 'es');
+        return compararFilas(a, b, groupField === 'sistema');
       });
     });
     var order = groupOrder.slice();

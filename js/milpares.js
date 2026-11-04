@@ -14,7 +14,7 @@
   var tbody = tabla.tBodies[0];
   var noResults = document.getElementById('noResults');
   var CV = window.COLUMNA_VERTEBRAL;
-  var COLS = 7;
+  var COLS = 8;
 
   function planoTexto(s) {
     return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -34,6 +34,11 @@
     if (tr.classList.contains('section-row')) {
       if (tr.cells[0]) tr.cells[0].colSpan = COLS;
       return;
+    }
+    if (!tr.querySelector('td.num')) {
+      var celdaNum = document.createElement('td');
+      celdaNum.className = 'num';
+      tr.insertBefore(celdaNum, tr.cells[0]);
     }
     var par1 = tr.querySelector('.par-a');
     if (!par1) return;
@@ -65,6 +70,18 @@
 
   function par1De(row) {
     return row.querySelector('.par-a').textContent.trim();
+  }
+
+  function sistemaDe(row) {
+    var c = row.querySelector('.sistema');
+    return c ? c.textContent.trim() : '';
+  }
+
+  function compararFilas(a, b, conFlujo) {
+    if (window.ORDEN_ANATOMICO) {
+      return window.ORDEN_ANATOMICO.comparar(par1De(a), sistemaDe(a), par1De(b), sistemaDe(b), conFlujo);
+    }
+    return par1De(a).toLowerCase().localeCompare(par1De(b).toLowerCase(), 'es');
   }
 
   function getKey(row, key) {
@@ -113,7 +130,7 @@
     });
     byGroup.forEach(function (arr) {
       arr.sort(function (a, b) {
-        return par1De(a).toLowerCase().localeCompare(par1De(b).toLowerCase(), 'es');
+        return compararFilas(a, b, groupField === 'sistema');
       });
     });
     var order = groupOrder.slice();

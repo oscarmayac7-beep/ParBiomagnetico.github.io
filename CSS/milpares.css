@@ -149,3 +149,8 @@ footer{text-align:center;padding:.7rem;color:var(--muted);font-size:.72rem;
   td.zona span{font-size:.54rem;padding:0 3px}
   td.sistema span{font-size:.5rem;padding:0 3px}
 }
+
+/* Columna # */
+thead th.th-num { text-align: center; width: 1%; }
+td.num { text-align: center; color: var(--muted); font-variant-numeric: tabular-nums;
+         font-size: .72rem; white-space: nowrap; width: 1%; }
