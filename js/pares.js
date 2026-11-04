@@ -914,7 +914,7 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
   const noResults = document.getElementById('noResults');
   const backTop   = document.getElementById('backToTop');
   const CV        = window.COLUMNA_VERTEBRAL;
-  const COLS      = 7;
+  const COLS      = 8;
 
   const esc = s => String(s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -945,13 +945,13 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     return `<td class="vertebra">${CV ? CV.celda(codigo) : ''}</td>`;
   }
 
-  function buildRow(item) {
+  function buildRow(item, num) {
     const [clasif, p1, p2, name, href] = item;
     const zona = zonaDe(p1, p2);
     const sistema = sistemaDe(p1, p2);
     const tr = document.createElement('tr');
     tr.innerHTML =
-      `<td class="clasif"><span class="${clasifClass(clasif)}">${esc(clasif)}</span></td>` +
+      `<td class="num">${num}</td><td class="clasif"><span class="${clasifClass(clasif)}">${esc(clasif)}</span></td>` +
       `<td class="par-a">${esc(p1)}</td>` +
       `<td class="par-b">${esc(p2 || '')}</td>` +
       `<td class="name">${href
@@ -999,12 +999,19 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     return tokens.every(t => texto.includes(t));
   }
 
+
+  const compararPares = (a, b, conFlujo) => {
+    if (!window.ORDEN_ANATOMICO) return a[1].localeCompare(b[1], 'es');
+    return window.ORDEN_ANATOMICO.comparar(a[1], sistemaDe(a[1], a[2]), b[1], sistemaDe(b[1], b[2]), conFlujo);
+  };
+
   function render() {
     const q = sinAcentos(input.value);
     const modo = sortSel.value;
     const visibles = filas.filter(it => coincide(it, q));
 
     tbody.innerHTML = '';
+    let nFila = 0;
     alphaNav.style.display = modo === 'patogeno' ? '' : 'none';
 
     if (modo === 'patogeno') {
@@ -1023,13 +1030,13 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
         .sort((a, b) => a[0].localeCompare(b[0], 'es'))
         .forEach(([letra, items]) => {
           tbody.appendChild(sectionRow(letra, 'sec-' + letra));
-          items.forEach(it => tbody.appendChild(buildRow(it)));
+          items.forEach(it => tbody.appendChild(buildRow(it, ++nFila)));
         });
     } else if (modo === 'clasif' || modo === 'par1' || modo === 'par2') {
       const idx = modo === 'clasif' ? 0 : modo === 'par1' ? 1 : 2;
       visibles
         .sort((a, b) => String(a[idx] || '').localeCompare(String(b[idx] || ''), 'es'))
-        .forEach(it => tbody.appendChild(buildRow(it)));
+        .forEach(it => tbody.appendChild(buildRow(it, ++nFila)));
     } else if (modo === 'columna') {
       /* Columna vertebral: las 33 vértebras con sus órganos. */
       const grupos = new Map();
@@ -1048,13 +1055,13 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
           head.firstChild.innerHTML = `<a class="v-code" href="Vertebras.html#${codigo}">${codigo}</a> ${esc(partes)}`;
           tbody.appendChild(head);
           arr.sort((a, b) => a[1].localeCompare(b[1], 'es'))
-            .forEach(it => tbody.appendChild(buildRow(it)));
+            .forEach(it => tbody.appendChild(buildRow(it, ++nFila)));
         });
       }
       if (sinRelacion.length) {
         tbody.appendChild(sectionRow('Sin relación con la columna'));
         sinRelacion.sort((a, b) => a[1].localeCompare(b[1], 'es'))
-          .forEach(it => tbody.appendChild(buildRow(it)));
+          .forEach(it => tbody.appendChild(buildRow(it, ++nFila)));
       }
     } else {
       /* Zona o Sistema: filas agrupadas con encabezado. */
@@ -1071,9 +1078,9 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
       orden.forEach(g => {
         const arr = grupos.get(g);
         if (!arr || !arr.length) return;
-        arr.sort((a, b) => a[1].localeCompare(b[1], 'es'));
+        arr.sort((a, b) => compararPares(a, b, campo === 'sistema'));
         frag.appendChild(sectionRow(g));
-        arr.forEach(it => frag.appendChild(buildRow(it)));
+        arr.forEach(it => frag.appendChild(buildRow(it, ++nFila)));
       });
       tbody.appendChild(frag);
     }
