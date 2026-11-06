@@ -1,0 +1,234 @@
+/* ============================================================
+   Tema Par Biomagnético · paleta tomada de «Quiz Testing 2026»
+   Se carga al final para reemplazar los colores de cada página.
+   ============================================================ */
+:root {
+	--parbiomag-fondo-0: #eef4fb;
+	--parbiomag-fondo-1: #e3edf9;
+	--parbiomag-panel: #ffffff;
+	--parbiomag-panel-2: #f4f8fe;
+	--parbiomag-linea: #cfe0f3;
+	--parbiomag-linea-fuerte: #a9c6e6;
+	--parbiomag-texto: #0d2138;
+	--parbiomag-texto-suave: #4a6484;
+	--parbiomag-texto-tenue: #6d84a0;
+	--parbiomag-aqua: #0e7fa8;
+	--parbiomag-azul: #1b5fd6;
+	--parbiomag-violeta: #6d3fe0;
+	--parbiomag-oro: #b57500;
+	--parbiomag-ok: #0f8a4d;
+	--parbiomag-bad: #cf2242;
+	--parbiomag-opcion: #f6faff;
+
+	/* Tokens que usan las páginas */
+	--bg: #eef4fb;
+	--card: #ffffff;
+	--text: #0d2138;
+	--muted: #4a6484;
+	--accent: #1b5fd6;
+	--accent-light: #eaf3fd;
+	--border: #cfe0f3;
+	--warm: #f4f8fe;
+	--warm-border: #a9c6e6;
+	--warm-text: #1b5fd6;
+}
+
+body {
+	background: linear-gradient(180deg, var(--parbiomag-fondo-0), var(--parbiomag-fondo-1)) fixed;
+	color: var(--parbiomag-texto);
+}
+
+/* Cabecera */
+.site-header {
+	background: linear-gradient(135deg, #1b5fd6, #0e7fa8);
+}
+.site-header .back { color: #cfe3ff; }
+.site-header h1 { letter-spacing: -.01em; }
+.site-header p { color: #d7ecfa; }
+
+/* Navegación alfabética / de zonas */
+.alpha-nav, .reg-nav {
+	background: var(--parbiomag-panel);
+	border-bottom: 1px solid var(--parbiomag-linea);
+	box-shadow: 0 1px 3px rgba(13, 33, 56, .08);
+}
+.alpha-nav a, .reg-nav a { color: var(--parbiomag-azul); }
+.alpha-nav a:hover, .reg-nav a:hover { background: var(--parbiomag-accent-light, #eaf3fd); }
+.alpha-nav span { color: #b9cde3; }
+
+/* Intro y barra de herramientas */
+.intro { color: var(--parbiomag-texto-suave); }
+.intro a, .intro b { color: var(--parbiomag-azul); }
+.toolbar input[type=search],
+.sort-wrap select,
+.sel-wrap select {
+	background: var(--parbiomag-panel);
+	border: 1px solid var(--parbiomag-linea);
+	color: var(--parbiomag-texto);
+}
+.toolbar input[type=search]:focus,
+.sort-wrap select:focus,
+.sel-wrap select:focus {
+	border-color: var(--parbiomag-aqua);
+	box-shadow: 0 0 0 3px rgba(14, 127, 168, .18);
+}
+
+/* Tabla */
+.table-wrap {
+	background: var(--parbiomag-panel);
+	border: 1px solid var(--parbiomag-linea);
+	box-shadow: 0 12px 30px -22px rgba(13, 33, 56, .55);
+}
+thead { background: var(--parbiomag-opcion); }
+thead th {
+	color: var(--parbiomag-texto-suave);
+	border-bottom: 1px solid var(--parbiomag-linea-fuerte);
+}
+tbody tr:hover { background: #f2f8ff; }
+tbody td { color: var(--parbiomag-texto); }
+tr.section-row td {
+	background: #e9f1fb;
+	color: var(--parbiomag-azul);
+	border-top: 1px solid var(--parbiomag-linea);
+}
+td.num { color: var(--parbiomag-texto-tenue); }
+td.par-a { color: var(--parbiomag-azul); }
+td.par-b { color: var(--parbiomag-oro); }
+td.par-b::before { color: #a9c6e6; }
+td.name a { color: var(--parbiomag-azul); }
+td.desc { color: var(--parbiomag-texto-suave); }
+
+/* Clasificación de pares */
+.c-R { color: var(--parbiomag-bad); }
+.c-E { color: var(--parbiomag-ok); }
+.c-D { color: var(--parbiomag-azul); }
+.c-Ps { color: var(--parbiomag-violeta); }
+.c-B, .c-V, .c-H, .c-P, .c-T, .c-O { color: var(--parbiomag-texto-suave); }
+
+/* Chips de zona */
+td.zona span { background: #e9f1fe; color: var(--parbiomag-azul); }
+
+/* Chips de sistema */
+td.sistema .s-Nervioso { background: #efe9fd; color: var(--parbiomag-violeta); }
+td.sistema .s-Circulatorio { background: #fdecef; color: var(--parbiomag-bad); }
+td.sistema .s-Respiratorio { background: #e6f4fa; color: var(--parbiomag-aqua); }
+td.sistema .s-Digestivo { background: #fdf3e0; color: var(--parbiomag-oro); }
+td.sistema .s-Esqueletico { background: #f1f5f9; color: #475569; }
+td.sistema .s-Muscular { background: #f7ecfb; color: #a21caf; }
+td.sistema .s-Endocrino { background: #fdf7e0; color: #8a6100; }
+td.sistema .s-Urinario { background: #e9f1fe; color: var(--parbiomag-azul); }
+td.sistema .s-Linfatico { background: #e7f7ee; color: var(--parbiomag-ok); }
+td.sistema .s-Inmunologico { background: #e3f8ee; color: #0b7a45; }
+td.sistema .s-Tegumentario { background: #fdf1e6; color: #a85a00; }
+td.sistema .s-Reproductor { background: #f3ecfe; color: var(--parbiomag-violeta); }
+td.sistema .s-Locomotor { background: #eef2f7; color: #475569; }
+td.sistema .s-OTRO { background: #f1f5f9; color: var(--parbiomag-texto-tenue); }
+
+/* Chips de vértebra (columna-vertebral.css) */
+td.vertebra .v-C { background: #efe9fd; color: var(--parbiomag-violeta); }
+td.vertebra .v-T { background: #fdf3e0; color: var(--parbiomag-oro); }
+td.vertebra .v-L { background: #e7f7ee; color: var(--parbiomag-ok); }
+td.vertebra .v-S { background: #e6f4fa; color: var(--parbiomag-aqua); }
+td.vertebra .v-Co { background: #f1f5f9; color: #475569; }
+td.vertebra .v-none { color: var(--parbiomag-linea-fuerte); }
+tr.section-row td .v-code { background: #ffffff; color: var(--parbiomag-azul); border: 1px solid var(--parbiomag-linea); }
+td.vertebra a:hover, td.vertebra a:focus-visible { outline-color: rgba(27, 95, 214, .45); }
+
+/* Chips de tipo (padecimientos) */
+td.tipo span { background: #eef2f8; color: var(--parbiomag-texto-suave); }
+td.tipo .t-Virus { background: #e9f1fe; color: var(--parbiomag-azul); }
+td.tipo .t-Bacteria { background: #fdecef; color: var(--parbiomag-bad); }
+td.tipo .t-Hongo { background: #fdf3e0; color: var(--parbiomag-oro); }
+td.tipo .t-Parasito { background: #e7f7ee; color: var(--parbiomag-ok); }
+td.tipo .t-Toxico { background: #fdf1e6; color: #a85a00; }
+td.tipo .t-Tumor { background: #fdecef; color: #b3182f; }
+td.tipo .t-Autoinmune { background: #f3ecfe; color: var(--parbiomag-violeta); }
+td.tipo .t-Genetico { background: #e6f4fa; color: var(--parbiomag-aqua); }
+td.tipo .t-Psicoemocional { background: #f7ecfb; color: #a21caf; }
+td.tipo .t-Mental { background: #efe9fd; color: var(--parbiomag-violeta); }
+td.tipo .t-Metabolico { background: #fdf7e0; color: #8a6100; }
+td.tipo .t-Hematologico { background: #fdeef1; color: var(--parbiomag-bad); }
+td.tipo .t-Neurologico { background: #efe9fd; color: #5b3df0; }
+td.tipo .t-Degenerativo { background: #f1f5f9; color: #475569; }
+td.tipo .t-Inflamatorio { background: #fdf1e6; color: #a85a00; }
+td.tipo .t-Infeccioso { background: #e6f4fa; color: var(--parbiomag-aqua); }
+td.tipo .t-Emergencia { background: #fdecef; color: var(--parbiomag-bad); }
+td.tipo .t-Primerosauxilios { background: #e7f7ee; color: var(--parbiomag-ok); }
+td.tipo .t-Disfuncion { background: #e9f1fe; color: var(--parbiomag-azul); }
+td.tipo .t-Otros { background: #f1f5f9; color: var(--parbiomag-texto-tenue); }
+td.tipo .t-Especial { background: #fdf7e0; color: #8a6100; }
+
+/* Vertebras.html */
+.reg-nav a:hover, .reg-nav a:focus { background: #eaf3fd; }
+.chips-index { background: var(--parbiomag-panel); border-color: var(--parbiomag-linea); }
+.ichip:hover, .ichip:focus { outline-color: rgba(14, 127, 168, .45); }
+.zona-titulo { color: var(--parbiomag-azul); border-bottom-color: var(--parbiomag-linea-fuerte); }
+.zona-rango { background: var(--parbiomag-opcion); color: var(--parbiomag-texto-suave); }
+.zona-intro { color: var(--parbiomag-texto-suave); }
+.vcard { background: var(--parbiomag-panel); border-color: var(--parbiomag-linea); }
+.vcard:hover { box-shadow: 0 10px 24px -14px rgba(13, 33, 56, .45); }
+.vcard.destacada { border-color: var(--parbiomag-azul); box-shadow: 0 0 0 3px rgba(27, 95, 214, .2); }
+.vcard-body h3 { color: var(--parbiomag-azul); }
+.vcard-body p { color: var(--parbiomag-texto-suave); }
+.vchip.v-C { background: #efe9fd; color: var(--parbiomag-violeta); }
+.vchip.v-T { background: #fdf3e0; color: var(--parbiomag-oro); }
+.vchip.v-L { background: #e7f7ee; color: var(--parbiomag-ok); }
+.vchip.v-S { background: #e6f4fa; color: var(--parbiomag-aqua); }
+.vchip.v-Co { background: #f1f5f9; color: #475569; }
+.v-alias { color: var(--parbiomag-texto-tenue); }
+
+/* Ventana de imagen del par */
+.par-modal { background: rgba(4, 16, 31, .62); }
+.par-modal-caja { background: var(--parbiomag-panel); box-shadow: 0 30px 60px -24px rgba(4, 16, 31, .55); }
+.par-modal-titulo { background: var(--parbiomag-opcion); color: var(--parbiomag-azul); border-bottom-color: var(--parbiomag-linea); }
+.par-modal-cerrar { background: #e3edf9; color: var(--parbiomag-texto-suave); }
+.par-modal-cerrar:hover, .par-modal-cerrar:focus { background: #cfe0f3; }
+.par-modal-pie { background: var(--parbiomag-opcion); color: var(--parbiomag-texto-suave); border-top-color: var(--parbiomag-linea); }
+
+/* Botón volver arriba y pie */
+.back-to-top { background: linear-gradient(135deg, #1b5fd6, #0e7fa8); box-shadow: 0 8px 20px rgba(14, 127, 168, .35); }
+footer { color: var(--parbiomag-texto-tenue); border-top-color: var(--parbiomag-linea); }
+.no-results { color: var(--parbiomag-texto-suave); }
+
+
+/* ============================================================
+   Menú lateral y barra superior (index.html)
+   ============================================================ */
+.menu-sup {
+	background-image: none !important;
+	background: linear-gradient(135deg, #0d2138, #0a2544) !important;
+	border-bottom: 1px solid rgba(169, 198, 230, .18) !important;
+	box-shadow: 0 6px 18px -12px rgba(4, 16, 31, .8);
+}
+.menu-lat {
+	background: linear-gradient(180deg, #0d2138, #0a2544) !important;
+	box-shadow: 6px 0 24px -18px rgba(4, 16, 31, .9);
+}
+ul.acel > li { background: transparent !important; }
+ul.acel li a {
+	background: transparent !important;
+	border-bottom: 1px solid rgba(169, 198, 230, .14) !important;
+	color: #dbe8f8 !important;
+	font-weight: 600;
+}
+ul.acel li a:hover,
+ul.acel li a:focus {
+	background: #1b5fd6 !important;
+	color: #ffffff !important;
+	outline: none;
+}
+ul.acel li a:hover img { filter: brightness(1.35); }
+.wguia { background: var(--parbiomag-fondo-0, #eef4fb) !important; }
+#menu4 {
+	background: #ffffff;
+	border: 1px solid #cfe0f3;
+	box-shadow: 0 24px 48px -18px rgba(13, 33, 56, .45);
+}
+#menu4 .mnum { background: #eaf3fd; color: #1b5fd6; }
+#menu4 .mhead { color: #4a6484; border-top-color: #eef4fb; }
+#menu4 > li > a { color: #0d2138; }
+#menu4 > li > a:hover,
+#menu4 > li > a:focus-visible { background: #eaf3fd; color: #1b5fd6; }
+#menu4 .mnuevo { background: #e7f7ee; color: #0f8a4d; }
+#colores { border-radius: 14px; box-shadow: 0 18px 36px -18px rgba(13, 33, 56, .45); }
+.anchura #menu4 { background: #ffffff; }
