@@ -488,3 +488,10 @@ ul.acel li.open > ul {
 
 
 
+
+
+/* Ajuste 2026-11: contraste de los enlaces del panel Listas (fondo claro) */
+#menu4 > li > a { color: #0f172a !important; }
+#menu4 > li > a:hover, #menu4 > li > a:focus-visible { color: #1d4ed8 !important; background: #eef2ff; }
+#menu4 .mhead { color: #64748b !important; }
+#menu4 .mnuevo { color: #15803d !important; }

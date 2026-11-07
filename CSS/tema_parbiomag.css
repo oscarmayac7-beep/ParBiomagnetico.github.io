@@ -389,3 +389,159 @@ html[data-tema="noche"] .btn-tema { color: var(--parbiomag-oro); }
 @media (max-width: 750px) {
 	.btn-tema { left: .6rem; bottom: .6rem; width: 2.2rem; height: 2.2rem; }
 }
+
+/* ============================================================
+   Submenús homologados al diseño del menú «Listas»
+   (Protocolos, Tutorial, Actualidad)
+   ============================================================ */
+#menu4, #menu5, #menu6, #menu7 {
+	left: 176px;
+	top: -4px;
+	padding: 8px;
+	background: #ffffff;
+	border: 1px solid #cfe0f3;
+	border-radius: 14px;
+	box-shadow: 0 22px 44px -20px rgba(13, 33, 56, .5);
+	animation: menuPanel 0.16s ease-out;
+}
+
+#menu5, #menu6, #menu7 {
+	min-width: 214px;
+	max-width: 282px;
+}
+
+@keyframes menuPanel {
+	from { opacity: 0; transform: translateY(-6px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+#menu5 > li, #menu6 > li, #menu7 > li {
+	background: transparent !important;
+	position: relative;
+	top: 0;
+}
+
+#menu5 > li > a,
+#menu6 > li > a,
+#menu7 > li > a {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 1px 0;
+	padding: 8px 10px;
+	border: 0 !important;
+	border-radius: 9px;
+	background: transparent !important;
+	color: #0d2138 !important;
+	font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	font-size: .82rem;
+	font-weight: 600;
+	line-height: 1.3;
+	text-decoration: none;
+	transition: background .15s ease, color .15s ease;
+}
+
+#menu5 > li > a:hover,
+#menu5 > li > a:focus-visible,
+#menu6 > li > a:hover,
+#menu6 > li > a:focus-visible,
+#menu7 > li > a:hover,
+#menu7 > li > a:focus-visible {
+	background: #eaf3fd !important;
+	color: #1b5fd6 !important;
+	outline: none;
+}
+
+/* Menú móvil (celmenu.html): paneles en línea, igual que Listas */
+.anchura #menu5,
+.anchura #menu6,
+.anchura #menu7 {
+	position: static;
+	left: auto;
+	top: auto;
+	width: 280px;
+	max-width: calc(100vw - 16px);
+	margin: 6px 0 10px;
+	box-shadow: 0 8px 20px rgba(13, 33, 56, .18);
+}
+
+/* Modo noche: paneles oscuros con texto claro */
+html[data-tema="noche"] #menu4,
+html[data-tema="noche"] #menu5,
+html[data-tema="noche"] #menu6,
+html[data-tema="noche"] #menu7 {
+	background: #0d1d31;
+	border-color: rgba(120, 180, 255, .22);
+	box-shadow: 0 24px 48px -18px rgba(0, 0, 0, .85);
+}
+html[data-tema="noche"] #menu4 > li > a,
+html[data-tema="noche"] #menu5 > li > a,
+html[data-tema="noche"] #menu6 > li > a,
+html[data-tema="noche"] #menu7 > li > a {
+	color: #eaf3ff !important;
+}
+html[data-tema="noche"] #menu4 > li > a:hover,
+html[data-tema="noche"] #menu4 > li > a:focus-visible,
+html[data-tema="noche"] #menu5 > li > a:hover,
+html[data-tema="noche"] #menu5 > li > a:focus-visible,
+html[data-tema="noche"] #menu6 > li > a:hover,
+html[data-tema="noche"] #menu6 > li > a:focus-visible,
+html[data-tema="noche"] #menu7 > li > a:hover,
+html[data-tema="noche"] #menu7 > li > a:focus-visible {
+	background: rgba(46, 125, 255, .18) !important;
+	color: #8ad4ff !important;
+}
+html[data-tema="noche"] #menu4 .mhead { color: #9db2cc; border-top-color: rgba(120, 180, 255, .14); }
+html[data-tema="noche"] #menu4 .mnum { background: rgba(46, 125, 255, .18); color: #a7c6ff; }
+html[data-tema="noche"] #menu4 .mnuevo { background: rgba(43, 213, 118, .16); color: #9ef0c2; }
+
+
+/* ============================================================
+   Ajustes 2026-11 — polos del par, clasificación y móvil
+   Par 1 = polo negativo (negro) · Par 2 = polo positivo (rojo)
+   ============================================================ */
+
+/* Clasificación (columna nueva de las listas) */
+thead th.th-clasif { text-align: center; padding-left: .3rem; padding-right: .3rem; }
+td.clasif {
+  text-align: center; font-weight: 800; font-size: .72rem;
+  padding: .15rem .3rem; white-space: nowrap; width: 1%;
+}
+td.clasif::before { content: attr(data-c); }
+td.clasif[data-c="R"]::before  { color: #dc2626; }
+td.clasif[data-c="E"]::before  { color: #16a34a; }
+td.clasif[data-c="D"]::before  { color: #2563eb; }
+td.clasif[data-c="Ps"]::before { color: #4338ca; }
+td.clasif[data-c="B"]::before,
+td.clasif[data-c="V"]::before,
+td.clasif[data-c="H"]::before,
+td.clasif[data-c="P"]::before,
+td.clasif[data-c="T"]::before,
+td.clasif[data-c="O"]::before  { color: #475569; }
+
+/* Polos del par: negativo a la izquierda, positivo a la derecha */
+td.par-a { color: #111827 !important; font-weight: 600; }
+td.par-b { color: #dc2626 !important; font-weight: 600; }
+td.par-b::before { color: #9ca3af !important; }
+
+html[data-tema="noche"] td.par-a { color: #e5e7eb !important; }
+html[data-tema="noche"] td.par-b { color: #f87171 !important; }
+html[data-tema="noche"] td.clasif[data-c="R"]::before  { color: #f87171; }
+html[data-tema="noche"] td.clasif[data-c="E"]::before  { color: #4ade80; }
+html[data-tema="noche"] td.clasif[data-c="D"]::before  { color: #60a5fa; }
+html[data-tema="noche"] td.clasif[data-c="Ps"]::before { color: #a5b4fc; }
+html[data-tema="noche"] td.clasif[data-c="B"]::before,
+html[data-tema="noche"] td.clasif[data-c="V"]::before,
+html[data-tema="noche"] td.clasif[data-c="H"]::before,
+html[data-tema="noche"] td.clasif[data-c="P"]::before,
+html[data-tema="noche"] td.clasif[data-c="T"]::before,
+html[data-tema="noche"] td.clasif[data-c="O"]::before  { color: #cbd5e1; }
+
+/* Android / Chrome: filas cómodas al tacto y desplazamiento suave */
+@media (max-width: 700px) {
+  .table-wrap { -webkit-overflow-scrolling: touch; }
+  tbody td { padding-top: .22rem; padding-bottom: .22rem; }
+  thead th { padding-top: .3rem; padding-bottom: .3rem; }
+  td.clasif { padding: .22rem .28rem; font-size: .7rem; }
+  td.par-a, td.par-b { font-size: .74rem; }
+}

@@ -10,12 +10,16 @@
 <link href="CSS/CSS0-menu1.css" rel="stylesheet">
 <link id="CSS-main" rel="stylesheet" href="CSS/metal.css">
 <script src="CSS/funciones1.js"></script>
-<script src="CSS/cambiarCSS5.js"></script>
 <link rel="stylesheet" href="CSS/tema_parbiomag.css">
 <script src="js/tema.js"></script>
+<style>
+  ul.acel svg.menu-ico{width:35px;height:35px;flex:none;color:inherit;display:block}
+  ul.acel li a{display:flex;align-items:center;gap:.5rem;min-height:44px}
+  @media (max-width:700px){ ul.acel svg.menu-ico{width:30px;height:30px} }
+</style>
 </head>
 
-<body onload="nuevoCss()">
+<body>
 
 <!-- Barra superior -->
 <header class="menu-sup">
@@ -33,14 +37,14 @@
 
     <li id="opcion1">
       <a href="portada.html" target="guia">
-        <img src="iconos/menu-home1.png" width="35" height="35" alt="">
+        <svg class="menu-ico" viewBox="0 0 24 24" width="35" height="35" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
         <span class="menu-txt">Inicio</span>
       </a>
     </li>
 
     <li id="opcion2">
       <a href="padecimientos.html" target="guia">
-        <img src="iconos/menu-pades1.png" width="35" height="35" alt="">
+        <svg class="menu-ico" viewBox="0 0 24 24" width="35" height="35" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12h4l2.4 6L14 6l2.4 6H21"/></svg>
         <span class="menu-txt">Padecimientos</span>
       </a>
     </li>
@@ -48,7 +52,7 @@
     <!-- Listas de pares: 6 grupos -->
     <li id="opcion4" class="tiene-menu">
       <a href="#opcion4" aria-haspopup="true">
-        <img src="iconos/menu-listas1.png" width="35" height="35" alt="">
+        <svg class="menu-ico" viewBox="0 0 24 24" width="35" height="35" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M4 6h.01"/><path d="M4 12h.01"/><path d="M4 18h.01"/></svg>
         <span class="menu-txt">Listas <img class="flecha" src="graficos/arrow-right.png" width="10" height="10" alt=""></span>
       </a>
 
@@ -79,7 +83,7 @@
 
     <li id="opcion5">
       <a href="#opcion5" aria-haspopup="true">
-        <img src="iconos/menu-protocolos1.png" width="35" height="35" alt="">
+        <svg class="menu-ico" viewBox="0 0 24 24" width="35" height="35" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 4h6v3H9z"/><path d="M9 4H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><path d="m9 13 2 2 4-4"/></svg>
         <span class="menu-txt">Protocolos <img class="flecha" src="graficos/arrow-right.png" width="10" height="10" alt=""></span>
       </a>
       <ul id="menu5">
@@ -91,7 +95,7 @@
 
     <li id="opcion6">
       <a href="#opcion6" aria-haspopup="true">
-        <img src="iconos/menu-tutorial1.png" width="35" height="35" alt="">
+        <svg class="menu-ico" viewBox="0 0 24 24" width="35" height="35" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.5C10 4.8 7.5 4 4 4v13c3.5 0 6 .8 8 2.5 2-1.7 4.5-2.5 8-2.5V4c-3.5 0-6 .8-8 2.5Z"/><path d="M12 6.5V20"/></svg>
         <span class="menu-txt">Tutorial <img class="flecha" src="graficos/arrow-right.png" width="10" height="10" alt=""></span>
       </a>
       <ul id="menu6">
@@ -105,7 +109,7 @@
 
     <li id="opcion7">
       <a href="#opcion7" aria-haspopup="true">
-        <img src="iconos/menu-news1.png" width="35" height="35" alt="">
+        <svg class="menu-ico" viewBox="0 0 24 24" width="35" height="35" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h6v4H7z"/><path d="M7 16h10"/><path d="M16 8h2"/><path d="M16 11h2"/></svg>
         <span class="menu-txt">Actualidad <img class="flecha" src="graficos/arrow-right.png" width="10" height="10" alt=""></span>
       </a>
       <ul id="menu7">
@@ -115,24 +119,7 @@
         <li><a href="directorio.html" target="guia">Directorio</a></li>
       </ul>
     </li>
-
-    <li id="opcion8">
-      <a href="#" onclick="toggle_visibility('colores'); return false;">
-        <img src="iconos/ajustes.png" width="35" height="35" alt="">
-        <span class="menu-txt">Preferencias</span>
-      </a>
-    </li>
-  </ul>
-
-  <!-- Panel de colores -->
-  <div class="colores" id="colores">
-    <p class="colores-tit">Colores</p>
-    <a href="#" class="botonc" style="background-color:#515C68;color:#fff" onclick="colorMetal('CSS/metal.css', 0); return false;">Metal</a>
-    <a href="#" class="botonc" style="background-color:#2E8271;color:#fff" onclick="colorVerde('CSS/CSS02.css', 0); return false;">Verde</a>
-    <a href="#" class="botonc" style="background-color:#0364D8;color:#fff" onclick="colorBlue('CSS/azul.html', 0); return false;">Azul</a>
-    <a href="#" class="botonc" style="background-color:#722F1F;color:#fff" onclick="colorRojo('CSS/rojo.css', 0); return false;">Siena</a>
-    <a href="#" class="botonc" style="background-color:#6906BD;color:#fff" onclick="colorPurple('CSS/purple.css', 0); return false;">Púrpura</a>
-  </div>
+</ul>
 </nav>
 
 <!-- Guía (iframe principal) -->
@@ -217,16 +204,6 @@ function closeMenu() {
   document.getElementById("btn-p4").style.display = "none";
 }
 
-/* Panel de colores (funciones1.js no las define por un error de jQuery) */
-function toggle_visibility(id) {
-  var e = document.getElementById(id);
-  e.style.display = (e.style.display === 'block') ? 'none' : 'block';
-}
-
-function hide_menu(id) {
-  var e = document.getElementById(id);
-  if (e) e.style.display = "none";
-}
 </script>
 
 <!-- Submenús al tocar (Android / iOS) -->
