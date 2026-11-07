@@ -232,3 +232,160 @@ ul.acel li a:hover img { filter: brightness(1.35); }
 #menu4 .mnuevo { background: #e7f7ee; color: #0f8a4d; }
 #colores { border-radius: 14px; box-shadow: 0 18px 36px -18px rgba(13, 33, 56, .45); }
 .anchura #menu4 { background: #ffffff; }
+
+/* ============================================================
+   Modo noche · toggle día/noche (js/tema.js)
+   ============================================================ */
+html[data-tema="noche"] {
+	--parbiomag-fondo-0: #04101f;
+	--parbiomag-fondo-1: #071c34;
+	--parbiomag-panel: #0d1d31;
+	--parbiomag-panel-2: #14273e;
+	--parbiomag-linea: rgba(120, 180, 255, .18);
+	--parbiomag-linea-fuerte: rgba(120, 180, 255, .34);
+	--parbiomag-texto: #eaf3ff;
+	--parbiomag-texto-suave: #9db2cc;
+	--parbiomag-texto-tenue: #6d84a0;
+	--parbiomag-aqua: #49c7f0;
+	--parbiomag-azul: #2e7dff;
+	--parbiomag-violeta: #8b5cf6;
+	--parbiomag-oro: #ffc24b;
+	--parbiomag-ok: #2bd576;
+	--parbiomag-bad: #ff5c74;
+	--parbiomag-opcion: #14273e;
+
+	--bg: #04101f;
+	--card: #0d1d31;
+	--text: #eaf3ff;
+	--muted: #9db2cc;
+	--accent: #2e7dff;
+	--accent-light: rgba(46, 125, 255, .16);
+	--border: rgba(120, 180, 255, .18);
+	--warm: #12263d;
+	--warm-border: rgba(120, 180, 255, .30);
+	--warm-text: #8ad4ff;
+}
+
+html[data-tema="noche"] body {
+	background: linear-gradient(180deg, #04101f, #071c34) fixed;
+	color: var(--parbiomag-texto);
+}
+
+/* Cabecera y navegación */
+html[data-tema="noche"] .site-header { background: linear-gradient(135deg, #123a6b, #0b556b); }
+html[data-tema="noche"] .alpha-nav,
+html[data-tema="noche"] .reg-nav { background: #0d1d31; border-bottom-color: var(--parbiomag-linea); }
+html[data-tema="noche"] .alpha-nav span { color: #3d5570; }
+
+/* Tabla */
+html[data-tema="noche"] .table-wrap {
+	background: var(--parbiomag-panel);
+	border-color: var(--parbiomag-linea);
+	box-shadow: 0 18px 40px -26px rgba(0, 0, 0, .9);
+}
+html[data-tema="noche"] thead { background: #14273e; }
+html[data-tema="noche"] thead th { color: #9db2cc; border-bottom-color: rgba(120, 180, 255, .3); }
+html[data-tema="noche"] tbody tr:hover { background: #12263e; }
+html[data-tema="noche"] tr.section-row td { background: #0e2138; color: #8ad4ff; border-top-color: var(--parbiomag-linea); }
+html[data-tema="noche"] td.par-b::before { color: #3d5570; }
+html[data-tema="noche"] tr.section-row td .v-code { background: #0d1d31; color: #8ad4ff; border-color: rgba(120, 180, 255, .3); }
+
+/* Chips de zona */
+html[data-tema="noche"] td.zona span { background: rgba(46, 125, 255, .2); color: #a7c6ff; }
+
+/* Chips de sistema */
+html[data-tema="noche"] td.sistema .s-Nervioso { background: rgba(139, 92, 246, .2); color: #c9b8ff; }
+html[data-tema="noche"] td.sistema .s-Circulatorio { background: rgba(255, 92, 116, .18); color: #ffb3c0; }
+html[data-tema="noche"] td.sistema .s-Respiratorio { background: rgba(73, 199, 240, .18); color: #9fe0ff; }
+html[data-tema="noche"] td.sistema .s-Digestivo { background: rgba(255, 194, 75, .18); color: #ffdf9e; }
+html[data-tema="noche"] td.sistema .s-Esqueletico { background: rgba(169, 198, 230, .16); color: #cddff5; }
+html[data-tema="noche"] td.sistema .s-Muscular { background: rgba(214, 124, 240, .18); color: #e6b8ff; }
+html[data-tema="noche"] td.sistema .s-Endocrino { background: rgba(255, 214, 102, .18); color: #ffe6a6; }
+html[data-tema="noche"] td.sistema .s-Urinario { background: rgba(46, 125, 255, .2); color: #a7c6ff; }
+html[data-tema="noche"] td.sistema .s-Linfatico { background: rgba(43, 213, 118, .18); color: #9ef0c2; }
+html[data-tema="noche"] td.sistema .s-Inmunologico { background: rgba(43, 213, 118, .22); color: #a8f5c8; }
+html[data-tema="noche"] td.sistema .s-Tegumentario { background: rgba(255, 150, 80, .18); color: #ffcfa8; }
+html[data-tema="noche"] td.sistema .s-Reproductor { background: rgba(139, 92, 246, .2); color: #d3c2ff; }
+html[data-tema="noche"] td.sistema .s-Locomotor { background: rgba(169, 198, 230, .14); color: #cddff5; }
+html[data-tema="noche"] td.sistema .s-OTRO { background: rgba(169, 198, 230, .12); color: #b9cde3; }
+
+/* Chips de vértebra */
+html[data-tema="noche"] td.vertebra .v-C { background: rgba(139, 92, 246, .22); color: #c9b8ff; }
+html[data-tema="noche"] td.vertebra .v-T { background: rgba(255, 194, 75, .2); color: #ffdf9e; }
+html[data-tema="noche"] td.vertebra .v-L { background: rgba(43, 213, 118, .2); color: #9ef0c2; }
+html[data-tema="noche"] td.vertebra .v-S { background: rgba(73, 199, 240, .2); color: #9fe0ff; }
+html[data-tema="noche"] td.vertebra .v-Co { background: rgba(169, 198, 230, .16); color: #cddff5; }
+html[data-tema="noche"] td.vertebra .v-none { color: #3d5570; }
+
+/* Chips de tipo (padecimientos) */
+html[data-tema="noche"] td.tipo span { background: rgba(169, 198, 230, .12); color: #b9cde3; }
+html[data-tema="noche"] td.tipo .t-Virus { background: rgba(46, 125, 255, .2); color: #a7c6ff; }
+html[data-tema="noche"] td.tipo .t-Bacteria { background: rgba(255, 92, 116, .18); color: #ffb3c0; }
+html[data-tema="noche"] td.tipo .t-Hongo { background: rgba(255, 194, 75, .18); color: #ffdf9e; }
+html[data-tema="noche"] td.tipo .t-Parasito { background: rgba(43, 213, 118, .18); color: #9ef0c2; }
+html[data-tema="noche"] td.tipo .t-Toxico { background: rgba(255, 150, 80, .18); color: #ffcfa8; }
+html[data-tema="noche"] td.tipo .t-Tumor { background: rgba(255, 92, 116, .2); color: #ffb3c0; }
+html[data-tema="noche"] td.tipo .t-Autoinmune { background: rgba(139, 92, 246, .2); color: #d3c2ff; }
+html[data-tema="noche"] td.tipo .t-Genetico { background: rgba(73, 199, 240, .18); color: #9fe0ff; }
+html[data-tema="noche"] td.tipo .t-Psicoemocional { background: rgba(214, 124, 240, .18); color: #e6b8ff; }
+html[data-tema="noche"] td.tipo .t-Mental { background: rgba(139, 92, 246, .2); color: #c9b8ff; }
+html[data-tema="noche"] td.tipo .t-Metabolico { background: rgba(255, 214, 102, .18); color: #ffe6a6; }
+html[data-tema="noche"] td.tipo .t-Hematologico { background: rgba(255, 92, 116, .18); color: #ffb3c0; }
+html[data-tema="noche"] td.tipo .t-Neurologico { background: rgba(139, 92, 246, .22); color: #c9b8ff; }
+html[data-tema="noche"] td.tipo .t-Degenerativo { background: rgba(169, 198, 230, .14); color: #cddff5; }
+html[data-tema="noche"] td.tipo .t-Inflamatorio { background: rgba(255, 150, 80, .18); color: #ffcfa8; }
+html[data-tema="noche"] td.tipo .t-Infeccioso { background: rgba(73, 199, 240, .18); color: #9fe0ff; }
+html[data-tema="noche"] td.tipo .t-Emergencia { background: rgba(255, 92, 116, .22); color: #ffb3c0; }
+html[data-tema="noche"] td.tipo .t-Primerosauxilios { background: rgba(43, 213, 118, .18); color: #9ef0c2; }
+html[data-tema="noche"] td.tipo .t-Disfuncion { background: rgba(46, 125, 255, .18); color: #a7c6ff; }
+html[data-tema="noche"] td.tipo .t-Otros { background: rgba(169, 198, 230, .1); color: #b9cde3; }
+html[data-tema="noche"] td.tipo .t-Especial { background: rgba(255, 214, 102, .18); color: #ffe6a6; }
+
+/* Página de vértebras y ventana de imagen */
+html[data-tema="noche"] .chips-index { background: #0d1d31; border-color: var(--parbiomag-linea); }
+html[data-tema="noche"] .vcard { background: #0d1d31; border-color: var(--parbiomag-linea); }
+html[data-tema="noche"] .vcard:hover { box-shadow: 0 12px 26px -14px rgba(0, 0, 0, .8); }
+html[data-tema="noche"] .vchip.v-C { background: rgba(139, 92, 246, .22); color: #c9b8ff; }
+html[data-tema="noche"] .vchip.v-T { background: rgba(255, 194, 75, .2); color: #ffdf9e; }
+html[data-tema="noche"] .vchip.v-L { background: rgba(43, 213, 118, .2); color: #9ef0c2; }
+html[data-tema="noche"] .vchip.v-S { background: rgba(73, 199, 240, .2); color: #9fe0ff; }
+html[data-tema="noche"] .vchip.v-Co { background: rgba(169, 198, 230, .16); color: #cddff5; }
+html[data-tema="noche"] .par-modal-caja { background: #0d1d31; }
+html[data-tema="noche"] .par-modal-imagen { background: #0a1829; }
+
+/* Menú del index */
+html[data-tema="noche"] .menu-sup { background: linear-gradient(135deg, #04101f, #071c34) !important; }
+html[data-tema="noche"] .menu-lat { background: linear-gradient(180deg, #071c34, #04101f) !important; }
+html[data-tema="noche"] .wguia { background: #04101f !important; }
+
+/* Botón día / noche */
+.btn-tema {
+	position: fixed;
+	left: 1rem;
+	bottom: 1rem;
+	z-index: 99999;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 50%;
+	border: 1px solid var(--parbiomag-linea);
+	background: var(--parbiomag-panel);
+	color: var(--parbiomag-azul);
+	font-size: 1.1rem;
+	line-height: 1;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 10px 24px -12px rgba(4, 16, 31, .55);
+	transition: transform .15s ease, background .15s ease;
+}
+.btn-tema:hover,
+.btn-tema:focus-visible {
+	transform: translateY(-1px);
+	background: var(--parbiomag-opcion);
+	outline: none;
+}
+html[data-tema="noche"] .btn-tema { color: var(--parbiomag-oro); }
+@media (max-width: 750px) {
+	.btn-tema { left: .6rem; bottom: .6rem; width: 2.2rem; height: 2.2rem; }
+}
