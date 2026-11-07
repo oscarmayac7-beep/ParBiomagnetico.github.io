@@ -14,7 +14,7 @@
   var tbody = tabla.tBodies[0];
   var noResults = document.getElementById('noResults');
   var CV = window.COLUMNA_VERTEBRAL;
-  var COLS = 7;
+  var COLS = 8;
 
   function planoTexto(s) {
     return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
