@@ -995,8 +995,8 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     const codigo = CV ? CV.vertebraDe(p1) : '';
     const partes = codigo && CV ? CV.partesDe(codigo) : '';
     const texto = sinAcentos(`${clasif} ${p1} ${p2 || ''} ${name} ${zonaDe(p1, p2)} ${sistemaDe(p1, p2)} ${codigo} ${partes} ${textoReferencia(href)}`);
-    const tokens = q.split(/\s+/).filter(Boolean);
-    return tokens.every(t => texto.includes(t));
+    const grupos = q.split(',').map(t => t.trim()).filter(Boolean);
+    return grupos.some(g => g.split(/\s+/).filter(Boolean).every(w => texto.includes(w)));
   }
 
 
@@ -1032,12 +1032,12 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
           tbody.appendChild(sectionRow(letra, 'sec-' + letra));
           items.forEach(it => tbody.appendChild(buildRow(it, ++nFila)));
         });
-    } else if (modo === 'clasif' || modo === 'par1' || modo === 'par2') {
-      const idx = modo === 'clasif' ? 0 : modo === 'par1' ? 1 : 2;
+    } else if (modo === 'clasif' || modo === 'par1' || modo === 'par2' || modo === 'nombre') {
+      const idx = modo === 'clasif' ? 0 : modo === 'par1' ? 1 : modo === 'par2' ? 2 : 3;
       visibles
         .sort((a, b) => String(a[idx] || '').localeCompare(String(b[idx] || ''), 'es'))
         .forEach(it => tbody.appendChild(buildRow(it, ++nFila)));
-    } else if (modo === 'columna') {
+    } else if (modo === 'columna' || modo === 'vertebra') {
       /* Columna vertebral: las 33 vértebras con sus órganos. */
       const grupos = new Map();
       (CV ? CV.VERTEBRAS : []).forEach(v => grupos.set(v[0], []));
@@ -1088,7 +1088,11 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     noResults.style.display = visibles.length ? 'none' : 'block';
   }
 
-  input.addEventListener('input', render);
+  if (window.BUSQUEDA) {
+    window.BUSQUEDA.init(input, tbody, render);
+  } else {
+    input.addEventListener('input', render);
+  }
   sortSel.addEventListener('change', render);
 
   window.addEventListener('scroll', () => {

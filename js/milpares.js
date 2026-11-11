@@ -60,7 +60,7 @@
   var hasSections = originalChildren.some(function (r) {
     return r.classList.contains('section-row');
   });
-  var MODO_ORIGINAL = sortSelect.options[0].value;
+  var MODO_ORIGINAL = '__original__';
 
   var ZONA_ORDER = ['Cabeza', 'Cara', 'Cuello', 'Brazos', 'Torso Superior', 'Torso Medio',
     'Torso Bajo', 'Pelvis', 'Dorso', 'Pierna', 'Pie', 'Otros'];
@@ -88,6 +88,10 @@
     if (key === 'clasif') return (row.querySelector('td.clasif').textContent || '').trim().toLowerCase();
     if (key === 'par1') return par1De(row).toLowerCase();
     if (key === 'par2') return row.querySelector('.par-b').textContent.trim().toLowerCase();
+    if (key === 'nombre' || key === 'name') {
+      var n = row.querySelector('.name');
+      return n ? n.textContent.trim().toLowerCase() : '';
+    }
     return '';
   }
 
@@ -179,16 +183,15 @@
 
   function render() {
     var q = planoTexto(input.value).trim();
-    var tokens = q ? q.split(/\s+/).filter(Boolean) : [];
+    var grupos = q ? q.split(',').map(function (t) { return t.trim(); }).filter(Boolean) : [];
     var sortKey = sortSelect.value;
     var matches = function (r) {
-      if (!tokens.length) return true;
+      if (!grupos.length) return true;
       var texto = planoTexto(r.textContent) + ' ' + planoTexto(r.dataset.partes || '') +
         ' ' + planoTexto(r.dataset.ref || '');
-      for (var i = 0; i < tokens.length; i++) {
-        if (texto.indexOf(tokens[i]) === -1) return false;
-      }
-      return true;
+      return grupos.some(function (g) {
+        return g.split(/\s+/).filter(Boolean).every(function (w) { return texto.indexOf(w) !== -1; });
+      });
     };
     var visibleData = new Set(dataRows.filter(matches));
     var frag = document.createDocumentFragment();
@@ -218,7 +221,7 @@
           }
         });
       }
-    } else if (sortKey === 'columna') {
+    } else if ((sortKey === 'columna' || sortKey === 'vertebra')) {
       frag.appendChild(buildColumna(Array.from(visibleData), !!q));
     } else if (sortKey === 'zona') {
       frag.appendChild(buildGrouped(visibleData, 'zona', ZONA_ORDER));
@@ -235,7 +238,11 @@
     if (noResults) noResults.style.display = visibleData.size === 0 ? 'block' : 'none';
   }
 
-  input.addEventListener('input', render);
+  if (window.BUSQUEDA) {
+    window.BUSQUEDA.init(input, tbody, render);
+  } else {
+    input.addEventListener('input', render);
+  }
   sortSelect.addEventListener('change', render);
   render();
 
