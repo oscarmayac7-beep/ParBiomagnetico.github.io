@@ -545,3 +545,151 @@ html[data-tema="noche"] td.clasif[data-c="O"]::before  { color: #cbd5e1; }
   td.clasif { padding: .22rem .28rem; font-size: .7rem; }
   td.par-a, td.par-b { font-size: .74rem; }
 }
+
+/* ============================================================
+   Configuración y Par 1 único
+   ============================================================ */
+.cfg-sec { margin-bottom: .85rem; }
+.cfg-tit {
+	font-size: .66rem;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	color: var(--parbiomag-texto-tenue);
+	margin-bottom: .35rem;
+}
+.cfg-seg { display: flex; gap: .35rem; }
+.cfg-seg button {
+	flex: 1;
+	padding: .45rem .5rem;
+	border-radius: 9px;
+	border: 1px solid var(--parbiomag-linea);
+	background: var(--parbiomag-panel-2);
+	color: var(--parbiomag-texto-suave);
+	font-weight: 700;
+	font-size: .78rem;
+	cursor: pointer;
+	transition: background .15s ease, color .15s ease;
+}
+.cfg-seg button:hover { background: var(--parbiomag-opcion); }
+.cfg-seg button.activo {
+	background: var(--parbiomag-azul);
+	border-color: var(--parbiomag-azul);
+	color: #ffffff;
+}
+.cfg-switch {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+	font-size: .8rem;
+	font-weight: 600;
+	color: var(--parbiomag-texto);
+	cursor: pointer;
+}
+.cfg-switch input { width: 1rem; height: 1rem; accent-color: var(--parbiomag-azul); }
+.cfg-ayuda {
+	margin: .35rem 0 0;
+	font-size: .7rem;
+	line-height: 1.35;
+	color: var(--parbiomag-texto-tenue);
+}
+.cfg-sep { height: 1px; background: var(--parbiomag-linea); margin: .2rem 0 .8rem; }
+
+.btn-config {
+	position: fixed;
+	left: 1rem;
+	bottom: 4.1rem;
+	z-index: 99999;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 50%;
+	border: 1px solid var(--parbiomag-linea);
+	background: var(--parbiomag-panel);
+	color: var(--parbiomag-texto-suave);
+	font-size: 1.05rem;
+	line-height: 1;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 10px 24px -12px rgba(4, 16, 31, .55);
+	transition: transform .15s ease, background .15s ease, color .15s ease;
+}
+.btn-config:hover,
+.btn-config:focus-visible {
+	transform: translateY(-1px);
+	background: var(--parbiomag-opcion);
+	color: var(--parbiomag-azul);
+	outline: none;
+}
+
+.cfg-fondo {
+	position: fixed;
+	inset: 0;
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+	background: rgba(4, 16, 31, .55);
+}
+.cfg-caja {
+	width: min(430px, 100%);
+	max-height: 90vh;
+	overflow-y: auto;
+	background: var(--parbiomag-panel);
+	border: 1px solid var(--parbiomag-linea);
+	border-radius: 16px;
+	box-shadow: 0 30px 60px -20px rgba(4, 16, 31, .6);
+}
+.cfg-cabeza {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: .75rem 1rem;
+	background: var(--parbiomag-opcion);
+	border-bottom: 1px solid var(--parbiomag-linea);
+}
+.cfg-cabeza h2 { margin: 0; font-size: .95rem; color: var(--parbiomag-texto); }
+.cfg-cerrar {
+	border: 0;
+	background: transparent;
+	font-size: 1.2rem;
+	line-height: 1;
+	color: var(--parbiomag-texto-suave);
+	cursor: pointer;
+}
+.cfg-cerrar:hover { color: var(--parbiomag-bad); }
+.cfg-cuerpo { padding: 1rem; }
+
+@media (max-width: 750px) {
+	.btn-config { left: .6rem; bottom: 3.4rem; width: 2.2rem; height: 2.2rem; }
+}
+
+/* Filas alternas (cebra) para facilitar la lectura */
+tbody tr.fila-par > td { background: #e7f0fb; }
+tbody tr.fila-par:hover > td { background: #d9e8fa; }
+html[data-tema="noche"] tbody tr.fila-par > td { background: rgba(46, 125, 255, .14); }
+html[data-tema="noche"] tbody tr.fila-par:hover > td { background: rgba(46, 125, 255, .18); }
+
+/* Filas contraídas (Par 1 repetido) */
+tbody tr.oculto { display: none; }
+tr.grupo-par1 { cursor: pointer; }
+tr.grupo-par1 > td.par-a { font-weight: 700; }
+.mas-par1 {
+	display: inline-block;
+	margin-left: 6px;
+	padding: 0 .4rem;
+	border-radius: 999px;
+	background: #dbeafe;
+	color: #1b5fd6;
+	font-size: .6rem;
+	font-weight: 800;
+	line-height: 1.5;
+	vertical-align: middle;
+}
+tr.grupo-par1.abierto .mas-par1 { background: #1b5fd6; color: #ffffff; }
+tr.grupo-par1:hover > td { background: #e2eefb; }
+html[data-tema="noche"] .mas-par1 { background: rgba(46, 125, 255, .22); color: #a7c6ff; }
+html[data-tema="noche"] tr.grupo-par1.abierto .mas-par1 { background: #2e7dff; color: #ffffff; }
+html[data-tema="noche"] tr.grupo-par1:hover > td { background: rgba(46, 125, 255, .18); }

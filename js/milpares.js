@@ -98,9 +98,10 @@
   function renumber() {
     var n = 0;
     Array.prototype.forEach.call(tbody.rows, function (row) {
-      if (row.classList.contains('section-row')) return;
+      if (row.classList.contains('section-row') || row.classList.contains('oculto')) return;
       var cell = row.querySelector('td.num');
       if (cell) cell.textContent = ++n;
+      row.classList.toggle('fila-par', n % 2 === 0);
     });
   }
 
@@ -124,7 +125,7 @@
     return header;
   }
 
-  function buildGrouped(visibleData, groupField, groupOrder) {
+  function buildGrouped(visibleData, groupField, groupOrder, etiqueta) {
     var byGroup = new Map();
     groupOrder.forEach(function (g) { byGroup.set(g, []); });
     Array.from(visibleData).forEach(function (r) {
@@ -144,10 +145,83 @@
     order.forEach(function (g) {
       var arr = byGroup.get(g);
       if (!arr || !arr.length) return;
-      frag.appendChild(encabezado(g));
+      frag.appendChild(encabezado(etiqueta ? etiqueta(g) : g));
       arr.forEach(function (r) { frag.appendChild(r); });
     });
     return frag;
+  }
+
+  var CLASIF_ORDER = ['V', 'B', 'H', 'P', 'T', 'E', 'D', 'Ps', 'R', 'O'];
+  var CLASIF_TITULOS = {
+    'V': 'Virus', 'B': 'Bacteria', 'H': 'Hongo', 'P': 'Parásito', 'T': 'Tóxico',
+    'E': 'Especial', 'D': 'Disfunción', 'Ps': 'Psico-emocional', 'R': 'Reservorio', 'O': 'Otros'
+  };
+
+  function aplicarPar1Unico(contenedor) {
+    var ultimo = null;
+    Array.prototype.forEach.call(contenedor.childNodes, function (n) {
+      if (n.nodeType !== 1) return;
+      if (n.classList.contains('section-row')) { ultimo = null; return; }
+      var a = n.querySelector('.par-a');
+      if (!a) return;
+      var txt = a.textContent.trim();
+      if (txt && ultimo && txt === ultimo) {
+        a.textContent = '';
+        n.classList.add('par1-repetido');
+      } else {
+        if (txt) ultimo = txt;
+        n.classList.remove('par1-repetido');
+      }
+    });
+  }
+
+  var contadorGrupo = 0;
+
+  function contraerRepetidos(contenedor) {
+    var filas = [];
+    Array.prototype.forEach.call(contenedor.childNodes, function (n) {
+      if (n.nodeType !== 1) return;
+      filas.push(n.classList.contains('section-row') ? null : n);
+    });
+
+    var i = 0;
+    while (i < filas.length) {
+      var tr = filas[i];
+      if (!tr) { i++; continue; }
+      var clave = tr.dataset.par1 || '';
+      var j = i + 1;
+      while (j < filas.length && filas[j] && (filas[j].dataset.par1 || '') === clave) j++;
+      if (clave && (j - i) > 1) {
+        var id = 'g' + (++contadorGrupo);
+        tr.classList.add('grupo-par1');
+        tr.dataset.grupo = id;
+        tr.classList.remove('oculto', 'abierto');
+        var celda = tr.querySelector('.par-a');
+        if (celda && !celda.querySelector('.mas-par1')) {
+          var marca = document.createElement('span');
+          marca.className = 'mas-par1';
+          marca.textContent = '+' + (j - i - 1);
+          celda.appendChild(marca);
+        }
+        for (var k = i + 1; k < j; k++) {
+          filas[k].classList.add('oculto');
+          filas[k].dataset.grupo = id;
+          filas[k].classList.remove('abierto');
+        }
+      }
+      i = j;
+    }
+  }
+
+  function alternarGrupo(tr) {
+    var id = tr.dataset.grupo;
+    if (!id) return;
+    var abierto = !tr.classList.contains('abierto');
+    tr.classList.toggle('abierto', abierto);
+    Array.prototype.forEach.call(tbody.querySelectorAll('tr[data-grupo="' + id + '"]'), function (fila) {
+      if (fila !== tr) fila.classList.toggle('oculto', !abierto);
+    });
+    renumber();
   }
 
   function buildColumna(visibles, conBusqueda) {
@@ -185,6 +259,19 @@
     var q = planoTexto(input.value).trim();
     var grupos = q ? q.split(',').map(function (t) { return t.trim(); }).filter(Boolean) : [];
     var sortKey = sortSelect.value;
+    if (window.CONFIG) {
+      Array.prototype.forEach.call(dataRows, function (tr) {
+        var celda = tr.querySelector('.par-a');
+        if (!celda) return;
+        if (tr.dataset.par1 === undefined) tr.dataset.par1 = celda.textContent.trim();
+        celda.textContent = tr.dataset.par1;
+        tr.classList.remove('oculto', 'grupo-par1', 'abierto');
+        delete tr.dataset.grupo;
+        var marca = tr.querySelector('.mas-par1');
+        if (marca) marca.remove();
+      });
+    }
+
     var matches = function (r) {
       if (!grupos.length) return true;
       var texto = planoTexto(r.textContent) + ' ' + planoTexto(r.dataset.partes || '') +
@@ -223,6 +310,10 @@
       }
     } else if ((sortKey === 'columna' || sortKey === 'vertebra')) {
       frag.appendChild(buildColumna(Array.from(visibleData), !!q));
+    } else if (sortKey === 'clasif') {
+      frag.appendChild(buildGrouped(visibleData, 'clasif', CLASIF_ORDER, function (g) {
+        return CLASIF_TITULOS[g] ? g + ' · ' + CLASIF_TITULOS[g] : g;
+      }));
     } else if (sortKey === 'zona') {
       frag.appendChild(buildGrouped(visibleData, 'zona', ZONA_ORDER));
     } else if (sortKey === 'sistema') {
@@ -233,6 +324,15 @@
         .forEach(function (r) { frag.appendChild(r); });
     }
 
+    if (window.CONFIG && window.CONFIG.get('ocultarPar1') &&
+        (sortKey === 'clasif' || sortKey === 'zona' || sortKey === 'sistema' ||
+         sortKey === 'columna' || sortKey === 'vertebra')) {
+      aplicarPar1Unico(frag);
+      if (!q && window.CONFIG.get('contraerPar1')) {
+        contadorGrupo = 0;
+        contraerRepetidos(frag);
+      }
+    }
     tbody.replaceChildren(frag);
     renumber();
     if (noResults) noResults.style.display = visibleData.size === 0 ? 'block' : 'none';
@@ -243,7 +343,15 @@
   } else {
     input.addEventListener('input', render);
   }
+  tbody.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('a')) return;
+    var tr = e.target.closest ? e.target.closest('tr.grupo-par1') : null;
+    if (tr) alternarGrupo(tr);
+  });
   sortSelect.addEventListener('change', render);
+  window.addEventListener('config:cambio', function (e) {
+    render();
+  });
   render();
 
   var backToTop = document.getElementById('backToTop');

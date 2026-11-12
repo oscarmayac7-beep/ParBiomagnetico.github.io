@@ -10,8 +10,12 @@ window.BUSQUEDA = (function () {
   /* Búsquedas predefinidas (se irán agregando aquí) */
   var PREDEFINIDAS = [
     {
-      nombre: 'Equilibrar vías respiratorias',
-      terminos: 'Amigdalitis, Sinusitis, Faringitis, Laringitis, Otitis, Rinitis, Disnea, Bronquitis, Neumonitis, Neumonía, Asma'
+      nombre: 'Equilibrio vías respiratorias',
+      terminos: 'Amigdalitis, Sinusitis, Faringitis, Laringitis, Otitis, Rinitis, Disnea, Bronquitis, Neumonitis, Neumonía, Asma, Enfisema, Pulmonar'
+    },
+	{
+      nombre: 'Equilibrio ocular',
+      terminos: 'Ceguera, Conjuntivitis, Correorrenitis, Retina, Sensibilidad a la luz, Maculopatía, Uveitis, Pterigion, Cataratas, Macular, Glaucoma, Fotofobia, Visual, Vista'
     }
   ];
 

@@ -950,6 +950,7 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     const zona = zonaDe(p1, p2);
     const sistema = sistemaDe(p1, p2);
     const tr = document.createElement('tr');
+    tr.dataset.par1 = p1;
     tr.innerHTML =
       `<td class="num">${num}</td><td class="clasif"><span class="${clasifClass(clasif)}">${esc(clasif)}</span></td>` +
       `<td class="par-a">${esc(p1)}</td>` +
@@ -1005,6 +1006,89 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     return window.ORDEN_ANATOMICO.comparar(a[1], sistemaDe(a[1], a[2]), b[1], sistemaDe(b[1], b[2]), conFlujo);
   };
 
+  var CLASIF_ORDER = ['V', 'B', 'H', 'P', 'T', 'E', 'D', 'Ps', 'R', 'O'];
+  var CLASIF_TITULOS = {
+    'V': 'Virus', 'B': 'Bacteria', 'H': 'Hongo', 'P': 'Parásito', 'T': 'Tóxico',
+    'E': 'Especial', 'D': 'Disfunción', 'Ps': 'Psico-emocional', 'R': 'Reservorio', 'O': 'Otros'
+  };
+
+
+  var contadorGrupo = 0;
+
+  function contraerRepetidos(contenedor) {
+    var filas = [];
+    Array.prototype.forEach.call(contenedor.childNodes, function (n) {
+      if (n.nodeType !== 1) return;
+      filas.push(n.classList.contains('section-row') ? null : n);
+    });
+
+    var i = 0;
+    while (i < filas.length) {
+      var tr = filas[i];
+      if (!tr) { i++; continue; }
+      var clave = tr.dataset.par1 || '';
+      var j = i + 1;
+      while (j < filas.length && filas[j] && (filas[j].dataset.par1 || '') === clave) j++;
+      if (clave && (j - i) > 1) {
+        var id = 'g' + (++contadorGrupo);
+        tr.classList.add('grupo-par1');
+        tr.dataset.grupo = id;
+        tr.classList.remove('oculto', 'abierto');
+        var celda = tr.querySelector('.par-a');
+        if (celda && !celda.querySelector('.mas-par1')) {
+          var marca = document.createElement('span');
+          marca.className = 'mas-par1';
+          marca.textContent = '+' + (j - i - 1);
+          celda.appendChild(marca);
+        }
+        for (var k = i + 1; k < j; k++) {
+          filas[k].classList.add('oculto');
+          filas[k].dataset.grupo = id;
+          filas[k].classList.remove('abierto');
+        }
+      }
+      i = j;
+    }
+  }
+
+  function alternarGrupo(tr) {
+    var id = tr.dataset.grupo;
+    if (!id) return;
+    var abierto = !tr.classList.contains('abierto');
+    tr.classList.toggle('abierto', abierto);
+    Array.prototype.forEach.call(tbody.querySelectorAll('tr[data-grupo="' + id + '"]'), function (fila) {
+      if (fila !== tr) fila.classList.toggle('oculto', !abierto);
+    });
+    renumerarPares();
+  }
+
+  function renumerarPares() {
+    let vis = 0;
+    Array.prototype.forEach.call(tbody.rows, function (tr) {
+      if (tr.classList.contains('section-row') || tr.classList.contains('oculto')) return;
+      const c = tr.querySelector('td.num');
+      if (c) c.textContent = ++vis;
+    });
+  }
+
+  function aplicarPar1Unico(contenedor) {
+    var ultimo = null;
+    Array.prototype.forEach.call(contenedor.childNodes, function (n) {
+      if (n.nodeType !== 1) return;
+      if (n.classList.contains('section-row')) { ultimo = null; return; }
+      var a = n.querySelector('.par-a');
+      if (!a) return;
+      var txt = a.textContent.trim();
+      if (txt && ultimo && txt === ultimo) {
+        a.textContent = '';
+        n.classList.add('par1-repetido');
+      } else {
+        if (txt) ultimo = txt;
+        n.classList.remove('par1-repetido');
+      }
+    });
+  }
+
   function render() {
     const q = sinAcentos(input.value);
     const modo = sortSel.value;
@@ -1032,11 +1116,29 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
           tbody.appendChild(sectionRow(letra, 'sec-' + letra));
           items.forEach(it => tbody.appendChild(buildRow(it, ++nFila)));
         });
-    } else if (modo === 'clasif' || modo === 'par1' || modo === 'par2' || modo === 'nombre') {
-      const idx = modo === 'clasif' ? 0 : modo === 'par1' ? 1 : modo === 'par2' ? 2 : 3;
+    } else if (modo === 'par1' || modo === 'par2' || modo === 'nombre') {
+      const idx = modo === 'par1' ? 1 : modo === 'par2' ? 2 : 3;
       visibles
         .sort((a, b) => String(a[idx] || '').localeCompare(String(b[idx] || ''), 'es'))
         .forEach(it => tbody.appendChild(buildRow(it, ++nFila)));
+    } else if (modo === 'clasif') {
+      const grupos = new Map();
+      visibles.forEach(it => {
+        const c = String(it[0] || '');
+        if (!grupos.has(c)) grupos.set(c, []);
+        grupos.get(c).push(it);
+      });
+      const orden = CLASIF_ORDER.slice();
+      grupos.forEach((_, g) => { if (orden.indexOf(g) === -1) orden.push(g); });
+      const frag = document.createDocumentFragment();
+      orden.forEach(g => {
+        const arr = grupos.get(g);
+        if (!arr || !arr.length) return;
+        arr.sort((a, b) => String(a[1] || '').localeCompare(String(b[1] || ''), 'es'));
+        frag.appendChild(sectionRow(CLASIF_TITULOS[g] ? g + ' · ' + CLASIF_TITULOS[g] : g));
+        arr.forEach(it => frag.appendChild(buildRow(it, ++nFila)));
+      });
+      tbody.appendChild(frag);
     } else if (modo === 'columna' || modo === 'vertebra') {
       /* Columna vertebral: las 33 vértebras con sus órganos. */
       const grupos = new Map();
@@ -1085,6 +1187,24 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
       tbody.appendChild(frag);
     }
 
+    let pares = 0;
+    Array.prototype.forEach.call(tbody.rows, function (tr) {
+      if (tr.classList.contains('section-row')) return;
+      pares++;
+      tr.classList.toggle('fila-par', pares % 2 === 0);
+    });
+
+    if (window.CONFIG && window.CONFIG.get('ocultarPar1') &&
+        (modo === 'clasif' || modo === 'zona' || modo === 'sistema' ||
+         modo === 'columna' || modo === 'vertebra')) {
+      aplicarPar1Unico(tbody);
+      if (!q && window.CONFIG.get('contraerPar1')) {
+        contadorGrupo = 0;
+        contraerRepetidos(tbody);
+        renumerarPares();
+      }
+    }
+
     noResults.style.display = visibles.length ? 'none' : 'block';
   }
 
@@ -1093,7 +1213,15 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
   } else {
     input.addEventListener('input', render);
   }
+  tbody.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('a')) return;
+    const tr = e.target.closest ? e.target.closest('tr.grupo-par1') : null;
+    if (tr) alternarGrupo(tr);
+  });
   sortSel.addEventListener('change', render);
+  window.addEventListener('config:cambio', function (e) {
+    render();
+  });
 
   window.addEventListener('scroll', () => {
     backTop.classList.toggle('visible', window.scrollY > 300);

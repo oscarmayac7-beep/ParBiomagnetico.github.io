@@ -24,6 +24,17 @@
   /* Se aplica antes de pintar la página */
   aplicar(guardado() || 'dia');
 
+  function cambiar(tema) {
+    aplicar(tema);
+    try { localStorage.setItem(CLAVE, tema === 'noche' ? 'noche' : 'dia'); } catch (e) {}
+  }
+
+  /* API para la configuración */
+  window.TEMA = {
+    aplicar: cambiar,
+    actual: function () { return raiz.getAttribute('data-tema') === 'noche' ? 'noche' : 'dia'; }
+  };
+
   function crearBoton() {
     if (document.getElementById('btnTema')) return;
     var btn = document.createElement('button');
@@ -33,9 +44,7 @@
     document.body.appendChild(btn);
     aplicar(raiz.getAttribute('data-tema'));
     btn.addEventListener('click', function () {
-      var nuevo = raiz.getAttribute('data-tema') === 'noche' ? 'dia' : 'noche';
-      aplicar(nuevo);
-      try { localStorage.setItem(CLAVE, nuevo); } catch (e) {}
+      cambiar(raiz.getAttribute('data-tema') === 'noche' ? 'dia' : 'noche');
     });
   }
 
