@@ -518,6 +518,9 @@ td.clasif[data-c="H"]::before,
 td.clasif[data-c="P"]::before,
 td.clasif[data-c="T"]::before,
 td.clasif[data-c="O"]::before  { color: #475569; }
+td.clasif[data-c="CM"]::before { color: #b45309; }
+td.clasif[data-c="C"]::before  { color: #7c3aed; }
+td.clasif[data-c="PsE"]::before{ color: #4338ca; }
 
 /* Polos del par: negativo a la izquierda, positivo a la derecha */
 td.par-a { color: #111827 !important; font-weight: 600; }
@@ -693,3 +696,119 @@ tr.grupo-par1:hover > td { background: #e2eefb; }
 html[data-tema="noche"] .mas-par1 { background: rgba(46, 125, 255, .22); color: #a7c6ff; }
 html[data-tema="noche"] tr.grupo-par1.abierto .mas-par1 { background: #2e7dff; color: #ffffff; }
 html[data-tema="noche"] tr.grupo-par1:hover > td { background: rgba(46, 125, 255, .18); }
+
+
+/* Sin símbolo inicial en Par 2 */
+td.par-b::before { content: "" !important; margin-right: 0 !important; display: none !important; }
+
+/* Rastreo del registro */
+td.num { cursor: pointer; }
+td.num:hover { color: var(--parbiomag-azul); text-decoration: underline; }
+.ras-titulo { margin: 0 0 .2rem; font-size: .95rem; font-weight: 700; color: var(--parbiomag-texto); }
+.ras-nota { margin: 0; font-size: .78rem; line-height: 1.45; color: var(--parbiomag-texto-suave); }
+.ras-chips { display: flex; flex-wrap: wrap; gap: .3rem; margin: .5rem 0 .2rem; }
+.ras-chip {
+	background: #e9f1fe;
+	color: var(--parbiomag-azul);
+	border-radius: 999px;
+	padding: 2px 8px;
+	font-size: .64rem;
+	font-weight: 700;
+}
+.ras-sub {
+	margin: .9rem 0 .3rem;
+	font-size: .64rem;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	color: var(--parbiomag-texto-tenue);
+}
+.ras-lista { margin: 0; padding-left: 1.1rem; font-size: .78rem; line-height: 1.45; color: var(--parbiomag-texto-suave); }
+.ras-lista li { margin: .15rem 0; }
+.ras-copiar {
+	margin-top: .9rem;
+	padding: .45rem .85rem;
+	border: 1px solid var(--parbiomag-azul);
+	border-radius: 9px;
+	background: var(--parbiomag-azul);
+	color: #ffffff;
+	font-size: .78rem;
+	font-weight: 700;
+	cursor: pointer;
+}
+.ras-copiar:hover { filter: brightness(1.08); }
+html[data-tema="noche"] .ras-chip { background: rgba(46, 125, 255, .18); color: #a7c6ff; }
+
+/* Pares marcados */
+th.th-chk, td.chk { width: 1%; text-align: center; padding-left: .25rem; padding-right: .25rem; }
+td.chk input, th.th-chk input {
+	width: .95rem;
+	height: .95rem;
+	accent-color: var(--parbiomag-azul);
+	cursor: pointer;
+}
+tbody tr.marcado > td { background: #fff6da !important; }
+html[data-tema="noche"] tbody tr.marcado > td { background: rgba(255, 194, 75, .12) !important; }
+
+.btn-marcados {
+	position: fixed;
+	left: 1rem;
+	bottom: 7.2rem;
+	z-index: 99999;
+	height: 2.5rem;
+	min-width: 2.5rem;
+	padding: 0 .6rem;
+	border-radius: 999px;
+	border: 1px solid var(--parbiomag-linea);
+	background: var(--parbiomag-panel);
+	color: var(--parbiomag-ok);
+	font-size: .95rem;
+	font-weight: 800;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .25rem;
+	cursor: pointer;
+	box-shadow: 0 10px 24px -12px rgba(4, 16, 31, .55);
+	transition: transform .15s ease, background .15s ease;
+}
+.btn-marcados:hover { transform: translateY(-1px); background: var(--parbiomag-opcion); }
+.btn-marcados b { font-size: .78rem; color: var(--parbiomag-texto); }
+
+.mar-lista { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; }
+.mar-lista li {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+	padding: .35rem 0;
+	border-bottom: 1px solid var(--parbiomag-linea);
+}
+.mar-info { display: flex; flex-direction: column; gap: .1rem; font-size: .78rem; min-width: 0; }
+.mar-info b { color: var(--parbiomag-texto); }
+.mar-info span { color: var(--parbiomag-texto-suave); font-size: .72rem; }
+.mar-quitar {
+	margin-left: auto;
+	border: 0;
+	background: transparent;
+	color: var(--parbiomag-texto-tenue);
+	font-size: 1.1rem;
+	line-height: 1;
+	cursor: pointer;
+}
+.mar-quitar:hover { color: var(--parbiomag-bad); }
+.mar-acciones { display: flex; gap: .5rem; margin-top: .9rem; flex-wrap: wrap; }
+.mar-limpiar {
+	padding: .45rem .85rem;
+	border-radius: 9px;
+	border: 1px solid var(--parbiomag-linea);
+	background: var(--parbiomag-panel-2);
+	color: var(--parbiomag-texto-suave);
+	font-weight: 700;
+	font-size: .78rem;
+	cursor: pointer;
+}
+.mar-limpiar:hover { color: var(--parbiomag-bad); }
+
+@media (max-width: 750px) {
+	.btn-marcados { left: .6rem; bottom: 6.3rem; height: 2.2rem; }
+}

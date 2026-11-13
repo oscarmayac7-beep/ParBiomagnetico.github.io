@@ -154,3 +154,7 @@ footer{text-align:center;padding:.7rem;color:var(--muted);font-size:.72rem;
 thead th.th-num { text-align: center; width: 1%; }
 td.num { text-align: center; color: var(--muted); font-variant-numeric: tabular-nums;
          font-size: .72rem; white-space: nowrap; width: 1%; }
+
+.c-CM{color:#b45309}
+.c-C{color:#7c3aed}
+.c-PsE{color:#4338ca}

@@ -125,11 +125,19 @@
     return header;
   }
 
+
+  function valorGrupo(r, campo) {
+    var c = r.querySelector('.' + campo);
+    if (!c) return '';
+    if (campo === 'clasif' && c.getAttribute('data-c')) return c.getAttribute('data-c').trim();
+    return c.textContent.trim();
+  }
+
   function buildGrouped(visibleData, groupField, groupOrder, etiqueta) {
     var byGroup = new Map();
     groupOrder.forEach(function (g) { byGroup.set(g, []); });
     Array.from(visibleData).forEach(function (r) {
-      var g = r.querySelector('.' + groupField).textContent.trim();
+      var g = valorGrupo(r, groupField);
       if (!byGroup.has(g)) byGroup.set(g, []);
       byGroup.get(g).push(r);
     });
@@ -219,7 +227,16 @@
     var abierto = !tr.classList.contains('abierto');
     tr.classList.toggle('abierto', abierto);
     Array.prototype.forEach.call(tbody.querySelectorAll('tr[data-grupo="' + id + '"]'), function (fila) {
-      if (fila !== tr) fila.classList.toggle('oculto', !abierto);
+      if (fila === tr) return;
+      fila.classList.toggle('oculto', !abierto);
+      if (abierto) {
+        var celda = fila.querySelector('.par-a');
+        if (celda && fila.dataset.par1) {
+          var marca = celda.querySelector('.mas-par1');
+          if (marca) marca.remove();
+          celda.textContent = fila.dataset.par1;
+        }
+      }
     });
     renumber();
   }
@@ -324,13 +341,14 @@
         .forEach(function (r) { frag.appendChild(r); });
     }
 
-    if (window.CONFIG && window.CONFIG.get('ocultarPar1') &&
+    if (window.CONFIG &&
         (sortKey === 'clasif' || sortKey === 'zona' || sortKey === 'sistema' ||
          sortKey === 'columna' || sortKey === 'vertebra')) {
-      aplicarPar1Unico(frag);
-      if (!q && window.CONFIG.get('contraerPar1')) {
+      if (window.CONFIG.get('contraerPar1')) {
         contadorGrupo = 0;
         contraerRepetidos(frag);
+      } else if (window.CONFIG.get('ocultarPar1')) {
+        aplicarPar1Unico(frag);
       }
     }
     tbody.replaceChildren(frag);

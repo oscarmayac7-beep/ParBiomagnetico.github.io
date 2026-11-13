@@ -13,9 +13,17 @@ window.BUSQUEDA = (function () {
       nombre: 'Equilibrio vías respiratorias',
       terminos: 'Amigdalitis, Sinusitis, Faringitis, Laringitis, Otitis, Rinitis, Disnea, Bronquitis, Neumonitis, Neumonía, Asma, Enfisema, Pulmonar'
     },
-	{
+	  {
       nombre: 'Equilibrio ocular',
       terminos: 'Ceguera, Conjuntivitis, Correorrenitis, Retina, Sensibilidad a la luz, Maculopatía, Uveitis, Pterigion, Cataratas, Macular, Glaucoma, Fotofobia, Visual, Vista'
+    },
+    {
+      nombre: 'Equilibrio bucal',
+      terminos: 'Halitosis, Dentales, Gingivitis, Periodontitis, Caries, Estomatitis, Aftas, Bruxismo, Sensibilidad dental, Encías'
+    }
+    ,{
+      nombre: 'Equilibrio sexual',
+      terminos: 'Transmisión sexual, Infección urinaria, Vaginitis, Cistitis, Prostatitis, Disfunción eréctil, Eyaculación precoz, Infertilidad, Esterilidad, Impotencia, Libido, Vaginismo, Dispareunia, Menstruación, Amenorrea, Ovarios, Endometriosis, Fibromas, Quistes, Miomas, Embarazo, Frigidez, Menopausia, Climaterio, Disfunción sexual, Libido baja, Deseo sexual, Infertilidad femenina,  Infertilidad masculina,Lujuria, Libido alta, Deseo sexual bajo, Deseo sexual alto, Disfunción sexual femenina, Disfunción sexual masculina,     Complejo de Edipo, Complejo de Electra, Complejo de castración, Complejo de inferioridad'
     }
   ];
 
@@ -66,6 +74,7 @@ window.BUSQUEDA = (function () {
       chip.querySelector('.busq-chip-txt').textContent = nombre;
       chip.querySelector('button').addEventListener('click', function () {
         predefActiva = null;
+        window.__BUSQUEDA_ACTIVA = null;
         input.value = '';
         pintarChip(null);
         alCambiar();
@@ -152,10 +161,12 @@ window.BUSQUEDA = (function () {
 
       if (op.tipo === 'predefinida') {
         predefActiva = op.dato;
+        window.__BUSQUEDA_ACTIVA = op.dato;
         input.value = op.dato.terminos;
         pintarChip(op.dato.nombre, op.dato.terminos);
       } else {
         predefActiva = null;
+        window.__BUSQUEDA_ACTIVA = null;
         input.value = op.texto;
         pintarChip(null);
       }
@@ -168,6 +179,7 @@ window.BUSQUEDA = (function () {
     input.addEventListener('input', function () {
       if (predefActiva && input.value !== predefActiva.terminos) {
         predefActiva = null;
+        window.__BUSQUEDA_ACTIVA = null;
         pintarChip(null);
       }
       renderSug(input.value);
@@ -203,5 +215,6 @@ window.BUSQUEDA = (function () {
     });
   }
 
-  return { init: init, predefinidas: PREDEFINIDAS };
+  return { init: init, predefinidas: PREDEFINIDAS,
+    activa: function () { return window.__BUSQUEDA_ACTIVA || null; } };
 })();
