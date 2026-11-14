@@ -1038,7 +1038,14 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
         if (celda && !celda.querySelector('.mas-par1')) {
           var marca = document.createElement('span');
           marca.className = 'mas-par1';
-          marca.textContent = '+' + (j - i - 1);
+          marca.dataset.total = String(j - i);
+          marca.innerHTML = '<b>' + (j - i) + '</b><i>+</i>';
+          marca.title = 'Expandir ' + (j - i) + ' pares';
+          marca.addEventListener('click', function (ev) {
+            ev.stopPropagation();
+            var fila = this.closest ? this.closest('tr') : null;
+            if (fila) alternarGrupo(fila);
+          });
           celda.appendChild(marca);
         }
         for (var k = i + 1; k < j; k++) {
@@ -1056,6 +1063,12 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     if (!id) return;
     var abierto = !tr.classList.contains('abierto');
     tr.classList.toggle('abierto', abierto);
+    var marca = tr.querySelector('.mas-par1');
+    if (marca) {
+      var total = marca.dataset.total || '';
+      marca.innerHTML = '<b>' + total + '</b><i>' + (abierto ? '\u2212' : '+') + '</i>';
+      marca.title = (abierto ? 'Contraer ' : 'Expandir ') + total + ' pares';
+    }
     Array.prototype.forEach.call(tbody.querySelectorAll('tr[data-grupo="' + id + '"]'), function (fila) {
       if (fila === tr) return;
       fila.classList.toggle('oculto', !abierto);

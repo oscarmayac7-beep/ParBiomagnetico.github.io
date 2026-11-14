@@ -105,8 +105,8 @@ window.RASTREO = (function () {
 
     if (tr.classList.contains('grupo-par1')) {
       var marca = tr.querySelector('.mas-par1');
-      var n = marca ? marca.textContent.replace('+', '') : '';
-      motivo.push('Encabeza ' + (n || 'varias') + ' fila(s) más con el mismo Par 1 («' + sinMarca(tr.querySelector('.par-a')) + '»), contraídas.');
+      var n = marca && marca.dataset ? marca.dataset.total : '';
+      motivo.push('Agrupa ' + (n || 'varios') + ' pares con el mismo Par 1 («' + sinMarca(tr.querySelector('.par-a')) + '»), contraídos.');
     }
 
     /* --- Construir panel --- */

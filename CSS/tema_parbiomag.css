@@ -812,3 +812,39 @@ html[data-tema="noche"] tbody tr.marcado > td { background: rgba(255, 194, 75, .
 @media (max-width: 750px) {
 	.btn-marcados { left: .6rem; bottom: 6.3rem; height: 2.2rem; }
 }
+
+/* Contador de pares repetidos: total + signo */
+.mas-par1 {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	margin-left: 6px;
+	padding: 0 .42rem;
+	border-radius: 999px;
+	background: #dbeafe;
+	color: #1b5fd6;
+	font-size: .62rem;
+	font-weight: 900;
+	line-height: 1.55;
+	cursor: pointer;
+	user-select: none;
+	vertical-align: middle;
+}
+.mas-par1 b { font-weight: 900; }
+.mas-par1 i { font-style: normal; font-weight: 900; opacity: .75; }
+.mas-par1:hover { background: #bfdbfe; }
+tr.grupo-par1.abierto .mas-par1 { background: #1b5fd6; color: #ffffff; }
+tr.grupo-par1.abierto .mas-par1 i { opacity: 1; }
+html[data-tema="noche"] .mas-par1 { background: rgba(46, 125, 255, .22); color: #a7c6ff; }
+html[data-tema="noche"] .mas-par1:hover { background: rgba(46, 125, 255, .34); }
+html[data-tema="noche"] tr.grupo-par1.abierto .mas-par1 { background: #2e7dff; color: #ffffff; }
+
+.mar-enlace {
+	display: inline-block;
+	margin: .1rem 0 .6rem;
+	font-size: .74rem;
+	font-weight: 700;
+	color: var(--parbiomag-azul);
+	text-decoration: none;
+}
+.mar-enlace:hover { text-decoration: underline; }
