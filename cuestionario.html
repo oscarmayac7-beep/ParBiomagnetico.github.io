@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuestionario médico · Par Biomagnético</title>
+<link rel="stylesheet" href="CSS/tema_parbiomag.css">
+<style>
+	* { box-sizing: border-box; }
+	body {
+		margin: 0;
+		font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+		background: linear-gradient(180deg, var(--parbiomag-fondo-0), var(--parbiomag-fondo-1)) fixed;
+		color: var(--parbiomag-texto);
+		line-height: 1.5;
+	}
+	.site-header {
+		background: linear-gradient(135deg, #1b5fd6, #0e7fa8);
+		color: #fff;
+		text-align: center;
+		padding: .95rem 1rem .85rem;
+	}
+	.site-header a { color: #cfe3ff; text-decoration: none; font-size: .78rem; }
+	.site-header h1 { margin: .15rem 0 0; font-size: 1.35rem; letter-spacing: -.01em; }
+	.site-header p { margin: .15rem 0 0; font-size: .8rem; color: #d7ecfa; }
+	main { max-width: 860px; margin: 1.1rem auto 2rem; padding: 0 1rem; }
+	.card {
+		background: var(--parbiomag-panel);
+		border: 1px solid var(--parbiomag-linea);
+		border-radius: 16px;
+		box-shadow: 0 16px 36px -22px rgba(13, 33, 56, .5);
+		padding: 1.1rem 1.2rem 1.3rem;
+	}
+	h2 {
+		margin: 0 0 .2rem;
+		font-size: .72rem;
+		text-transform: uppercase;
+		letter-spacing: .09em;
+		color: var(--parbiomag-texto-tenue);
+	}
+	.fila { display: flex; gap: .8rem; flex-wrap: wrap; }
+	.campo { display: flex; flex-direction: column; gap: .25rem; margin-top: .7rem; flex: 1 1 220px; }
+	.campo label { font-size: .78rem; font-weight: 700; color: var(--parbiomag-texto-suave); }
+	input[type="text"], input[type="number"], textarea {
+		width: 100%;
+		padding: .55rem .65rem;
+		border: 1px solid var(--parbiomag-linea);
+		border-radius: 10px;
+		background: var(--parbiomag-panel-2);
+		color: var(--parbiomag-texto);
+		font: inherit;
+		font-size: .88rem;
+	}
+	input:focus, textarea:focus {
+		outline: none;
+		border-color: var(--parbiomag-aqua);
+		box-shadow: 0 0 0 3px rgba(14, 127, 168, .18);
+	}
+	textarea { min-height: 92px; resize: vertical; }
+	.bloque { margin-top: 1.15rem; }
+	.acciones { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1.2rem; align-items: center; }
+	button {
+		padding: .55rem 1rem;
+		border-radius: 10px;
+		border: 1px solid var(--parbiomag-azul);
+		background: var(--parbiomag-azul);
+		color: #fff;
+		font-weight: 700;
+		font-size: .82rem;
+		cursor: pointer;
+	}
+	button.sec {
+		background: var(--parbiomag-panel-2);
+		color: var(--parbiomag-texto-suave);
+		border-color: var(--parbiomag-linea);
+	}
+	button:hover { filter: brightness(1.06); }
+	.estado { font-size: .74rem; color: var(--parbiomag-ok); font-weight: 700; margin-left: auto; }
+	.aviso {
+		margin-top: 1rem;
+		font-size: .74rem;
+		color: var(--parbiomag-texto-tenue);
+		border-top: 1px solid var(--parbiomag-linea);
+		padding-top: .7rem;
+	}
+	@media (max-width: 640px) {
+		.card { padding: .9rem; }
+		.fila { gap: .5rem; }
+	}
+</style>
+<script src="js/tema.js"></script>
+<script src="js/config.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+	<a href="pares.html">← Volver a los pares</a>
+	<h1>Cuestionario médico</h1>
+	<p>Datos del paciente y antecedentes para el informe</p>
+</header>
+
+<main>
+	<div class="card">
+		<h2>Datos del paciente</h2>
+		<div class="fila">
+			<div class="campo">
+				<label for="cNombre">Nombre completo</label>
+				<input type="text" id="cNombre" autocomplete="off" placeholder="Nombre y apellidos">
+			</div>
+			<div class="campo" style="flex:0 1 120px">
+				<label for="cEdad">Edad</label>
+				<input type="number" id="cEdad" min="0" max="120" placeholder="Años">
+			</div>
+			<div class="campo">
+				<label for="cNacimiento">Lugar de nacimiento</label>
+				<input type="text" id="cNacimiento" autocomplete="off" placeholder="Ciudad, estado, país">
+			</div>
+		</div>
+
+		<div class="bloque">
+			<h2>Antecedentes patológicos</h2>
+			<div class="campo">
+				<label for="cPersonal">Personales</label>
+				<textarea id="cPersonal" placeholder="Enfermedades, cirugías, medicamentos, alergias…"></textarea>
+			</div>
+			<div class="campo">
+				<label for="cPadres">De los padres</label>
+				<textarea id="cPadres" placeholder="Enfermedades de la madre y del padre"></textarea>
+			</div>
+			<div class="campo">
+				<label for="cHermanos">De los hermanos</label>
+				<textarea id="cHermanos" placeholder="Enfermedades de los hermanos"></textarea>
+			</div>
+		</div>
+
+		<div class="acciones">
+			<button type="button" id="btnGuardar">Guardar ficha</button>
+			<button type="button" class="sec" id="btnLimpiar">Limpiar</button>
+			<span class="estado" id="estado"></span>
+		</div>
+
+		<p class="aviso">
+			Los datos se guardan solo en este dispositivo y se incluyen automáticamente en el PDF de
+			<strong>pares marcados</strong>. No se envían a ningún servidor.
+		</p>
+	</div>
+</main>
+
+<script>
+(function () {
+	var CLAVE = 'ficha-medica';
+	var campos = ['cNombre', 'cEdad', 'cNacimiento', 'cPersonal', 'cPadres', 'cHermanos'];
+	var estado = document.getElementById('estado');
+
+	function leer() {
+		try { return JSON.parse(localStorage.getItem(CLAVE) || '{}'); } catch (e) { return {}; }
+	}
+	function guardar(silencioso) {
+		var datos = {};
+		campos.forEach(function (id) { datos[id] = document.getElementById(id).value; });
+		try { localStorage.setItem(CLAVE, JSON.stringify(datos)); } catch (e) {}
+		if (!silencioso && estado) {
+			estado.textContent = 'Guardado ✓';
+			setTimeout(function () { estado.textContent = ''; }, 1800);
+		}
+	}
+
+	var datos = leer();
+	campos.forEach(function (id) {
+		var el = document.getElementById(id);
+		if (el && datos[id]) el.value = datos[id];
+	});
+
+	var t = null;
+	campos.forEach(function (id) {
+		var el = document.getElementById(id);
+		el.addEventListener('input', function () {
+			clearTimeout(t);
+			t = setTimeout(function () { guardar(true); }, 400);
+		});
+	});
+
+	document.getElementById('btnGuardar').addEventListener('click', function () { guardar(false); });
+	document.getElementById('btnLimpiar').addEventListener('click', function () {
+		if (!window.confirm('¿Borrar los datos de la ficha?')) return;
+		campos.forEach(function (id) { document.getElementById(id).value = ''; });
+		guardar(false);
+	});
+})();
+</script>
+</body>
+</html>
