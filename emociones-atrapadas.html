@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emociones atrapadas · Par Biomagnético</title>
+<link rel="stylesheet" href="CSS/tema_parbiomag.css">
+<style>
+	* { box-sizing: border-box; }
+	body {
+		margin: 0;
+		font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+		background: var(--parbiomag-fondo-0);
+		color: var(--parbiomag-texto);
+		line-height: 1.45;
+	}
+	.site-header {
+		background: linear-gradient(135deg, #1b5fd6, #0e7fa8);
+		color: #fff;
+		text-align: center;
+		padding: .95rem 1rem .85rem;
+	}
+	.site-header a { color: #cfe3ff; text-decoration: none; font-size: .78rem; }
+	.site-header h1 { margin: .15rem 0 0; font-size: 1.35rem; letter-spacing: -.01em; }
+	.site-header p { margin: .15rem 0 0; font-size: .8rem; color: #d7ecfa; }
+	main { max-width: 1050px; margin: 1.1rem auto 2.4rem; padding: 0 1rem; }
+	.toolbar { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; margin-bottom: .7rem; }
+	.search-wrap { flex: 1 1 260px; }
+	input[type="search"] {
+		width: 100%;
+		padding: .5rem .7rem;
+		border: 1px solid var(--parbiomag-linea);
+		border-radius: 10px;
+		background: var(--parbiomag-panel);
+		color: var(--parbiomag-texto);
+		font: inherit;
+		font-size: .85rem;
+	}
+	input[type="search"]:focus {
+		outline: none;
+		border-color: var(--parbiomag-aqua);
+		box-shadow: 0 0 0 3px rgba(14, 127, 168, .18);
+	}
+	button {
+		padding: .5rem .9rem;
+		border-radius: 10px;
+		border: 1px solid var(--parbiomag-azul);
+		background: var(--parbiomag-azul);
+		color: #fff;
+		font-weight: 700;
+		font-size: .8rem;
+		cursor: pointer;
+	}
+	button.sec {
+		background: var(--parbiomag-panel-2);
+		color: var(--parbiomag-texto-suave);
+		border-color: var(--parbiomag-linea);
+	}
+	button:hover { filter: brightness(1.06); }
+	.estado { font-size: .74rem; font-weight: 700; color: var(--parbiomag-ok); margin-left: auto; }
+
+	.table-wrap {
+		background: var(--parbiomag-panel);
+		border: 1px solid var(--parbiomag-linea);
+		border-radius: 14px;
+		box-shadow: 0 16px 34px -24px rgba(13, 33, 56, .5);
+		overflow: hidden;
+	}
+	table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+	thead th {
+		font-size: .58rem;
+		text-transform: uppercase;
+		letter-spacing: .06em;
+		color: var(--parbiomag-texto-tenue);
+		text-align: left;
+		padding: .34rem .4rem;
+		border-bottom: 1px solid var(--parbiomag-linea);
+		background: var(--parbiomag-panel-2);
+		white-space: nowrap;
+	}
+	th.c-num { width: 1.7rem; text-align: center; }
+	th.c-ck { width: 2rem; text-align: center; }
+	th.c-emocion { width: auto; }
+	th.c-org { width: 5.2rem; text-align: right; padding-right: .55rem; }
+	tbody tr { border-bottom: 1px solid #eef2f8; }
+	tbody tr:hover { background: #f3f8ff; }
+	tbody td { padding: .18rem .4rem; font-size: .78rem; vertical-align: middle; }
+	td.emocion { line-height: 1.15; }
+	.lbl-s { display: none; }
+	@media (max-width: 640px) {
+		main { padding: 0 .45rem; }
+		thead th { font-size: .5rem; letter-spacing: .02em; padding: .26rem .2rem; }
+		th.c-num { width: 1.2rem; }
+		th.c-ck { width: 1.5rem; }
+		th.c-org { width: 3.6rem; }
+		tbody td { padding: .12rem .2rem; font-size: .66rem; }
+		td.num { font-size: .58rem; }
+		td.ck input { width: .85rem; height: .85rem; }
+		tr.section-row td { font-size: .62rem; padding: .3rem .3rem; }
+		.lbl-l { display: none; }
+		.lbl-s { display: inline; }
+	}
+	td.num { text-align: center; color: var(--parbiomag-texto-tenue); font-size: .72rem; }
+	td.ck { text-align: center; }
+	td.ck.org { text-align: right; padding-right: .55rem; }
+	tr.section-row .fila-der { float: right; font-weight: 600; }
+	td.ck input { width: 1rem; height: 1rem; accent-color: var(--parbiomag-azul); cursor: pointer; }
+	td.emocion { font-weight: 600; }
+	td.emocion.marcada { color: var(--parbiomag-azul); }
+	tr.section-row td {
+		background: #e9f1fb;
+		color: var(--parbiomag-azul);
+		font-weight: 800;
+		font-size: .78rem;
+		letter-spacing: .02em;
+		padding: .45rem .55rem;
+	}
+	tr.marcada td { background: #fff6da; }
+	html[data-tema="noche"] thead th { background: #14273e; }
+	html[data-tema="noche"] tbody tr:hover { background: #12263e; }
+	html[data-tema="noche"] tr.section-row td { background: #0e2138; color: #8ad4ff; }
+	html[data-tema="noche"] tr.marcada td { background: rgba(255, 194, 75, .12); }
+	.aviso { margin-top: .9rem; font-size: .75rem; color: var(--parbiomag-texto-tenue); }
+	.no-results { display: none; padding: 1rem; text-align: center; color: var(--parbiomag-texto-tenue); }
+</style>
+<script src="js/tema.js?v=20261114"></script>
+<script src="js/config.js?v=20261114"></script>
+</head>
+<body>
+
+<header class="site-header">
+	<a href="pares.html">← Volver a los pares</a>
+	<h1>Emociones atrapadas</h1>
+	<p>El cuadro de las emociones atrapadas · una emoción y un órgano o sistema por renglón</p>
+</header>
+
+<main>
+	<div class="toolbar">
+		<div class="search-wrap">
+			<input id="q" type="search" placeholder="Buscar emoción, órgano o fila…" autocomplete="off" aria-label="Buscar emoción">
+		</div>
+		<button type="button" class="sec" id="btnLimpiar">Limpiar</button>
+		<span class="estado" id="estado"></span>
+	</div>
+
+	<div class="table-wrap">
+		<table id="emoTable">
+			<thead>
+				<tr>
+					<th class="c-num" scope="col">#</th>
+					<th class="c-ck" scope="col">✓</th>
+					<th class="c-emocion" scope="col"><span class="lbl-l">Columna A</span><span class="lbl-s">A</span></th>
+					<th class="c-ck" scope="col">✓</th>
+					<th class="c-emocion" scope="col"><span class="lbl-l">Columna B</span><span class="lbl-s">B</span></th>
+					<th class="c-org" scope="col"><span class="lbl-l">Órgano</span><span class="lbl-s">Órg.</span></th>
+					<th class="c-org" scope="col"><span class="lbl-l">Sistema</span><span class="lbl-s">Sist.</span></th>
+				</tr>
+			</thead>
+			<tbody id="emoBody"></tbody>
+		</table>
+		<div class="no-results" id="noResults">Sin coincidencias.</div>
+	</div>
+
+	<p class="aviso">
+		En cada renglón se elige <strong>una</strong> emoción (Columna A o B) y <strong>una</strong> opción entre
+		Órgano y Sistema. Volver a tocar la misma casilla la desmarca. Lo marcado se incluye en la sección
+		«Emociones atrapadas» del informe PDF.
+	</p>
+</main>
+
+<script>
+
+(function () {
+	var CLAVE = 'emociones-atrapadas';
+
+	var DATOS = [
+		{ f: 1, organos: ['Corazón', 'Intestino Delgado'],
+			a: ['Abandono', 'Engaño', 'Desamparo', 'Pérdida', 'Amor No Recibido'],
+			b: ['Esfuerzo No Recibido', 'Pena', 'Inseguridad', 'Demasiada Alegría', 'Vulnerabilidad'] },
+		{ f: 2, organos: ['Bazo', 'Estómago'],
+			a: ['Ansiedad', 'Desesperación', 'Asco', 'Nerviosismo', 'Preocupación'],
+			b: ['Fracaso', 'Impotencia', 'Desesperanza', 'Falta de control', 'Baja Autoestima'] },
+		{ f: 3, organos: ['Pulmón', 'Colon'],
+			a: ['Llanto', 'Desánimo', 'Rechazo', 'Tristeza', 'Pesar'],
+			b: ['Confusión', 'Desprotección', 'Pena profunda', 'Autolesión', 'Obstinación'] },
+		{ f: 4, organos: ['Hígado', 'Vesícula'],
+			a: ['Ira', 'Amargura', 'Culpa', 'Odio', 'Resentimiento'],
+			b: ['Depresión', 'Frustración', 'Indecisión', 'Pánico', 'Dado por Sentado'] },
+		{ f: 5, organos: ['Riñones', 'Vejiga'],
+			a: ['Culpa', 'Terror', 'Miedo', 'Horror', 'Fastidio'],
+			b: ['Conflicto', 'Inseguridad Creativa', 'Terror', 'Falta de Apoyo', 'Falta de Personalidad'] },
+		{ f: 6, organos: ['Glándulas', 'Órganos Sexuales'],
+			a: ['Humillación', 'Celos', 'Nostalgia', 'Lujuria', 'Desconsuelo'],
+			b: ['Soberbia', 'Vergüenza', 'Shock', 'Indignidad', 'Desprecio'] }
+	];
+
+	var tbody = document.getElementById('emoBody');
+	var input = document.getElementById('q');
+	var noResults = document.getElementById('noResults');
+	var estado = document.getElementById('estado');
+
+	/* marcas: { "fila-renglon": { emo: {c,e}, org: {c,e} } } */
+	var marcas = {};
+
+	function plano(s) {
+		return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+	}
+	function esc(s) {
+		return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	}
+	function cargar() {
+		try {
+			(JSON.parse(localStorage.getItem(CLAVE) || '[]') || []).forEach(function (m) {
+				var k = m.f + '-' + (m.r || 0);
+				marcas[k] = marcas[k] || {};
+				if (m.c === 'A' || m.c === 'B') marcas[k].emo = { c: m.c, e: m.e };
+				else if (m.c === 'O' || m.c === 'S') marcas[k].org = { c: m.c, e: m.e };
+			});
+		} catch (e) { marcas = {}; }
+	}
+	function guardar(silencioso) {
+		var out = [];
+		DATOS.forEach(function (d) {
+			for (var i = 0; i < 5; i++) {
+				var m = marcas[d.f + '-' + i];
+				if (!m) continue;
+				if (m.emo) out.push({ f: d.f, r: i, o: d.organos, c: m.emo.c, e: m.emo.e });
+				if (m.org) out.push({ f: d.f, r: i, o: d.organos, c: m.org.c, e: m.org.e });
+			}
+		});
+		try { localStorage.setItem(CLAVE, JSON.stringify(out)); } catch (e) {}
+		var n = out.filter(function (x) { return x.c === 'A' || x.c === 'B'; }).length;
+		if (estado) estado.textContent = n ? n + ' emoción(es) marcada(s)' : '';
+		if (!silencioso) setTimeout(function () { if (estado) estado.textContent = ''; }, 2200);
+	}
+
+	function render() {
+		var q = plano(input.value.trim());
+		tbody.innerHTML = '';
+		var total = 0, num = 0;
+
+		DATOS.forEach(function (d) {
+			var org = d.organos[0], sis = d.organos[1];
+			var filas = [];
+			for (var i = 0; i < 5; i++) {
+				var ea = d.a[i] || '', eb = d.b[i] || '';
+				if (q && (plano(ea) + ' ' + plano(eb) + ' ' + plano(org) + ' ' + plano(sis) + ' fila ' + d.f).indexOf(q) === -1) continue;
+				filas.push({ i: i, ea: ea, eb: eb });
+			}
+			if (!filas.length) return;
+			total += filas.length;
+
+			var sec = document.createElement('tr');
+			sec.className = 'section-row';
+			sec.innerHTML = '<td colspan="7"><span>Fila ' + d.f + '</span>' +
+				'<span class="fila-der">' + esc(org) + ' / ' + esc(sis) + '</span></td>';
+			tbody.appendChild(sec);
+
+			filas.forEach(function (r) {
+				var k = d.f + '-' + r.i;
+				var m = marcas[k] || {};
+				var emo = m.emo || {}, or = m.org || {};
+				var tr = document.createElement('tr');
+				tr.className = (emo.c || or.c) ? 'marcada' : '';
+				tr.innerHTML =
+					'<td class="num">' + (++num) + '</td>' +
+					'<td class="ck"><input type="radio" name="e' + k + '" value="A"' + (emo.c === 'A' ? ' checked' : '') + ' aria-label="Columna A"></td>' +
+					'<td class="emocion' + (emo.c === 'A' ? ' marcada' : '') + '">' + esc(r.ea) + '</td>' +
+					'<td class="ck"><input type="radio" name="e' + k + '" value="B"' + (emo.c === 'B' ? ' checked' : '') + ' aria-label="Columna B"></td>' +
+					'<td class="emocion' + (emo.c === 'B' ? ' marcada' : '') + '">' + esc(r.eb) + '</td>' +
+					'<td class="ck org"><input type="radio" name="o' + k + '" value="O"' + (or.c === 'O' ? ' checked' : '') + ' aria-label="Órgano ' + esc(org) + '"></td>' +
+					'<td class="ck org"><input type="radio" name="o' + k + '" value="S"' + (or.c === 'S' ? ' checked' : '') + ' aria-label="Sistema ' + esc(sis) + '"></td>';
+				tbody.appendChild(tr);
+
+				function sincronizar() {
+					var mm = marcas[k] || {};
+					tr.classList.toggle('marcada', !!(mm.emo || mm.org));
+					var celdas = tr.querySelectorAll('td.emocion');
+					celdas[0].classList.toggle('marcada', mm.emo && mm.emo.c === 'A');
+					celdas[1].classList.toggle('marcada', mm.emo && mm.emo.c === 'B');
+					guardar(true);
+				}
+
+				tr.querySelectorAll('input[type="radio"]').forEach(function (inp) {
+					var esEmocion = inp.name.charAt(0) === 'e';
+					inp.addEventListener('click', function () {
+						var mm = marcas[k] || {};
+						var actual = esEmocion ? mm.emo : mm.org;
+						if (actual && actual.c === inp.value) {
+							inp.checked = false;
+							if (esEmocion) delete mm.emo;
+							else delete mm.org;
+						} else {
+							var texto = inp.value === 'A' ? r.ea : inp.value === 'B' ? r.eb : inp.value === 'O' ? org : sis;
+							if (esEmocion) mm.emo = { c: inp.value, e: texto };
+							else mm.org = { c: inp.value, e: texto };
+						}
+						if (mm.emo || mm.org) marcas[k] = mm;
+						else delete marcas[k];
+						sincronizar();
+					});
+				});
+			});
+		});
+
+		noResults.style.display = total ? 'none' : 'block';
+	}
+
+	input.addEventListener('input', render);
+	document.getElementById('btnLimpiar').addEventListener('click', function () {
+		if (!window.confirm('¿Borrar todas las marcas de emociones atrapadas?')) return;
+		marcas = {};
+		guardar(false);
+		render();
+	});
+
+	cargar();
+	render();
+	guardar(true);
+})();
+
+</script>
+</body>
+</html>

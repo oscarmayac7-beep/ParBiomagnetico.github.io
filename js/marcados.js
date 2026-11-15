@@ -1,6 +1,6 @@
 /* ============================================================
    Pares marcados: casilla inicial en cada fila, ficha médica y
-   resumen en PDF con formato de informe.
+   resumen en PDF con formato de historia clínica.
    ============================================================ */
 window.MARCADOS = (function () {
   var CLAVE = 'marcados-parbiomag';
@@ -16,6 +16,11 @@ window.MARCADOS = (function () {
   function guardar() {
     try { localStorage.setItem(CLAVE, JSON.stringify(datos)); } catch (e) {}
   }
+  function emociones() {
+    try { return JSON.parse(localStorage.getItem('emociones-atrapadas') || '[]') || []; }
+    catch (e) { return []; }
+  }
+
   function ficha() {
     try { return JSON.parse(localStorage.getItem(FICHA) || '{}'); } catch (e) { return {}; }
   }
@@ -70,7 +75,14 @@ window.MARCADOS = (function () {
         inp.setAttribute('aria-label', 'Marcar par');
         celda.appendChild(inp);
         celda.addEventListener('click', function (e) { e.stopPropagation(); });
-        tr.insertBefore(celda, tr.cells[0]);
+        var ref = tr.querySelector('td.num');
+        tr.insertBefore(celda, ref ? ref.nextSibling : tr.cells[0]);
+      }
+      var celdaChk = tr.querySelector('td.chk');
+      if (celdaChk) {
+        var num = tr.querySelector('td.num');
+        var destino = num ? num.nextSibling : tr.cells[0];
+        if (destino !== celdaChk) tr.insertBefore(celdaChk, destino);
       }
       if (tr.cells.length > total) total = tr.cells.length;
       var chk = tr.querySelector('td.chk input');
@@ -133,11 +145,16 @@ window.MARCADOS = (function () {
     return s.length > max ? s.slice(0, max - 1) + '\u2026' : s;
   }
 
+  function ancho(texto, tam, bold) {
+    return String(texto || '').length * tam * (bold ? 0.56 : 0.5);
+  }
+
   function construirPdf(titulo, items) {
     var W = 595, H = 842, M = 42, ANCHO = W - 2 * M;
     var paginas = [], ops = [], y = H - M;
     var f = ficha();
-    var fecha = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
+    var hoy = new Date();
+    var fecha = hoy.toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
 
     function t(font, size, x, yy, str) {
       return 'BT /' + font + ' ' + size + ' Tf ' + x + ' ' + yy + ' Td (' + esc(str) + ') Tj ET';
@@ -153,109 +170,221 @@ window.MARCADOS = (function () {
       ops = [];
       y = H - M;
       if (continuacion) {
-        ops.push(t('F2', 8, M, y, 'PAR BIOMAGNÉTICO · Informe de pares encontrados'));
+        ops.push(t('F2', 8, M, y, 'PAR BIOMAGNÉTICO · HISTORIA CLÍNICA'));
+        var pn = 'CONTINUACIÓN · PARES ENCONTRADOS';
+        ops.push(t('F1', 8, W - M - ancho(pn, 8), y, pn));
         y -= 6;
-        ops.push(linea(M, y, W - M, y, 0.7, '0.8'));
-        y -= 20;
+        ops.push(linea(M, y, W - M, y, 0.8, '0.5'));
+        y -= 22;
       }
     }
     function salto(alto) {
-      if (y - alto < M + 44) nuevaPagina(true);
+      if (y - alto < M + 46) nuevaPagina(true);
     }
-    function tituloSeccion(texto) {
-      salto(24);
-      ops.push(t('F2', 9, M, y, texto));
-      y -= 5;
-      ops.push(linea(M, y, W - M, y, 0.8, '0.85'));
-      y -= 13;
+    function banda(texto, yBanda) {
+      ops.push(rect(M, yBanda - 4, ANCHO, 17, '0.90'));
+      ops.push(t('F2', 9, M + 8, yBanda, texto));
+      ops.push(linea(M, yBanda - 4, M + ANCHO, yBanda - 4, 0.5, '0.6'));
+      return yBanda - 20;
+    }
+    function campo(x, etiqueta, valor, yy, anchoEtiqueta) {
+      ops.push(t('F2', 8, x, yy, etiqueta));
+      ops.push(t('F1', 9, x + anchoEtiqueta, yy, valor));
+      ops.push(linea(x + anchoEtiqueta, yy - 2.5, x + anchoEtiqueta + ancho(valor, 9) + 6, yy - 2.5, 0.4, '0.7'));
     }
 
-    /* Encabezado de la primera página */
-    ops.push(t('F2', 8, M, y, 'PAR BIOMAGNÉTICO'));
-    ops.push(t('F1', 8, W - M - 90, y, fecha));
-    y -= 7;
+    /* Portada / encabezado */
+    var tit = 'HISTORIA CLÍNICA';
+    ops.push(t('F2', 22, (W - ancho(tit, 22, true)) / 2, y, tit));
+    y -= 16;
+    var sub = 'PAR BIOMAGNÉTICO · INFORME DE PARES ENCONTRADOS';
+    ops.push(t('F1', 9, (W - ancho(sub, 9)) / 2, y, sub));
+    y -= 9;
     ops.push(linea(M, y, W - M, y, 1, '0.35'));
     y -= 26;
-    ops.push(t('F2', 19, M, y, titulo || 'Informe de pares encontrados'));
-    y -= 15;
-    ops.push(t('F1', 9, M, y, 'Resumen de pares biomagnéticos encontrados'));
-    y -= 22;
 
-    /* Datos del paciente */
-    tituloSeccion('DATOS DEL PACIENTE');
-    var nombre = (f.cNombre || '').trim() || '—';
+    /* Datos personales */
+    y = banda('DATOS PERSONALES', y);
+    var nombre = recortar((f.cNombre || '').trim() || '—', 52);
     var edad = (f.cEdad || '').trim();
-    var nac = (f.cNacimiento || '').trim() || '—';
-    ops.push(t('F2', 10, M, y, recortar(nombre, 80)));
-    y -= 12;
-    ops.push(t('F1', 8.5, M, y, 'Edad: ' + (edad ? edad + ' años' : '—') + '     Lugar de nacimiento: ' + recortar(nac, 60)));
-    y -= 18;
+    var nac = recortar((f.cNacimiento || '').trim() || '—', 46);
+    var correo = recortar((f.cCorreo || '').trim() || '—', 56);
+    campo(M + 8, 'Nombre del paciente:', nombre, y, 108);
+    campo(M + 330, 'Edad:', edad ? edad + ' años' : '—', y, 34);
+    y -= 20;
+    campo(M + 8, 'Lugar de nacimiento:', nac, y, 108);
+    campo(M + 330, 'Fecha del informe:', fecha, y, 74);
+    y -= 20;
+    campo(M + 8, 'Correo electrónico:', correo, y, 108);
+    y -= 28;
+
+    /* Resumen ejecutivo */
+    var clases = {};
+    items.forEach(function (it) { var k = it.c || 'O'; clases[k] = (clases[k] || 0) + 1; });
+    var nEmoRes = emociones().filter(function (m) { return m.c === 'A' || m.c === 'B'; }).length;
+    y = banda('RESUMEN', y);
+    ops.push(t('F1', 9, M + 8, y, 'Pares encontrados: ' + items.length));
+    ops.push(t('F1', 9, M + 190, y, 'Clasificaciones: ' + Object.keys(clases).length));
+    ops.push(t('F1', 9, M + 350, y, 'Emociones: ' + nEmoRes));
+    y -= 26;
 
     /* Antecedentes */
     var bloques = [
-      ['Antecedentes personales', f.cPersonal],
-      ['Antecedentes de los padres', f.cPadres],
-      ['Antecedentes de los hermanos', f.cHermanos]
+      ['Personales', f.cPersonal],
+      ['De los padres', f.cPadres],
+      ['De los hermanos', f.cHermanos]
     ];
     if (bloques.some(function (b) { return (b[1] || '').trim(); })) {
-      tituloSeccion('ANTECEDENTES PATOLÓGICOS');
+      y = banda('ANTECEDENTES PATOLÓGICOS', y);
       bloques.forEach(function (b) {
-        var lineas = envolver(b[1] || '—', 105);
-        salto(14 + lineas.length * 11);
-        ops.push(t('F2', 8.5, M, y, b[0]));
-        y -= 11;
+        var lineas = envolver(b[1] || '—', 96);
+        salto(16 + lineas.length * 11);
+        ops.push(t('F2', 8, M + 8, y, b[0] + ':'));
+        y -= 12;
         lineas.forEach(function (l) {
           salto(12);
-          ops.push(t('F1', 8.5, M + 10, y, l));
+          ops.push(t('F1', 8.5, M + 22, y, l));
           y -= 11;
+        });
+        y -= 6;
+      });
+      y -= 2;
+    }
+
+    /* Emociones atrapadas */
+    var marcasEmo = emociones();
+    var emo = marcasEmo.filter(function (m) { return m.c === 'A' || m.c === 'B'; });
+    if (emo.length) {
+      y = banda('EMOCIONES ATRAPADAS (' + emo.length + ')', y);
+
+      var orgMark = {};
+      marcasEmo.forEach(function (m) {
+        if (m.c === 'O' || m.c === 'S') orgMark[m.f + '-' + (m.r || 0)] = m;
+      });
+
+      var colsEmo = [
+        { x: M + 4, w: 18, t: '#' },
+        { x: M + 22, w: 28, t: 'Fila' },
+        { x: M + 50, w: 136, t: 'Columna A' },
+        { x: M + 186, w: 136, t: 'Columna B' },
+        { x: M + 322, w: 86, t: '\u00d3rgano' },
+        { x: M + 408, w: 99, t: 'Sistema' }
+      ];
+      function cabeceraEmo() {
+        ops.push(rect(M, y - 9, ANCHO, 13, '0.92'));
+        colsEmo.forEach(function (c) { ops.push(t('F2', 7.5, c.x, y - 6, c.t)); });
+        ops.push(linea(M, y - 9, W - M, y - 9, 0.4, '0.6'));
+        y -= 15;
+      }
+      cabeceraEmo();
+
+      var filasEmo = {}, nEmo = 0;
+      emo.forEach(function (m) {
+        if (!filasEmo[m.f]) filasEmo[m.f] = { org: (m.o || []).join(' / '), filas: [] };
+        filasEmo[m.f].filas.push(m);
+      });
+      var todas = [];
+      Object.keys(filasEmo).forEach(function (k) {
+        filasEmo[k].filas.forEach(function (m) { todas.push(m); });
+      });
+      todas.sort(function (a, b) {
+        if (a.f !== b.f) return a.f - b.f;
+        return (a.r || 0) - (b.r || 0);
+      });
+      todas.forEach(function (m) {
+        if (y - 13 < M + 46) { nuevaPagina(true); y = banda('EMOCIONES ATRAPADAS (continuaci\u00f3n)', y); cabeceraEmo(); }
+        var o = orgMark[m.f + '-' + (m.r || 0)] || {};
+        var fila = [
+          String(++nEmo),
+          String(m.f),
+          m.c === 'A' ? recortar(m.e, 30) : '',
+          m.c === 'B' ? recortar(m.e, 30) : '',
+          o.c === 'O' ? recortar(o.e, 17) : '',
+          o.c === 'S' ? recortar(o.e, 19) : ''
+        ];
+        colsEmo.forEach(function (c, i) { ops.push(t('F1', 7.6, c.x, y - 6, fila[i])); });
+        y -= 12;
+        ops.push(linea(M, y + 1, W - M, y + 1, 0.3, '0.9'));
+      });
+      y -= 14;
+    }
+
+    /* Pares encontrados: secciones por clasificación */
+    var ORDEN_CL = [
+      ['R', 'Reservorio'], ['E', 'Especiales'], ['D', 'Disfuncionales'],
+      ['Ps', 'Psicoemocionales'], ['B', 'Bacteria'], ['V', 'Virus'], ['H', 'Hongo'],
+      ['P', 'Par\u00e1sito'], ['T', 'T\u00f3xico'], ['O', 'Otros']
+    ];
+    var etiquetas = {}, grupos = {};
+    ORDEN_CL.forEach(function (o) { etiquetas[o[0]] = o[1]; });
+    items.forEach(function (it) {
+      var k = it.c || 'O';
+      if (!grupos[k]) grupos[k] = [];
+      grupos[k].push(it);
+    });
+    var claves = Object.keys(grupos).sort(function (a, b) {
+      var ia = 99, ib = 99;
+      ORDEN_CL.forEach(function (o, k) { if (o[0] === a) ia = k; if (o[0] === b) ib = k; });
+      return ia - ib;
+    });
+
+    y = banda('PARES ENCONTRADOS (' + items.length + ')', y);
+
+    var cols = [
+      { x: M + 4, w: 20, t: '#' },
+      { x: M + 24, w: 172, t: 'Par 1 \u2013 Par 2' },
+      { x: M + 196, w: 158, t: 'Padecimiento' },
+      { x: M + 354, w: 70, t: 'Zona' },
+      { x: M + 424, w: 83, t: 'Sistema' }
+    ];
+    function cabeceraTabla() {
+      ops.push(rect(M, y - 10, ANCHO, 14, '0.93'));
+      cols.forEach(function (c) { ops.push(t('F2', 7.5, c.x, y - 7, c.t)); });
+      ops.push(linea(M, y - 10, W - M, y - 10, 0.5, '0.6'));
+      y -= 16;
+    }
+
+    if (!items.length) {
+      ops.push(t('F1', 9, M + 4, y - 2, 'No hay pares marcados.'));
+      y -= 20;
+    } else {
+      var resumen = claves.map(function (k) { return (etiquetas[k] || 'Otros') + ': ' + grupos[k].length; }).join('   \u00b7   ');
+      ops.push(t('F1', 8, M + 4, y - 2, 'Resumen: ' + resumen));
+      y -= 14;
+      cabeceraTabla();
+
+      var nPar = 0;
+      claves.forEach(function (k) {
+        var lista = grupos[k].slice().sort(function (a, b) {
+          return String(a.n).localeCompare(String(b.n), 'es');
+        });
+        if (y - 28 < M + 46) { nuevaPagina(true); cabeceraTabla(); }
+        ops.push(rect(M, y - 9, ANCHO, 13, '0.955'));
+        ops.push(t('F2', 7.5, M + 4, y - 6, k + ' \u00b7 ' + (etiquetas[k] || 'Otros') + ' (' + lista.length + ')'));
+        y -= 15;
+
+        lista.forEach(function (it) {
+          if (y - 14 < M + 46) { nuevaPagina(true); cabeceraTabla(); }
+          nPar++;
+          if (nPar % 2 === 0) ops.push(rect(M, y - 10, ANCHO, 12, '0.975'));
+          var fila = [
+            String(nPar),
+            recortar((it.p1 || '') + ' \u2013 ' + (it.p2 || ''), 42),
+            recortar(it.n || '', 44),
+            recortar(it.z || '', 18),
+            recortar(it.s || '', 20)
+          ];
+          cols.forEach(function (c, i) { ops.push(t('F1', 7.6, c.x, y - 6.5, fila[i])); });
+          y -= 12;
+          ops.push(linea(M, y + 1, W - M, y + 1, 0.3, '0.9'));
         });
         y -= 5;
       });
     }
 
-    /* Tabla de pares */
-    tituloSeccion('PARES ENCONTRADOS (' + items.length + ')');
-    var cols = [
-      { x: M, w: 20, t: '#' },
-      { x: M + 20, w: 148, t: 'Par 1 – Par 2' },
-      { x: M + 168, w: 166, t: 'Padecimiento' },
-      { x: M + 334, w: 30, t: 'Clasif.' },
-      { x: M + 364, w: 70, t: 'Zona' },
-      { x: M + 434, w: 77, t: 'Sistema' }
-    ];
-    function cabeceraTabla() {
-      ops.push(rect(M, y - 10, ANCHO, 13, '0.92'));
-      cols.forEach(function (c) { ops.push(t('F2', 7.5, c.x + 3, y - 7, c.t)); });
-      y -= 15;
-    }
-    cabeceraTabla();
+paginas.push(ops);
 
-    if (!items.length) {
-      ops.push(t('F1', 9, M, y - 2, 'No hay pares marcados.'));
-      y -= 20;
-    }
-
-    items.forEach(function (it, i) {
-      if (y - 14 < M + 44) { nuevaPagina(true); cabeceraTabla(); }
-      if (i % 2 === 1) ops.push(rect(M, y - 10, ANCHO, 12, '0.975'));
-      var fila = [
-        String(i + 1),
-        recortar((it.p1 || '') + ' \u2013 ' + (it.p2 || ''), 40),
-        recortar(it.n || '', 46),
-        it.c || '',
-        recortar(it.z || '', 18),
-        recortar(it.s || '', 18)
-      ];
-      cols.forEach(function (c, k) {
-        ops.push(t('F1', 7.6, c.x + 3, y - 6.5, fila[k]));
-      });
-      y -= 12;
-      ops.push(linea(M, y + 1, W - M, y + 1, 0.4, '0.9'));
-    });
-
-    paginas.push(ops);
-
-    /* Pie de página */
+    /* Pie */
     var total = paginas.length;
     paginas.forEach(function (lineas, idx) {
       lineas.push(linea(M, 36, W - M, 36, 0.5, '0.85'));
@@ -263,7 +392,7 @@ window.MARCADOS = (function () {
       lineas.push(t('F1', 7, W - M - 62, 26, 'Página ' + (idx + 1) + ' de ' + total));
     });
 
-    /* Objetos PDF */
+    /* Objetos */
     var objetos = [];
     function obj(n, cuerpo) { objetos[n] = cuerpo; }
 
@@ -311,22 +440,30 @@ window.MARCADOS = (function () {
       .sort(function (a, b) { return String(a.n).localeCompare(String(b.n), 'es'); });
   }
 
+  function nombreArchivo() {
+    var f = ficha();
+    var nombre = (f.cNombre || '').trim() || 'Paciente';
+    nombre = nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^A-Za-z0-9 ]+/g, '').trim().replace(/\s+/g, '-');
+    if (!nombre) nombre = 'Paciente';
+    var d = new Date();
+    var fecha = d.getFullYear() + ('0' + (d.getMonth() + 1)).slice(-2) + ('0' + d.getDate()).slice(-2);
+    var hora = ('0' + d.getHours()).slice(-2) + ('0' + d.getMinutes()).slice(-2);
+    return nombre + '_' + fecha + '_' + hora + '_Informe-Pares.pdf';
+  }
+
   function descargar() {
     var items = itemsOrdenados();
     var bytes = construirPdf('Informe de pares encontrados', items);
     var blob = new Blob([bytes], { type: 'application/pdf' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    var f = new Date();
-    var nombre = 'informe-pares-' + f.getFullYear() +
-      ('0' + (f.getMonth() + 1)).slice(-2) + ('0' + f.getDate()).slice(-2) + '-' +
-      ('0' + f.getHours()).slice(-2) + ('0' + f.getMinutes()).slice(-2) + '.pdf';
     a.href = url;
-    a.download = nombre;
+    a.download = nombreArchivo();
     document.body.appendChild(a);
     a.click();
     setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 1500);
-    return nombre;
+    return a.download;
   }
 
   /* ---------- panel de marcados ---------- */
@@ -450,7 +587,8 @@ window.MARCADOS = (function () {
       th.className = 'th-chk';
       th.scope = 'col';
       th.innerHTML = '<input type="checkbox" id="chkTodos" aria-label="Marcar los visibles" title="Marcar / desmarcar los pares visibles">';
-      thead.insertBefore(th, thead.cells[0]);
+      var thNum = thead.querySelector('th.th-num');
+      thead.insertBefore(th, thNum ? thNum.nextSibling : thead.cells[0]);
     }
 
     asegurar();
@@ -488,6 +626,7 @@ window.MARCADOS = (function () {
     descargar: descargar,
     abrir: abrir,
     contar: contar,
+    nombreArchivo: nombreArchivo,
     pdfBytes: function () { return construirPdf('Informe de pares encontrados', itemsOrdenados()); }
   };
 })();

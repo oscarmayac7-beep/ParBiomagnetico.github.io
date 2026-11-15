@@ -62,11 +62,23 @@
   });
   var MODO_ORIGINAL = '__original__';
 
-  var ZONA_ORDER = ['Cabeza', 'Cara', 'Cuello', 'Brazos', 'Torso Superior', 'Torso Medio',
-    'Torso Bajo', 'Pelvis', 'Dorso', 'Pierna', 'Pie', 'Otros'];
-  var SISTEMA_ORDER = ['Nervioso', 'Circulatorio', 'Respiratorio', 'Digestivo', 'Esquelético',
-    'Muscular', 'Endócrino', 'Endocrino', 'Urinario', 'Linfático', 'Inmunológico',
-    'Tegumentario', 'Reproductor', 'Locomotor', 'OTRO'];
+  var ZONA_ORDER = ['Coronilla', 'Parietal', 'Frontal', 'Cara', 'Temporal', 'Nuca', 'Cuello', 'Brazos', 'Torso Superior', 'Torso Medio', 'Torso Bajo', 'Dorso', 'Pelvis', 'Pierna', 'Pie', 'Otros'];
+  var SISTEMA_ORDER = ['Nervioso', 'Endócrino', 'Endocrino', 'Respiratorio', 'Circulatorio', 'Digestivo', 'Urinario', 'Reproductor', 'Linfático', 'Inmunológico', 'Tegumentario', 'Muscular', 'Esquelético', 'Locomotor', 'OTRO'];
+
+
+  function zonaDe(row) {
+    var c = row.querySelector('.zona');
+    return c ? c.textContent.trim() : '';
+  }
+
+  function compararPorZona(a, b) {
+    var ia = ZONA_ORDER.indexOf(zonaDe(a));
+    var ib = ZONA_ORDER.indexOf(zonaDe(b));
+    if (ia < 0) ia = 99;
+    if (ib < 0) ib = 99;
+    if (ia !== ib) return ia - ib;
+    return par1De(a).toLowerCase().localeCompare(par1De(b).toLowerCase(), 'es');
+  }
 
   function par1De(row) {
     return row.querySelector('.par-a').textContent.trim();
@@ -271,16 +283,12 @@
       /* Sin búsqueda se muestran las 33 vértebras, aunque no tengan pares */
       if (!arr.length && conBusqueda) return;
       frag.appendChild(encabezadoHTML('<a class="v-code" href="Vertebras.html#' + v[0] + '">' + v[0] + '</a> ' + v[1]));
-      arr.sort(function (a, b) {
-        return par1De(a).toLowerCase().localeCompare(par1De(b).toLowerCase(), 'es');
-      }).forEach(function (r) { frag.appendChild(r); });
+      arr.sort(compararPorZona).forEach(function (r) { frag.appendChild(r); });
     });
 
     if (sinRelacion.length) {
       frag.appendChild(encabezado('Sin relación con la columna'));
-      sinRelacion.sort(function (a, b) {
-        return par1De(a).toLowerCase().localeCompare(par1De(b).toLowerCase(), 'es');
-      }).forEach(function (r) { frag.appendChild(r); });
+      sinRelacion.sort(compararPorZona).forEach(function (r) { frag.appendChild(r); });
     }
     return frag;
   }

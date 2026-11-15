@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cuestionario médico · Par Biomagnético</title>
-<link rel="stylesheet" href="CSS/tema_parbiomag.css">
+<link rel="stylesheet" href="CSS/tema_parbiomag.css?v=20261114">
 <style>
 	* { box-sizing: border-box; }
 	body {
@@ -41,7 +41,7 @@
 	.fila { display: flex; gap: .8rem; flex-wrap: wrap; }
 	.campo { display: flex; flex-direction: column; gap: .25rem; margin-top: .7rem; flex: 1 1 220px; }
 	.campo label { font-size: .78rem; font-weight: 700; color: var(--parbiomag-texto-suave); }
-	input[type="text"], input[type="number"], textarea {
+	input[type="text"], input[type="number"], input[type="email"], textarea {
 		width: 100%;
 		padding: .55rem .65rem;
 		border: 1px solid var(--parbiomag-linea);
@@ -74,6 +74,7 @@
 		color: var(--parbiomag-texto-suave);
 		border-color: var(--parbiomag-linea);
 	}
+	button.ok { background: var(--parbiomag-ok); border-color: var(--parbiomag-ok); }
 	button:hover { filter: brightness(1.06); }
 	.estado { font-size: .74rem; color: var(--parbiomag-ok); font-weight: 700; margin-left: auto; }
 	.aviso {
@@ -88,8 +89,9 @@
 		.fila { gap: .5rem; }
 	}
 </style>
-<script src="js/tema.js"></script>
-<script src="js/config.js"></script>
+<script src="js/tema.js?v=20261114"></script>
+<script src="js/config.js?v=20261114"></script>
+<script src="js/marcados.js?v=20261114"></script>
 </head>
 <body>
 
@@ -111,6 +113,12 @@
 				<label for="cEdad">Edad</label>
 				<input type="number" id="cEdad" min="0" max="120" placeholder="Años">
 			</div>
+			<div class="campo">
+				<label for="cCorreo">Correo electrónico</label>
+				<input type="email" id="cCorreo" autocomplete="email" placeholder="paciente@correo.com">
+			</div>
+		</div>
+		<div class="fila">
 			<div class="campo">
 				<label for="cNacimiento">Lugar de nacimiento</label>
 				<input type="text" id="cNacimiento" autocomplete="off" placeholder="Ciudad, estado, país">
@@ -135,13 +143,16 @@
 
 		<div class="acciones">
 			<button type="button" id="btnGuardar">Guardar ficha</button>
+			<button type="button" class="sec" id="btnPdf">Descargar PDF</button>
+			<button type="button" class="ok" id="btnCorreo">Enviar por correo</button>
 			<button type="button" class="sec" id="btnLimpiar">Limpiar</button>
 			<span class="estado" id="estado"></span>
 		</div>
 
 		<p class="aviso">
-			Los datos se guardan solo en este dispositivo y se incluyen automáticamente en el PDF de
-			<strong>pares marcados</strong>. No se envían a ningún servidor.
+			Los datos se guardan solo en este dispositivo y se incluyen en el PDF de
+			<strong>pares marcados</strong>. «Enviar por correo» descarga el informe y abre tu aplicación de correo
+			para que adjuntes el archivo y lo envíes. No se envía nada a ningún servidor.
 		</p>
 	</div>
 </main>
@@ -149,16 +160,19 @@
 <script>
 (function () {
 	var CLAVE = 'ficha-medica';
-	var campos = ['cNombre', 'cEdad', 'cNacimiento', 'cPersonal', 'cPadres', 'cHermanos'];
+	var campos = ['cNombre', 'cEdad', 'cCorreo', 'cNacimiento', 'cPersonal', 'cPadres', 'cHermanos'];
 	var estado = document.getElementById('estado');
 
 	function leer() {
 		try { return JSON.parse(localStorage.getItem(CLAVE) || '{}'); } catch (e) { return {}; }
 	}
+	function datosFicha() {
+		var d = {};
+		campos.forEach(function (id) { d[id] = document.getElementById(id).value; });
+		return d;
+	}
 	function guardar(silencioso) {
-		var datos = {};
-		campos.forEach(function (id) { datos[id] = document.getElementById(id).value; });
-		try { localStorage.setItem(CLAVE, JSON.stringify(datos)); } catch (e) {}
+		try { localStorage.setItem(CLAVE, JSON.stringify(datosFicha())); } catch (e) {}
 		if (!silencioso && estado) {
 			estado.textContent = 'Guardado ✓';
 			setTimeout(function () { estado.textContent = ''; }, 1800);
@@ -181,6 +195,50 @@
 	});
 
 	document.getElementById('btnGuardar').addEventListener('click', function () { guardar(false); });
+
+	document.getElementById('btnPdf').addEventListener('click', function () {
+		guardar(true);
+		if (window.MARCADOS) window.MARCADOS.descargar();
+	});
+
+	document.getElementById('btnCorreo').addEventListener('click', function () {
+		var correo = document.getElementById('cCorreo').value.trim();
+		if (correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+			alert('El correo electrónico no parece válido.');
+			document.getElementById('cCorreo').focus();
+			return;
+		}
+		guardar(true);
+		if (window.MARCADOS) window.MARCADOS.descargar();
+
+		var d = datosFicha();
+		var asunto = 'Historia clínica · ' + (d.cNombre || 'Paciente');
+		var cuerpo = [
+			'HISTORIA CLÍNICA · PAR BIOMAGNÉTICO',
+			'',
+			'Paciente: ' + (d.cNombre || '—'),
+			'Edad: ' + (d.cEdad ? d.cEdad + ' años' : '—'),
+			'Lugar de nacimiento: ' + (d.cNacimiento || '—'),
+			'Correo: ' + (d.cCorreo || '—'),
+			'',
+			'Antecedentes personales: ' + (d.cPersonal || '—'),
+			'Antecedentes de los padres: ' + (d.cPadres || '—'),
+			'Antecedentes de los hermanos: ' + (d.cHermanos || '—'),
+			'',
+			'Se adjunta el informe de pares en PDF.'
+		].join('\n');
+
+		var url = 'mailto:' + encodeURIComponent(correo) +
+			'?subject=' + encodeURIComponent(asunto) +
+			'&body=' + encodeURIComponent(cuerpo);
+
+		if (estado) {
+			estado.textContent = 'PDF descargado · adjúntalo en el correo';
+			setTimeout(function () { estado.textContent = ''; }, 5000);
+		}
+		setTimeout(function () { window.location.href = url; }, 400);
+	});
+
 	document.getElementById('btnLimpiar').addEventListener('click', function () {
 		if (!window.confirm('¿Borrar los datos de la ficha?')) return;
 		campos.forEach(function (id) { document.getElementById(id).value = ''; });
