@@ -16,16 +16,29 @@ window.BUSQUEDA = (function () {
 	  {
       nombre: 'Equilibrio ocular',
       terminos: 'Ceguera, Conjuntivitis, Correorrenitis, Retina, Sensibilidad a la luz, Maculopatía, Uveitis, Pterigion, Cataratas, Macular, Glaucoma, Fotofobia, Visual, Vista'
-    },
-    {
+    }
+    ,{
       nombre: 'Equilibrio bucal',
       terminos: 'Halitosis, Dentales, Gingivitis, Periodontitis, Caries, Estomatitis, Aftas, Bruxismo, Sensibilidad dental, Encías'
     }
     ,{
       nombre: 'Equilibrio sexual',
-      terminos: 'Transmisión sexual, Infección urinaria, Vaginitis, Cistitis, Prostatitis, Disfunción eréctil, Eyaculación precoz, Infertilidad, Esterilidad, Impotencia, Libido, Vaginismo, Dispareunia, Menstruación, Amenorrea, Ovarios, Endometriosis, Fibromas, Quistes, Miomas, Embarazo, Frigidez, Menopausia, Climaterio, Disfunción sexual, Libido baja, Deseo sexual, Infertilidad femenina,  Infertilidad masculina,Lujuria, Libido alta, Deseo sexual bajo, Deseo sexual alto, Disfunción sexual femenina, Disfunción sexual masculina,     Complejo de Edipo, Complejo de Electra, Complejo de castración, Complejo de inferioridad'
+      terminos: 'Transmisión sexual, Infección urinaria, Vaginitis, Cistitis, Prostatitis, Disfunción eréctil, Eyaculación precoz, Infertilidad, Esterilidad, Impotencia, Libido, Vaginismo, Dispareunia, Menstruación, Amenorrea, Ovarios, Endometriosis, Fibromas, Quistes, Miomas, Frigidez, Menopausia, Climaterio, Disfunción sexual, Libido baja, Deseo sexual, Infertilidad femenina,  Infertilidad masculina,Lujuria, Libido alta, Deseo sexual bajo, Deseo sexual alto, Disfunción sexual femenina, Disfunción sexual masculina,     Complejo de Edipo, Complejo de Electra, Complejo de castración, Complejo de inferioridad'
+    }
+    ,{
+      nombre: 'Equilibrio degestivo',
+      terminos: 'reflujo gastroesofágico, diarrea, estreñimiento, gastritis, gastroenteritis, gases, distensión abdominal, colitis, síndrome del intestino irritable, enfermedad inflamatoria intestinal, enfermedad celíaca, intolerancia a la lactosa, enfermedad de Crohn, diverticulitis, hemorroides, acidez estomacal, indigestión, flatulencia, vómito, náuseas'
+    }
+    ,{
+      nombre: 'Equilibrio cefalea o dolor de cabeza',
+      terminos: 'Insomnio,drogas, alcohol, tabaco, marihuana, estrés, ansiedad, depresión, Chapingo, Shigella , Dengue , Dengue hemorrágico , Newcastle , Encefalitis , Tifo exantemático , Sinusitis frontal , Sinusitis nasal, Influenza , Catarro común,migraña, Cefalea, Dolores de cabeza, jaquecas, cefalea tensional, cefalea en racimos, cefalea por sinusitis, cefalea por hipertensión, cefalea por estrés, cefalea por fatiga ocular, cefalea por deshidratación, cefalea por cambios hormonales, cefalea por consumo de cafeína, cefalea por consumo de alcohol, cefalea por consumo de alimentos procesados, cefalea por consumo de alimentos con glutamato monosódico (GMS), cefalea por consumo de alimentos con nitratos, cefalea por consumo de alimentos con aspartame'
+    }
+    ,{
+      nombre: 'Equilibrio energético',
+      terminos: 'hidratación, mareos, crisis curativa, equilibrio energético, balance energético, Fatiga, Cansancio, Debilidad, Letargo, Somnolencia, Apatía, Falta de energía, Falta de motivación, Falta de concentración, Falta de memoria, Falta de atención, Falta de claridad mental, Falta de creatividad, Falta de inspiración, Falta de entusiasmo, Falta de pasión, Falta de alegría, Falta de felicidad, Falta de bienestar, Falta de salud'
     }
   ];
+
 
   function plano(s) {
     return String(s || '')
