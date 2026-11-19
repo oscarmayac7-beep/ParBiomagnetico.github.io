@@ -11,7 +11,7 @@ window.BUSQUEDA = (function () {
   var PREDEFINIDAS = [
     {
       nombre: 'Equilibrio vías respiratorias',
-      terminos: 'Amigdalitis, Sinusitis, Faringitis, Laringitis, Otitis, Rinitis, Disnea, Bronquitis, Neumonitis, Neumonía, Asma, Enfisema, Pulmonar'
+      terminos: 'garganta, estornudo, irritación, vías respiratorias, Tuberculosis, Amigdalitis, Sinusitis, Faringitis, Epligot, Laringitis, Traquea, Otitis, Rinitis, Disnea, Bronquitis, Neumonitis, Neumon, Asma, Enfisema, Pulmonar, Diafragma, Catarro, Resfriado, Gripe, Influenza, Bronquitis crónica, Bronquiectasias, Neumonía, Neumotórax, Apnea del sueño, Hipoxia, Hipoxemia, Hipercapnia'
     },
 	  {
       nombre: 'Equilibrio ocular',
@@ -23,11 +23,11 @@ window.BUSQUEDA = (function () {
     }
     ,{
       nombre: 'Equilibrio sexual',
-      terminos: 'Transmisión sexual, Infección urinaria, Vaginitis, Cistitis, Prostatitis, Disfunción eréctil, Eyaculación precoz, Infertilidad, Esterilidad, Impotencia, Libido, Vaginismo, Dispareunia, Menstruación, Amenorrea, Ovarios, Endometriosis, Fibromas, Quistes, Miomas, Frigidez, Menopausia, Climaterio, Disfunción sexual, Libido baja, Deseo sexual, Infertilidad femenina,  Infertilidad masculina,Lujuria, Libido alta, Deseo sexual bajo, Deseo sexual alto, Disfunción sexual femenina, Disfunción sexual masculina,     Complejo de Edipo, Complejo de Electra, Complejo de castración, Complejo de inferioridad'
+      terminos: 'VIH, SIDA, Transmisión sexual, Infección urinaria, Vaginitis, Cistitis, Prostatitis, Disfunción eréctil, Eyaculación precoz, Infertilidad, Esterilidad, Impotencia, Libido, Vaginismo, Dispareunia, Menstruación, Amenorrea, Ovarios, Endometriosis, Fibromas, Quistes, Miomas, Frigidez, Menopausia, Climaterio, Disfunción sexual, Libido baja, Deseo sexual, Infertilidad femenina,  Infertilidad masculina,Lujuria, Libido alta, Deseo sexual bajo, Deseo sexual alto, Disfunción sexual femenina, Disfunción sexual masculina,     Complejo de Edipo, Complejo de Electra, Complejo de castración, Complejo de inferioridad'
     }
     ,{
       nombre: 'Equilibrio degestivo',
-      terminos: 'reflujo gastroesofágico, diarrea, estreñimiento, gastritis, gastroenteritis, gases, distensión abdominal, colitis, síndrome del intestino irritable, enfermedad inflamatoria intestinal, enfermedad celíaca, intolerancia a la lactosa, enfermedad de Crohn, diverticulitis, hemorroides, acidez estomacal, indigestión, flatulencia, vómito, náuseas'
+      terminos: 'reflujo gastroesofágico, diarrea, estreñimiento, gastritis, gastroenteritis, gases, distensión abdominal, colitis, síndrome del intestino irritable, enfermedad inflamatoria intestinal, enfermedad celíaca, intolerancia a la lactosa, enfermedad de Crohn, diverticulitis, hemorroides, acidez estomacal, indigestión, flatulencia, vómito, náusea, dolor abdominal, dolor de estómago, dolor de intestinos, dolor de colon, dolor de recto, dolor de ano, dolor de hígado, dolor de vesícula biliar, dolor de páncreas, dolor de estómago superior, dolor de estómago inferior, dolor de estómago derecho, dolor de estómago izquierdo'
     }
     ,{
       nombre: 'Equilibrio cefalea o dolor de cabeza',
@@ -35,9 +35,23 @@ window.BUSQUEDA = (function () {
     }
     ,{
       nombre: 'Equilibrio energético',
-      terminos: 'hidratación, mareos, crisis curativa, equilibrio energético, balance energético, Fatiga, Cansancio, Debilidad, Letargo, Somnolencia, Apatía, Falta de energía, Falta de motivación, Falta de concentración, Falta de memoria, Falta de atención, Falta de claridad mental, Falta de creatividad, Falta de inspiración, Falta de entusiasmo, Falta de pasión, Falta de alegría, Falta de felicidad, Falta de bienestar, Falta de salud'
+      terminos: 'hidratación, crisis curativa, equilibrio energético, balance energético, Fatiga, Cansancio, Debilidad, Letargo, Somnolencia, Apatía, Falta de energía, Falta de motivación, Falta de concentración, Falta de memoria, Falta de atención, Falta de claridad mental, Falta de creatividad, Falta de inspiración, Falta de entusiasmo, Falta de pasión, Falta de alegría, Falta de felicidad, Falta de bienestar, Falta de salud'
+    }
+    ,{
+      nombre: 'Equilibrio Cardiovascular',
+      terminos: 'Insuficiencia ventilatoria, Angina de pecho, Arterioesclerosis, Ateroesclerosis, Miocardiopatías , hipertensión arterial, Equilibrio cardio, Hipercolesterolemia, Dislipemia o Dislipidemia, válvula mitral, válvula aórtica, válvula tricúspide, válvula pulmonar, válvula mitral estenosis, válvula aórtica estenosis, válvula tricúspide estenosis, válvula pulmonar estenosis, válvula mitral insuficiencia, válvula aórtica insuficiencia, válvula tricúspide insuficiencia, válvula pulmonar insuficiencia, válvula mitral prolapso, válvula aórtica prolapso, válvula tricúspide prolapso, válvula pulmonar prolapso'
+    }
+    ,{
+      nombre: 'Equilibrio sistema inmunitario',
+      terminos: 'inmunodeficiencia, inmunosupresión, VIH, SIDA, mononucleosis, Epstein-Barr, citomegalovirus, CMV, hepatitis, sarampión, Diabetes, renal, hepática, Leucemias, Linfomas, Mieloma, lupus, artritis, esclerosis'
+    }
+    ,{
+      nombre: 'Equilibrio sistema inmunodeprimido',
+      terminos: 'Candidiasis, Micosis, onicomicosis, neumonía, criptococosis, aspergilosis, Herpes, gripe, influenza, COVID-19, bronquitis, neumonía, VPH, Papiloma Humano, IVU, Infecciones de vías urinarias, Forúnculos, foliculitis, celulitis infecciosa, Tuberculosis, Gastroenteritis, Toxoplasmosis, Salmonella, Campylobacter, Giardia lamblia, Cryptosporidium'
     }
   ];
+
+  
 
 
   function plano(s) {

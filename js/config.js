@@ -23,7 +23,10 @@ window.CONFIG = (function () {
     try { localStorage.setItem(CLAVE, JSON.stringify(estado)); } catch (e) {}
   }
 
-  function get(clave) { return estado[clave]; }
+  function get(clave) {
+    leer();
+    return estado[clave];
+  }
 
   function set(clave, valor) {
     estado[clave] = valor;
@@ -71,7 +74,7 @@ window.CONFIG = (function () {
           '<input type="checkbox" class="cfg-contraer">' +
           '<span>Contraer las filas repetidas</span>' +
         '</label>' +
-        '<p class="cfg-ayuda">Las filas del mismo Par 1 se ocultan; toca la primera fila (con el número <b>+N</b>) para expandirlas o volver a contraerlas.</p>' +
+        '<p class="cfg-ayuda">Las filas del mismo Par 1 se ocultan; toca el contador <b>N +</b> de la primera fila para expandirlas o volver a contraerlas. Los cambios se aplican al instante en todas las listas.</p>' +
       '</div>' +
       '<div class="cfg-sep"></div>';
 
@@ -176,7 +179,28 @@ window.CONFIG = (function () {
     document.body.appendChild(btn);
   }
 
+
+  function vigilarCambios() {
+    var antes = JSON.stringify(estado);
+    leer();
+    if (JSON.stringify(estado) !== antes) {
+      var ev;
+      try { ev = new CustomEvent('config:cambio', { detail: { recarga: true } }); }
+      catch (e) {
+        ev = document.createEvent('CustomEvent');
+        ev.initCustomEvent('config:cambio', true, true, { recarga: true });
+      }
+      window.dispatchEvent(ev);
+    }
+  }
+
   leer();
+  setInterval(vigilarCambios, 1200);
+  window.addEventListener('focus', vigilarCambios);
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) vigilarCambios();
+  });
+
   if (document.body) montar();
   else document.addEventListener('DOMContentLoaded', montar);
 

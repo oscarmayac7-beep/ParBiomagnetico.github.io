@@ -915,7 +915,7 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
   const noResults = document.getElementById('noResults');
   const backTop   = document.getElementById('backToTop');
   const CV        = window.COLUMNA_VERTEBRAL;
-  const COLS      = 8;
+  const COLS      = 10;
 
   const esc = s => String(s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -946,6 +946,11 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     return `<td class="vertebra">${CV ? CV.celda(codigo) : ''}</td>`;
   }
 
+  const FUENTES = {};
+  (window.PARES || []).forEach(function (p) {
+    FUENTES[String(p.p1).toLowerCase() + '|' + String(p.p2).toLowerCase()] = p.f || 'Lista';
+  });
+
   function buildRow(item, num) {
     const [clasif, p1, p2, name, href] = item;
     const zona = zonaDe(p1, p2);
@@ -961,7 +966,8 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
         : `<span>${esc(name)}</span>`}</td>` +
       `<td class="zona"><span>${esc(zona)}</span></td>` +
       `<td class="sistema"><span class="s-${sistemaClass(sistema)}">${esc(sistema)}</span></td>` +
-      vertebraCell(p1);
+      vertebraCell(p1) +
+      `<td class="fuente">${esc(FUENTES[String(p1).toLowerCase() + '|' + String(p2 || '').toLowerCase()] || 'Lista')}</td>`;
     return tr;
   }
 
