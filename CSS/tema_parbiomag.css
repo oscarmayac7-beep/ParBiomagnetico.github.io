@@ -848,3 +848,29 @@ html[data-tema="noche"] tr.grupo-par1.abierto .mas-par1 { background: #2e7dff; c
 	text-decoration: none;
 }
 .mar-enlace:hover { text-decoration: underline; }
+
+/* Columna Fuente1 */
+th.th-fuente { white-space: nowrap; }
+td.fuente { white-space: nowrap; font-size: .7rem; color: var(--parbiomag-texto-suave); }
+
+/* Filas de agrupación (sección): color propio y ancho completo */
+tbody tr.section-row td,
+tbody tr.section-row:hover td {
+	background: #cfe2fb !important;
+	color: #0b3f8f !important;
+	font-weight: 800 !important;
+	border-top: 1px solid #a9c8ef !important;
+	border-bottom: 1px solid #a9c8ef !important;
+}
+tbody tr.section-row td {
+	padding-top: .4rem;
+	padding-bottom: .4rem;
+	letter-spacing: .01em;
+}
+html[data-tema="noche"] tbody tr.section-row td,
+html[data-tema="noche"] tbody tr.section-row:hover td {
+	background: #123a63 !important;
+	color: #bfe0ff !important;
+	border-top-color: rgba(120, 180, 255, .45) !important;
+	border-bottom-color: rgba(120, 180, 255, .25) !important;
+}
