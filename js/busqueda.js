@@ -11,7 +11,7 @@ window.BUSQUEDA = (function () {
   var PREDEFINIDAS = [
     {
       nombre: 'Equilibrio vías respiratorias',
-      terminos: 'garganta, estornudo, irritación, vías respiratorias, Tuberculosis, Amigdalitis, Sinusitis, Faringitis, Epligot, Laringitis, Traquea, Otitis, Rinitis, Disnea, Bronquitis, Neumonitis, Neumon, Asma, Enfisema, Pulmonar, Diafragma, Catarro, Resfriado, Gripe, Influenza, Bronquitis crónica, Bronquiectasias, Neumonía, Neumotórax, Apnea del sueño, Hipoxia, Hipoxemia, Hipercapnia'
+      terminos: 'fiebre, resfriado, garganta, estornudo, irritación, vías respiratorias, Tuberculosis, Amigdalitis, Sinusitis, Faringitis, Epligot, Laringitis, Traquea, Otitis, Rinitis, Disnea, Bronquitis, Neumonitis, Neumon, Asma, Enfisema, Pulmonar, Diafragma, Catarro, Resfriado, Gripe, Influenza, Bronquitis crónica, Bronquiectasias, Neumonía, Neumotórax, Apnea del sueño, Hipoxia, Hipoxemia, Hipercapnia'
     },
 	  {
       nombre: 'Equilibrio ocular',
@@ -19,7 +19,7 @@ window.BUSQUEDA = (function () {
     }
     ,{
       nombre: 'Equilibrio bucal',
-      terminos: 'Halitosis, Dentales, Gingivitis, Periodontitis, Caries, Estomatitis, Aftas, Bruxismo, Sensibilidad dental, Encías'
+      terminos: 'periodontal , Halitosis, Dentales, Gingivitis, Periodontitis, Caries, Estomatitis, Aftas, Bruxismo, Sensibilidad dental, Encías'
     }
     ,{
       nombre: 'Equilibrio sexual',
@@ -31,11 +31,11 @@ window.BUSQUEDA = (function () {
     }
     ,{
       nombre: 'Equilibrio cefalea o dolor de cabeza',
-      terminos: 'Insomnio,drogas, alcohol, tabaco, marihuana, estrés, ansiedad, depresión, Chapingo, Shigella , Dengue , Dengue hemorrágico , Newcastle , Encefalitis , Tifo exantemático , Sinusitis frontal , Sinusitis nasal, Influenza , Catarro común,migraña, Cefalea, Dolores de cabeza, jaquecas, cefalea tensional, cefalea en racimos, cefalea por sinusitis, cefalea por hipertensión, cefalea por estrés, cefalea por fatiga ocular, cefalea por deshidratación, cefalea por cambios hormonales, cefalea por consumo de cafeína, cefalea por consumo de alcohol, cefalea por consumo de alimentos procesados, cefalea por consumo de alimentos con glutamato monosódico (GMS), cefalea por consumo de alimentos con nitratos, cefalea por consumo de alimentos con aspartame'
+      terminos: 'Insomnio, estrés, ansiedad, Shigella , Dengue , Dengue hemorrágico , Newcastle , Encefalitis , Tifo exantemático , Sinusitis frontal , Sinusitis nasal, Influenza , Catarro común, migraña, Cefalea, Dolores de cabeza, jaquecas'
     }
     ,{
       nombre: 'Equilibrio energético',
-      terminos: 'hidratación, crisis curativa, equilibrio energético, balance energético, Fatiga, Cansancio, Debilidad, Letargo, Somnolencia, Apatía, Falta de energía, Falta de motivación, Falta de concentración, Falta de memoria, Falta de atención, Falta de claridad mental, Falta de creatividad, Falta de inspiración, Falta de entusiasmo, Falta de pasión, Falta de alegría, Falta de felicidad, Falta de bienestar, Falta de salud'
+      terminos: 'crisis curativa, equilibrio energético, balance energético, Fatiga, Cansancio, Debilidad, Letargo, Somnolencia, Apatía, Falta de energía, Falta de motivación, Falta de concentración, Falta de memoria, Falta de atención, Falta de claridad mental, Falta de creatividad, Falta de inspiración, Falta de entusiasmo, Falta de pasión, Falta de alegría, Falta de felicidad, Falta de bienestar, Falta de salud'
     }
     ,{
       nombre: 'Equilibrio Cardiovascular',
@@ -43,11 +43,11 @@ window.BUSQUEDA = (function () {
     }
     ,{
       nombre: 'Equilibrio sistema inmunitario',
-      terminos: 'inmunodeficiencia, inmunosupresión, VIH, SIDA, mononucleosis, Epstein-Barr, citomegalovirus, CMV, hepatitis, sarampión, Diabetes, renal, hepática, Leucemias, Linfomas, Mieloma, lupus, artritis, esclerosis'
+      terminos: 'inmunodeficiencia, inmunosupresión, VIH, SIDA, mononucleosis, Epstein-Barr, citomegalovirus, CMV, hepatitis, sarampión, Diabetes, hepática, Leucemias, Linfomas, Mieloma, lupus, artritis, esclerosis'
     }
     ,{
       nombre: 'Equilibrio sistema inmunodeprimido',
-      terminos: 'Candidiasis, Micosis, onicomicosis, neumonía, criptococosis, aspergilosis, Herpes, gripe, influenza, COVID-19, bronquitis, neumonía, VPH, Papiloma Humano, IVU, Infecciones de vías urinarias, Forúnculos, foliculitis, celulitis infecciosa, Tuberculosis, Gastroenteritis, Toxoplasmosis, Salmonella, Campylobacter, Giardia lamblia, Cryptosporidium'
+      terminos: 'Candidiasis, Micosis, onicomicosis, neumonía, criptococosis, aspergilosis, Herpes, gripe, influenza, COVID-19, bronquitis, neumonía, VPH, Papiloma Humano, IVU, Forúnculos, foliculitis, Tuberculosis, Gastroenteritis, Toxoplasmosis, Campylobacter, Giardia lamblia, Cryptosporidium'
     }
   ];
 

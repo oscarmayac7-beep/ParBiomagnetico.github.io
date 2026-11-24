@@ -874,3 +874,79 @@ html[data-tema="noche"] tbody tr.section-row:hover td {
 	border-top-color: rgba(120, 180, 255, .45) !important;
 	border-bottom-color: rgba(120, 180, 255, .25) !important;
 }
+
+/* Columnas opcionales */
+table.oculta-fuente th.th-fuente, table.oculta-fuente td.fuente,
+table.oculta-f-alta th.th-falta, table.oculta-f-alta td.f-alta,
+table.oculta-f-act th.th-fact, table.oculta-f-act td.f-act,
+table.oculta-p-que th.th-pque, table.oculta-p-que td.p-que,
+table.oculta-img-par th.th-img, table.oculta-img-par td.img-par { display: none; }
+
+th.th-falta, th.th-fact, th.th-pque, th.th-img { white-space: nowrap; }
+td.f-alta, td.f-act { white-space: nowrap; font-size: .7rem; color: var(--parbiomag-texto-suave); }
+td.p-que { font-size: .68rem; color: var(--parbiomag-texto-suave); white-space: nowrap; }
+th.th-pque { text-align: left; }
+td.img-par { text-align: center; font-weight: 700; color: var(--parbiomag-ok); white-space: nowrap; }
+
+/* Listas: sin barra horizontal. La tabla se adapta al ancho disponible. */
+.table-wrap { overflow-x: hidden !important; }
+
+table.tabla-ancha { table-layout: fixed; width: 100%; }
+table.tabla-ancha th,
+table.tabla-ancha td {
+	white-space: normal !important;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+}
+table.tabla-ancha th { font-size: .56rem !important; letter-spacing: 0; }
+table.tabla-ancha td { font-size: .66rem !important; }
+table.tabla-ancha td.zona span,
+table.tabla-ancha td.sistema span,
+table.tabla-ancha td.vertebra a,
+table.tabla-ancha td.vertebra span { white-space: normal !important; }
+
+table.tabla-ancha th.th-num { width: 2.5% !important; }
+table.tabla-ancha th.th-chk { width: 2.2% !important; }
+table.tabla-ancha th.th-clasif { width: 3.4% !important; }
+table.tabla-ancha th:nth-child(4) { width: 11% !important; }
+table.tabla-ancha th:nth-child(5) { width: 11% !important; }
+table.tabla-ancha th:nth-child(6) { width: 17% !important; }
+table.tabla-ancha th.th-zona { width: 5.5% !important; }
+table.tabla-ancha th.th-sistema { width: 6.5% !important; }
+table.tabla-ancha th.th-vertebra { width: 4.2% !important; }
+table.tabla-ancha th.th-fuente { width: 4.9% !important; }
+table.tabla-ancha th.th-falta,
+table.tabla-ancha th.th-fact { width: 5.5% !important; }
+table.tabla-ancha th.th-img { width: 3.3% !important; }
+table.tabla-ancha th.th-pque { width: 17.5% !important; }
+table.tabla-ancha th,
+table.tabla-ancha td { min-width: 0 !important; max-width: none !important; }
+
+/* Tipografía homologada de las listas de pares */
+body, .site-header h1, .site-header p, .site-header a,
+main, footer, .intro,
+thead th, tbody td, tr.section-row td,
+td.par-a, td.par-b, td.name a, td.name span,
+td.zona span, td.sistema span, td.num, td.clasif span,
+td.vertebra a, td.vertebra span,
+.toolbar input[type="search"], .sort-wrap select {
+	font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+body { font-size: 14px; }
+.site-header h1 { font-size: 1.43rem; font-weight: 700; }
+.site-header p { font-size: .82rem; font-weight: 400; }
+.intro { font-size: .8rem; }
+thead th { font-size: .66rem; font-weight: 700; letter-spacing: .04em; }
+tbody td { font-size: .78rem; }
+td.par-a, td.par-b { font-size: .78rem; font-weight: 600; }
+td.name a, td.name span { font-size: .82rem; font-weight: 500; }
+td.zona span { font-size: .66rem; font-weight: 600; }
+td.sistema span { font-size: .62rem; font-weight: 600; }
+td.num { font-size: .72rem; font-weight: 400; }
+td.clasif span { font-size: .72rem; font-weight: 700; }
+td.vertebra a, td.vertebra span { font-size: .68rem; font-weight: 700; }
+tr.section-row td { font-size: .78rem; font-weight: 800; }
+td.f-alta, td.f-act, td.p-que, td.fuente, td.img-par { font-size: .7rem; font-weight: 400; }
+.toolbar input[type="search"] { font-size: .88rem; }
+.sort-wrap select { font-size: .8rem; }
+footer { font-size: .72rem; }

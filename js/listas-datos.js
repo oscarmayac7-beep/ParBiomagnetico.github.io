@@ -45,16 +45,41 @@
       : esc(p.n);
   }
 
+  /* Zona y sistema dependen solo del Par 1 (valor más frecuente) */
+  var GRUPO_CANON = {};
+  (function () {
+    var cuenta = {};
+    (window.PARES || []).forEach(function (p) {
+      var k = String(p.p1 || '').trim().toLowerCase();
+      if (!k) return;
+      if (!cuenta[k]) cuenta[k] = {};
+      var g = p.z + '|' + p.s;
+      cuenta[k][g] = (cuenta[k][g] || 0) + 1;
+    });
+    Object.keys(cuenta).forEach(function (k) {
+      var mejor = '', max = -1;
+      Object.keys(cuenta[k]).forEach(function (g) {
+        if (cuenta[k][g] > max) { max = cuenta[k][g]; mejor = g; }
+      });
+      var partes = mejor.split('|');
+      GRUPO_CANON[k] = { z: partes[0], s: partes[1] };
+    });
+  })();
+
   function fila(p) {
-    var sis = '<td class="sistema"><span class="' + chipSistema(p.s) + '">' + esc(p.s) + '</span></td>';
-    var zona = '<td class="zona"><span>' + esc(p.z) + '</span></td>';
+    var g = GRUPO_CANON[String(p.p1 || '').trim().toLowerCase()] || { z: p.z, s: p.s };
+    var fuenteDato = p.f || 'Lista';
+    var datosCol = ' data-fa="' + esc(p.fa || '—') + '" data-fu="' + esc(p.fu || '—') +
+      '" data-pm="' + esc(p.pm || '') + '"';
+    var sis = '<td class="sistema"><span class="' + chipSistema(g.s) + '">' + esc(g.s) + '</span></td>';
+    var zona = '<td class="zona"><span>' + esc(g.z) + '</span></td>';
     var name = '<td class="name">' + enlace(p) + '</td>';
     var pares = '<td class="par-a">' + esc(p.p1) + '</td><td class="par-b">' + esc(p.p2) + '</td>';
     if (formato === 'milpares') {
-      return '<tr><td class="clasif"><span class="c-' + claseClasif(p.c) + '">' + esc(p.c) + '</span></td>' +
+      return '<tr data-fuente="' + esc(fuenteDato) + '"' + datosCol + '><td class="clasif"><span class="c-' + claseClasif(p.c) + '">' + esc(p.c) + '</span></td>' +
         pares + name + zona + sis + '</tr>';
     }
-    return '<tr><td class="num"></td><td class="clasif" data-c="' + esc(p.c) +
+    return '<tr data-fuente="' + esc(fuenteDato) + '"' + datosCol + '><td class="num"></td><td class="clasif" data-c="' + esc(p.c) +
       '" aria-label="Clasificaci\u00f3n ' + esc(p.c) + '"></td>' + pares + name + zona + sis + '</tr>';
   }
 

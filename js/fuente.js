@@ -14,7 +14,8 @@
     var k = plano(p.p1) + '|' + plano(p.p2) + '|' + plano(p.n);
     MAPA[k] = p.f || 'Lista';
     var kp = plano(p.p1) + '|' + plano(p.p2);
-    if (!PAR[kp]) PAR[kp] = p.f || 'Lista';
+    var fuente = p.f || 'Lista';
+    if (!PAR[kp] || fuente === 'Lista') PAR[kp] = fuente;
   });
 
   function texto(el) {
@@ -26,6 +27,7 @@
   }
 
   function valor(tr) {
+    if (tr.dataset.fuente) return tr.dataset.fuente;
     var p1 = plano(tr.dataset.par1 || '') || texto(tr.querySelector('.par-a'));
     var p2 = texto(tr.querySelector('.par-b'));
     var n = texto(tr.querySelector('.name'));
@@ -56,7 +58,6 @@
       td.textContent = valor(tr);
       tr.appendChild(td);
     });
-    ajustarEncabezados();
   }
 
   if (document.body) aplicar();

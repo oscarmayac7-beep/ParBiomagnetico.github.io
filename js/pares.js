@@ -511,7 +511,7 @@ const DATA = [
    modo que un mismo punto (Bazo, Timo, Bulbo, Riñón, ...)
    siempre muestra la misma zona y el mismo sistema.
    ============================================================ */
-const ZONA_ORDER = ['Coronilla', 'Parietal', 'Frontal', 'Cara', 'Temporal', 'Nuca', 'Cuello', 'Brazos', 'Torso Superior', 'Torso Medio', 'Torso Bajo', 'Dorso', 'Pelvis', 'Pierna', 'Pie', 'Otros'];
+const ZONA_ORDER = ['Coronilla', 'Parietal', 'Frontal', 'Cara', 'Temporal', 'Nuca', 'Cuello', 'Brazos', 'Torso Superior', 'Torso Medio', 'Torso Bajo', 'Dorso', 'Pelvis', 'Pierna', 'Pie', 'Cuerpo', 'Otros'];
 const SISTEMA_ORDER = ['Nervioso', 'Endócrino', 'Endocrino', 'Respiratorio', 'Circulatorio', 'Digestivo', 'Urinario', 'Reproductor', 'Linfático', 'Inmunológico', 'Tegumentario', 'Muscular', 'Esquelético', 'Locomotor', 'OTRO'];
 
 const PAR1_INFO = {
@@ -892,12 +892,9 @@ function porPalabras(texto, mapa) {
 function infoPar1(par1, par2) {
   const directo = PAR1_INDEX.get(sinAcentos(par1));
   if (directo) return directo;
-  let zona = porPalabras(par1, ZONA_KEYWORDS);
-  let sistema = porPalabras(par1, SISTEMA_KEYWORDS);
-  if (!zona || !sistema) {
-    zona = zona || porPalabras(par2, ZONA_KEYWORDS);
-    sistema = sistema || porPalabras(par2, SISTEMA_KEYWORDS);
-  }
+  /* Solo el Par 1 determina zona y sistema */
+  const zona = porPalabras(par1, ZONA_KEYWORDS);
+  const sistema = porPalabras(par1, SISTEMA_KEYWORDS);
   return [zona || 'Otros', sistema || 'OTRO'];
 }
 
@@ -946,6 +943,11 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     return `<td class="vertebra">${CV ? CV.celda(codigo) : ''}</td>`;
   }
 
+  const DATOS_PAR = {};
+  (window.PARES || []).forEach(function (p) {
+    DATOS_PAR[String(p.p1).toLowerCase() + '|' + String(p.p2).toLowerCase() + '|' + String(p.n).toLowerCase()] = p;
+  });
+
   const FUENTES = {};
   (window.PARES || []).forEach(function (p) {
     FUENTES[String(p.p1).toLowerCase() + '|' + String(p.p2).toLowerCase()] = p.f || 'Lista';
@@ -956,7 +958,9 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     const zona = zonaDe(p1, p2);
     const sistema = sistemaDe(p1, p2);
     const tr = document.createElement('tr');
+    const dato = DATOS_PAR[String(p1).toLowerCase() + '|' + String(p2 || '').toLowerCase() + '|' + String(name || '').toLowerCase()] || {};
     tr.dataset.par1 = p1;
+    tr.dataset.fuente = FUENTES[String(p1).toLowerCase() + '|' + String(p2 || '').toLowerCase()] || 'Lista';
     tr.innerHTML =
       `<td class="num">${num}</td><td class="clasif"><span class="${clasifClass(clasif)}">${esc(clasif)}</span></td>` +
       `<td class="par-a">${esc(p1)}</td>` +
@@ -967,7 +971,11 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
       `<td class="zona"><span>${esc(zona)}</span></td>` +
       `<td class="sistema"><span class="s-${sistemaClass(sistema)}">${esc(sistema)}</span></td>` +
       vertebraCell(p1) +
-      `<td class="fuente">${esc(FUENTES[String(p1).toLowerCase() + '|' + String(p2 || '').toLowerCase()] || 'Lista')}</td>`;
+      `<td class="fuente">${esc(FUENTES[String(p1).toLowerCase() + '|' + String(p2 || '').toLowerCase()] || 'Lista')}</td>` +
+      `<td class="f-alta">${esc(dato.fa || '—')}</td>` +
+      `<td class="f-act">${esc(dato.fu || '—')}</td>` +
+      `<td class="img-par"></td>` +
+      `<td class="p-que">${esc(dato.pm || 'Básicos')}</td>`;
     return tr;
   }
 
@@ -1126,6 +1134,15 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
     });
   }
 
+  const RANGO_VER = {};
+  if (window.COLUMNA_VERTEBRAL && window.COLUMNA_VERTEBRAL.VERTEBRAS) {
+    window.COLUMNA_VERTEBRAL.VERTEBRAS.forEach((v, i) => { RANGO_VER[v[0]] = i + 1; });
+  }
+  function rangoVertebraItem(it) {
+    const c = window.COLUMNA_VERTEBRAL ? window.COLUMNA_VERTEBRAL.vertebraDe(it[1]) : '';
+    return RANGO_VER[c] || 999;
+  }
+
   function render() {
     const q = sinAcentos(input.value);
     const modo = sortSel.value;
@@ -1193,7 +1210,7 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
           const head = sectionRow('');
           head.firstChild.innerHTML = `<a class="v-code" href="Vertebras.html#${codigo}">${codigo}</a> ${esc(partes)}`;
           tbody.appendChild(head);
-          arr.sort(compararParesPorZona)
+          arr.sort((a, b) => String(a[1]).localeCompare(String(b[1]), 'es'))
             .forEach(it => tbody.appendChild(buildRow(it, ++nFila)));
         });
       }
@@ -1217,7 +1234,11 @@ const sistemaDe = (par1, par2) => infoPar1(par1, par2)[1];
       orden.forEach(g => {
         const arr = grupos.get(g);
         if (!arr || !arr.length) return;
-        arr.sort((a, b) => compararPares(a, b, campo === 'sistema'));
+        arr.sort((a, b) => {
+          const va = rangoVertebraItem(a), vb = rangoVertebraItem(b);
+          if (va !== vb) return va - vb;
+          return compararPares(a, b, campo === 'sistema');
+        });
         frag.appendChild(sectionRow(g));
         arr.forEach(it => frag.appendChild(buildRow(it, ++nFila)));
       });

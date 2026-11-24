@@ -63,23 +63,13 @@ window.RASTREO = (function () {
     return sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : sel.value;
   }
 
-  function abrir(tr) {
+  function motivos(tr) {
     var q = (document.getElementById('q') || {}).value || '';
     q = q.trim();
     var predef = (window.BUSQUEDA && window.BUSQUEDA.activa) ? window.BUSQUEDA.activa() : null;
-    var num = limpio(tr.querySelector('td.num'));
     var cs = campos(tr);
-    var porNombre = {};
-    cs.forEach(function (c) { porNombre[c.n] = c.v; });
-
-    var tbody = tr.parentNode;
-    var filas = tbody.querySelectorAll('tr:not(.section-row)');
-    var visibles = tbody.querySelectorAll('tr:not(.section-row):not(.oculto)');
-
-    var lineas = [];
-
-    /* --- Motivo --- */
     var motivo = [];
+
     if (q) {
       if (predef) {
         motivo.push('Búsqueda guardada: «' + predef.nombre + '» (' + predef.terminos.split(',').length + ' términos).');
@@ -108,6 +98,27 @@ window.RASTREO = (function () {
       var n = marca && marca.dataset ? marca.dataset.total : '';
       motivo.push('Agrupa ' + (n || 'varios') + ' pares con el mismo Par 1 («' + sinMarca(tr.querySelector('.par-a')) + '»), contraídos.');
     }
+
+    return motivo;
+  }
+
+  function abrir(tr) {
+    var q = (document.getElementById('q') || {}).value || '';
+    q = q.trim();
+    var predef = (window.BUSQUEDA && window.BUSQUEDA.activa) ? window.BUSQUEDA.activa() : null;
+    var num = limpio(tr.querySelector('td.num'));
+    var cs = campos(tr);
+    var porNombre = {};
+    cs.forEach(function (c) { porNombre[c.n] = c.v; });
+
+    var tbody = tr.parentNode;
+    var filas = tbody.querySelectorAll('tr:not(.section-row)');
+    var visibles = tbody.querySelectorAll('tr:not(.section-row):not(.oculto)');
+
+    var lineas = [];
+
+    /* --- Motivo (mismo cálculo que la columna) --- */
+    var motivo = motivos(tr);
 
     /* --- Construir panel --- */
     var fondo = document.createElement('div');
@@ -230,5 +241,5 @@ window.RASTREO = (function () {
     abrir(tr);
   }, true);
 
-  return { abrir: abrir };
+  return { abrir: abrir, motivo: motivos };
 })();

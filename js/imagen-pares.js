@@ -48,6 +48,14 @@ window.IMAGENES_PARES={"hipofisis|corazon":"hipofisis-corazon.jpg","punta de pan
   var pie = modal.querySelector('.par-modal-pie');
   var caja = modal.querySelector('.par-modal-caja');
 
+  function textoCelda(celda) {
+    if (!celda) return '';
+    var copia = celda.cloneNode(true);
+    var marca = copia.querySelector('.mas-par1');
+    if (marca) marca.remove();
+    return copia.textContent.trim();
+  }
+
   function cerrar() {
     modal.classList.remove('abierto');
     modal.setAttribute('aria-hidden', 'true');
@@ -88,8 +96,8 @@ window.IMAGENES_PARES={"hipofisis|corazon":"hipofisis-corazon.jpg","punta de pan
     var a = fila.querySelector('td.par-a');
     var b = fila.querySelector('td.par-b');
     var n = fila.querySelector('td.name');
-    var p1 = a ? a.textContent.trim() : '';
-    var p2 = b ? b.textContent.trim() : '';
+    var p1 = (fila.dataset && fila.dataset.par1 ? fila.dataset.par1 : '') || textoCelda(a);
+    var p2 = textoCelda(b);
     if (!p1) return;
 
     ev.preventDefault();

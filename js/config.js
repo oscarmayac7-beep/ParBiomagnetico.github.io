@@ -5,17 +5,22 @@
    ============================================================ */
 window.CONFIG = (function () {
   var CLAVE = 'config-parbiomag';
-  var DEF = { ocultarPar1: true, contraerPar1: true };
+  var DEF = {
+    ocultarPar1: true, contraerPar1: true,
+    colFuente1: true, colFechaAlta: false, colFechaAct: false,
+    colPorQue: false, colImg: false
+  };
   var estado = { ocultarPar1: DEF.ocultarPar1, contraerPar1: DEF.contraerPar1 };
 
   function leer() {
     try {
       var g = JSON.parse(localStorage.getItem(CLAVE) || '{}');
-      estado.ocultarPar1 = ('ocultarPar1' in g) ? !!g.ocultarPar1 : DEF.ocultarPar1;
-      estado.contraerPar1 = ('contraerPar1' in g) ? !!g.contraerPar1 : DEF.contraerPar1;
+      ['ocultarPar1', 'contraerPar1', 'colFuente1', 'colFechaAlta',
+       'colFechaAct', 'colPorQue', 'colImg'].forEach(function (k) {
+        estado[k] = (k in g) ? !!g[k] : DEF[k];
+      });
     } catch (e) {
-      estado.ocultarPar1 = DEF.ocultarPar1;
-      estado.contraerPar1 = DEF.contraerPar1;
+      Object.keys(DEF).forEach(function (k) { estado[k] = DEF[k]; });
     }
   }
 
@@ -76,6 +81,15 @@ window.CONFIG = (function () {
         '</label>' +
         '<p class="cfg-ayuda">Las filas del mismo Par 1 se ocultan; toca el contador <b>N +</b> de la primera fila para expandirlas o volver a contraerlas. Los cambios se aplican al instante en todas las listas.</p>' +
       '</div>' +
+      '<div class="cfg-sec">' +
+        '<div class="cfg-tit">Columnas opcionales</div>' +
+        '<label class="cfg-switch"><input type="checkbox" class="cfg-c-fuente"><span>Fuente1</span></label>' +
+        '<label class="cfg-switch" style="margin-top:.35rem"><input type="checkbox" class="cfg-c-falta"><span>Fecha alta</span></label>' +
+        '<label class="cfg-switch" style="margin-top:.35rem"><input type="checkbox" class="cfg-c-fact"><span>Fecha actualización</span></label>' +
+        '<label class="cfg-switch" style="margin-top:.35rem"><input type="checkbox" class="cfg-c-pque"><span>¿Por qué se muestra?</span></label>' +
+        '<label class="cfg-switch" style="margin-top:.35rem"><input type="checkbox" class="cfg-c-img"><span>Img Par-Biomag</span></label>' +
+        '<p class="cfg-ayuda">Muestra u oculta las columnas opcionales de las listas. Las columnas adicionales aparecen al final de la tabla.</p>' +
+      '</div>' +
       '<div class="cfg-sep"></div>';
 
     var check = caja.querySelector('.cfg-par1');
@@ -85,6 +99,15 @@ window.CONFIG = (function () {
     var checkC = caja.querySelector('.cfg-contraer');
     checkC.checked = !!get('contraerPar1');
     checkC.addEventListener('change', function () { set('contraerPar1', checkC.checked); });
+
+    [['.cfg-c-fuente', 'colFuente1'], ['.cfg-c-falta', 'colFechaAlta'],
+     ['.cfg-c-fact', 'colFechaAct'], ['.cfg-c-pque', 'colPorQue'],
+     ['.cfg-c-img', 'colImg']].forEach(function (par) {
+      var c = caja.querySelector(par[0]);
+      if (!c) return;
+      c.checked = !!get(par[1]);
+      c.addEventListener('change', function () { set(par[1], c.checked); });
+    });
 
     var botones = caja.querySelectorAll('[data-tema]');
 

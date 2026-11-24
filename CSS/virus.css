@@ -21,7 +21,7 @@
              font-weight:600;font-size:.74rem;line-height:1.2}
   .alpha-nav a:hover,.alpha-nav a:focus{background:var(--accent-light);outline:none}
   .alpha-nav span{color:#cbd5e1;cursor:default}
-  main{max-width:1050px;margin:0 auto;padding:.5rem .35rem 2rem}
+  main{max-width:1200px;margin:0 auto;padding:.5rem .35rem 2rem}
   .intro{margin:0 0 .4rem;color:var(--muted);font-size:.8rem}
   .intro a{color:var(--accent)}
   .toolbar{display:flex;gap:.4rem;margin-bottom:.4rem;flex-wrap:wrap;align-items:center}

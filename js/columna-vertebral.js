@@ -523,6 +523,9 @@ window.COLUMNA_VERTEBRAL = (function () {
     'cortex prefrontal (d)': 'C1',
     'dorsal': 'T6',
     'lobulo prefrontal': 'C1',
+    'cabeza cuello femur': 'L4',
+    'cabeza de perone': 'L5',
+    'seno a ventricular': 'T2',
   };
 
   /* Respaldo por palabra clave para órganos que no estén en la tabla */

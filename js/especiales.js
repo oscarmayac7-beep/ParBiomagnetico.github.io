@@ -57,7 +57,7 @@
   });
   var MODO_ORIGINAL = '__original__';
 
-  var ZONA_ORDER = ['Coronilla', 'Parietal', 'Frontal', 'Cara', 'Temporal', 'Nuca', 'Cuello', 'Brazos', 'Torso Superior', 'Torso Medio', 'Torso Bajo', 'Dorso', 'Pelvis', 'Pierna', 'Pie', 'Otros'];
+  var ZONA_ORDER = ['Coronilla', 'Parietal', 'Frontal', 'Cara', 'Temporal', 'Nuca', 'Cuello', 'Brazos', 'Torso Superior', 'Torso Medio', 'Torso Bajo', 'Dorso', 'Pelvis', 'Pierna', 'Pie', 'Cuerpo', 'Otros'];
   var SISTEMA_ORDER = ['Nervioso', 'Endócrino', 'Endocrino', 'Respiratorio', 'Circulatorio', 'Digestivo', 'Urinario', 'Reproductor', 'Linfático', 'Inmunológico', 'Tegumentario', 'Muscular', 'Esquelético', 'Locomotor', 'OTRO'];
 
 
@@ -143,6 +143,13 @@
     return c.textContent.trim();
   }
 
+  var RANGO_VERTEBRA = {};
+  if (CV && CV.VERTEBRAS) CV.VERTEBRAS.forEach(function (v, i) { RANGO_VERTEBRA[v[0]] = i + 1; });
+  function rangoVertebra(row) {
+    var c = row.dataset.vertebra || '';
+    return RANGO_VERTEBRA[c] || 999;
+  }
+
   function buildGrouped(visibleData, groupField, groupOrder, etiqueta) {
     var byGroup = new Map();
     groupOrder.forEach(function (g) { byGroup.set(g, []); });
@@ -153,6 +160,8 @@
     });
     byGroup.forEach(function (arr) {
       arr.sort(function (a, b) {
+        var va = rangoVertebra(a), vb = rangoVertebra(b);
+        if (va !== vb) return va - vb;
         return compararFilas(a, b, groupField === 'sistema');
       });
     });
@@ -281,7 +290,9 @@
       /* Sin búsqueda se muestran las 33 vértebras, aunque no tengan pares */
       if (!arr.length && conBusqueda) return;
       frag.appendChild(encabezadoHTML('<a class="v-code" href="Vertebras.html#' + v[0] + '">' + v[0] + '</a> ' + v[1]));
-      arr.sort(compararPorZona).forEach(function (r) { frag.appendChild(r); });
+      arr.sort(function (a, b) {
+        return par1De(a).toLowerCase().localeCompare(par1De(b).toLowerCase(), 'es');
+      }).forEach(function (r) { frag.appendChild(r); });
     });
 
     if (sinRelacion.length) {
